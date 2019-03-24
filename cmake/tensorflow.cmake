@@ -46,9 +46,8 @@ elseif(APPLE)
             message(FATAL_ERROR "error downloading tensorflow lib: ${status_string}" "${log}")
         endif()
 
-        # KW: removed ${CMAKE_COMMAND} -E
-        # message("${CMAKE_COMMAND} -E tar xvzf ${CMAKE_SOURCE_DIR}/tensorflow/darwin.tar.gz WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tensorflow")
-        execute_process(COMMAND tar xvzf ${CMAKE_SOURCE_DIR}/tensorflow/darwin.tar.gz WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tensorflow)
+        execute_process(COMMAND cmake -E tar xvzf ${CMAKE_SOURCE_DIR}/tensorflow/darwin.tar.gz WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tensorflow)
+
         file(REMOVE ${CMAKE_SOURCE_DIR}/tensorflow/darwin.tar.gz)
     endif()
 

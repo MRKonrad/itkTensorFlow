@@ -13,6 +13,7 @@ find_package(ITK REQUIRED)
 file(GLOB_RECURSE SRC_FILES src/*.c* src/*.h* src/*.t*)
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
+include_directories(${CMAKE_SOURCE_DIR}/thirdparty/hello_tf_c_api/src)
 add_library(itkTensorFlowLib ${SRC_FILES})
 
 add_subdirectory(tests)

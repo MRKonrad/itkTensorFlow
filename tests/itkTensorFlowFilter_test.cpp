@@ -8,6 +8,18 @@
 
 TEST(itkTensorFlow, printTensorFlowVersion) {
 
+    EXPECT_NO_THROW(printTensorFlowVersion());
+
+}
+
+TEST(itkTensorFlow, printGraphInfo) {
+
+    EXPECT_NO_THROW(printGraphInfo("../../tests/testData/model.pb"));
+
+}
+
+TEST(itkTensorFlow, oneImagePipeline) {
+
     printTensorFlowVersion();
     EXPECT_EQ(true, true);
 
