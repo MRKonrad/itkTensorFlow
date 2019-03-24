@@ -1,3 +1,13 @@
+tensorflow/
+models/
+
+# mac
+*.DS_Store
+
+# clion
+.idea
+cmake-build-*
+
 # Prerequisites
 *.d
 
