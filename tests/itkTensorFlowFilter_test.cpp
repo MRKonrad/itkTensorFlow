@@ -4,7 +4,9 @@
 
 #include "gtest/gtest.h"
 
-#include "itkTensorFlowFilter.h"
+#include "itktfUtils.h"
+
+#include "samplePipeline.h"
 
 TEST(itkTensorFlow, printTensorFlowVersion) {
 
@@ -33,7 +35,14 @@ TEST(itkTensorFlow, sessionRun_model2) {
 
 TEST(itkTensorFlow, oneImagePipeline) {
 
-    printTensorFlowVersion();
+    char *argv[] = {
+            (char*) "",
+            (char*) "../../tests/testData/dicom/T1map.dcm",
+            (char*) "../../tests/testData/temp/T1map.dcm",
+    };
+
+    samplePipeline(3, argv);
+
     EXPECT_EQ(true, true);
 
 }

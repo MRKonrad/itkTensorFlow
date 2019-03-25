@@ -1,5 +1,8 @@
 tensorflow/
-tests/testData/
+tests/testData/dicom
+tests/testData/log
+tests/testData/temp
+tests/testData/model*
 
 # mac
 *.DS_Store

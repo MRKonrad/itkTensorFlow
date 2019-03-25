@@ -9,6 +9,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 include(cmake/tensorflow.cmake)
 
 find_package(ITK REQUIRED)
+include(${ITK_USE_FILE})
 
 file(GLOB_RECURSE SRC_FILES
         src/*.c*
@@ -20,6 +21,9 @@ file(GLOB_RECURSE SRC_FILES
 include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_SOURCE_DIR}/thirdparty/hello_tf_c_api/src)
 add_library(itkTensorFlowLib ${SRC_FILES})
+target_link_libraries (itkTensorFlowLib PUBLIC ${ITK_LIBRARIES})
+
+set(TOMATO_LIBS_TO_LINK ${TOMATO_LIBS_TO_LINK} ${ITK_LIBRARIES})
 
 add_subdirectory(tests)
 

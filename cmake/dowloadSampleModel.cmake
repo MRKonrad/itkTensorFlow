@@ -28,5 +28,7 @@ if (NOT EXISTS ${CMAKE_SOURCE_DIR}/tests/testData/model2.pb)
             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/testData)
 
     file(REMOVE ${CMAKE_SOURCE_DIR}/tests/testData/model2.tar.gz)
-    #file(REMOVE_RECURSE ${CMAKE_SOURCE_DIR}/tests/testData/deeplabv3_mnv2_dm05_pascal_trainaug)
+    # file(REMOVE_RECURSE ${CMAKE_SOURCE_DIR}/tests/testData/deeplabv3_mnv2_dm05_pascal_trainaug)
+    file(REMOVE_RECURSE ${CMAKE_SOURCE_DIR}/tests/testData/deeplabv3_mnv2_pascal_train_aug)
+
 endif()

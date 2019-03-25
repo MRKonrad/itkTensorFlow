@@ -2,7 +2,7 @@
 // Created by Konrad Werys on 24/03/2019.
 //
 
-#include "itkTensorFlowFilter.h"
+#include "itktfUtils.h"
 
 int main() {
     printTensorFlowVersion();
