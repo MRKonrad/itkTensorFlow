@@ -10,7 +10,12 @@ include(cmake/tensorflow.cmake)
 
 find_package(ITK REQUIRED)
 
-file(GLOB_RECURSE SRC_FILES src/*.c* src/*.h* src/*.t*)
+file(GLOB_RECURSE SRC_FILES
+        src/*.c*
+        src/*.h*
+        src/*.t*
+        thirdparty/hello_tf_c_api/src/*.c*
+        thirdparty/hello_tf_c_api/src/*.h*)
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_SOURCE_DIR}/thirdparty/hello_tf_c_api/src)
