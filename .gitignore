@@ -1,5 +1,4 @@
 tensorflow/
-tests/testData/dicom
 tests/testData/log
 tests/testData/temp
 tests/testData/model*

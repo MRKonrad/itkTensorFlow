@@ -23,7 +23,7 @@ install:
   - cd ${TRAVIS_BUILD_DIR};
 
 script:
-  - cmake . -DITK_DIR="../ITK_install"
+  - cmake . -DITK_DIR_HINTS="../ITK_install"
   - make -j8
   - cd tests
   - ./itkTensorFlowTests
