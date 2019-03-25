@@ -1,0 +1,29 @@
+language: cpp
+
+os:
+  - linux
+  - osx
+
+compiler:
+  - gcc
+  - clang
+
+install:
+  # download ITK
+  - cd ${TRAVIS_BUILD_DIR};
+  - cd ..;
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+      curl -L -O https://www.dropbox.com/s/zi7wfc9qev2529d/ITK413_osx_install.zip;
+      unzip -a -q ITK413_osx_install.zip;
+    fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+      curl -L -O https://www.dropbox.com/s/w35r9k376gg1cc3/ITK413_linux_install.zip;
+      unzip -a -q ITK413_linux_install.zip;
+    fi
+  - cd ${TRAVIS_BUILD_DIR};
+
+script:
+  - cmake . -DITK_DIR="../ITK_install"
+  - make -j8
+  - cd tests
+  - ./itkTensorFlowTests
