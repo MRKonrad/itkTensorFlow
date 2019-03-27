@@ -1,0 +1,6 @@
+[submodule "thirdParty/googletest"]
+	path = thirdParty/googletest
+	url = https://github.com/google/googletest.git
+[submodule "thirdParty/hello_tf_c_api"]
+	path = thirdParty/hello_tf_c_api
+	url = https://github.com/Neargye/hello_tf_c_api.git
