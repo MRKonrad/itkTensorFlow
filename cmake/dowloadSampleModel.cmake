@@ -4,12 +4,13 @@ if (NOT EXISTS ${CMAKE_SOURCE_DIR}/tests/testData)
     make_directory(${CMAKE_SOURCE_DIR}/tests/testData)
 endif()
 
+
 if (NOT EXISTS ${CMAKE_SOURCE_DIR}/tests/testData/model2.pb)
     file(
             DOWNLOAD
-            #http://download.tensorflow.org/models/deeplabv3_mnv2_dm05_pascal_trainaug_2018_10_01.tar.gz
-            http://download.tensorflow.org/models/deeplabv3_mnv2_pascal_train_aug_2018_01_29.tar.gz
-            ${CMAKE_SOURCE_DIR}/tests/testData/model2.tar.gz
+                #http://download.tensorflow.org/models/deeplabv3_mnv2_dm05_pascal_trainaug_2018_10_01.tar.gz
+                http://download.tensorflow.org/models/deeplabv3_mnv2_pascal_train_aug_2018_01_29.tar.gz
+                ${CMAKE_SOURCE_DIR}/tests/testData/model2.tar.gz
             STATUS status
             LOG log)
     list(GET status 0 status_code)

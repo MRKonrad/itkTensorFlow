@@ -6,7 +6,8 @@
 
 #include "itktfUtils.h"
 
-#include "samplePipeline.h"
+#include "samplePipeline2.h"
+#include "samplePipeline1.h"
 
 TEST(itkTensorFlow, printTensorFlowVersion) {
 
@@ -20,30 +21,137 @@ TEST(itkTensorFlow, printGraphInfo) {
 
 }
 
-TEST(itkTensorFlow, sessionRun_model2) {
-
-    EXPECT_NO_THROW(sessionRun<uint8_t>(TF_UINT8, 513, 513, 3,"../../tests/testData/model2.pb", "ImageTensor", "SemanticPredictions"));
-
-}
-
 //TEST(itkTensorFlow, sessionRun_model) {
 //
-//    EXPECT_NO_THROW(sessionRun<float>(TF_FLOAT, 384, 384, 1,"../../tests/testData/model.pb", "input_1", "conv2d_7/truediv"));
+//    EXPECT_NO_THROW(sessionRun<float>(TF_FLOAT, 384, 384, 1, "../../tests/testData/model.pb", "input_1", "conv2d_7/truediv"));
 //
 //}
 
+TEST(itkTensorFlow, sessionRun_model) {
 
-TEST(itkTensorFlow, oneImagePipeline) {
+    long sizeX = 384, sizeY=384, sizeZ=1;
+    const std::vector<std::int64_t> input_dims = {1, sizeX, sizeY, sizeZ};
+    const std::vector<float> input_vals (sizeX * sizeY * sizeZ, 1);
+
+    TF_Tensor* input_tensor = tf_utils::CreateTensor(TF_FLOAT,
+                                                     input_dims.data(), input_dims.size(),
+                                                     input_vals.data(), input_vals.size() * sizeof(float));
+    TF_Tensor* output_tensor = nullptr;
+
+    EXPECT_NO_THROW(sessionRun(input_tensor, output_tensor, "../../tests/testData/model.pb", "input_1", "conv2d_7/truediv"));
+
+    const auto data = static_cast<float*>(TF_TensorData(output_tensor));
+
+    std::cout << "Output vals: " << data[0] << ", " << data[1] << ", " << data[2] << ", " << data[3] << std::endl;
+
+    tf_utils::DeleteTensor(input_tensor);
+    tf_utils::DeleteTensor(output_tensor);
+
+}
+
+TEST(itkTensorFlow, sessionRun_model2) {
+
+    long sizeX = 513, sizeY=513, sizeZ=1;
+    const std::vector<std::int64_t> input_dims = {1, sizeX, sizeY, sizeZ};
+    const std::vector<uint8_t> input_vals (sizeX * sizeY * sizeZ, 1);
+
+    TF_Tensor* input_tensor = tf_utils::CreateTensor(TF_UINT8,
+                                                     input_dims.data(), input_dims.size(),
+                                                     input_vals.data(), input_vals.size() * sizeof(uint8_t));
+    TF_Tensor* output_tensor = nullptr;
+
+    EXPECT_NO_THROW(sessionRun(input_tensor, output_tensor, "../../tests/testData/model2.pb", "ImageTensor", "SemanticPredictions"));
+
+    const auto data = static_cast<float*>(TF_TensorData(output_tensor));
+
+    std::cout << "Output vals: " << data[0] << ", " << data[1] << ", " << data[2] << ", " << data[3] << std::endl;
+
+    tf_utils::DeleteTensor(input_tensor);
+    tf_utils::DeleteTensor(output_tensor);
+
+}
+
+TEST(itkTensorFlow, oneImagePipeline1) {
 
     char *argv[] = {
             (char*) "",
-            (char*) "../../tests/testData/dicom/T1map.dcm",
-            (char*) "../../tests/testData/temp/T1map.dcm",
+            (char*) "../../tests/testData/dicom/T1map2.dcm",
+            (char*) "../../tests/testData/temp/samplePipeline1.dcm",
     };
 
-    samplePipeline(3, argv);
+    samplePipeline1(3, argv);
 
     EXPECT_EQ(true, true);
 
 }
+
+TEST(itkTensorFlow, oneImagePipeline2) {
+
+    char *argv[] = {
+            (char*) "",
+            (char*) "../../tests/testData/jpg/image2.jpg",
+            (char*) "../../tests/testData/temp/samplePipeline2.png",
+    };
+
+    samplePipeline2(3, argv);
+
+    EXPECT_EQ(true, true);
+
+}
+
+TEST(itkTensorFlow, tralala1) {
+
+    char *argv[] = {
+            (char*) "",
+            (char*) "../../tests/testData/dicom/T1map.dcm",
+            (char*) "../../tests/testData/temp/tralala1.png",
+    };
+
+    using PixelType = itk::Vector< uint16_t, 1 >;
+    typedef itk::Image< PixelType, 2 > InputImageType;
+
+    typedef itk::ImageFileReader<InputImageType> ReaderType;
+    ReaderType::Pointer reader = ReaderType::New();
+    reader->SetFileName(argv[1]);
+    reader->Update();
+
+    typedef  itk::ImageFileWriter< InputImageType  > WriterType;
+    WriterType::Pointer writer = WriterType::New();
+    writer->SetFileName(argv[2]);
+    writer->SetInput(reader->GetOutput());
+    writer->Update();
+
+}
+
+TEST(itkTensorFlow, tralala2) {
+
+    char *argv[] = {
+            (char*) "",
+            (char*) "../../tests/testData/jpg/image2.jpg",
+            (char*) "../../tests/testData/temp/samplePipeline2.png",
+    };
+
+    //using PixelType = itk::RGBPixel< unsigned char >;
+    //using PixelType = unsigned char ;
+
+    using PixelType = itk::Vector< unsigned char, 1 >;
+    typedef itk::Image< PixelType, 2 > InputImageType;
+
+    typedef itk::ImageFileReader<InputImageType> ReaderType;
+    ReaderType::Pointer reader = ReaderType::New();
+    reader->SetFileName(argv[1]);
+    reader->Update();
+    PixelType *a= reader->GetOutput()->GetBufferPointer();
+    unsigned char *b = (unsigned char*) a;
+    std::cout << a[0] << std::endl;
+    std::cout << (int)b[0] << " " << (int)b[1] << " " << (int)b[2] << " " << std::endl;
+    //reader->GetOutput()->Print(std::cout);
+    //reader->GetOutput(4);
+    EXPECT_EQ(true, true);
+
+}
+
+
+
+
 

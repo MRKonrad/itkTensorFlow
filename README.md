@@ -8,3 +8,6 @@ python ~/Code/tensorflow/tensorflow/python/tools/import_pb_to_tensorboard.py --m
 tensorboard --logdir tests/testData/log
 ```
 
+# Models
+https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/model_zoo.md
+https://colab.research.google.com/github/tensorflow/models/blob/master/research/deeplab/deeplab_demo.ipynb

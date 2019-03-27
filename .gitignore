@@ -2,6 +2,7 @@ tensorflow/
 tests/testData/log
 tests/testData/temp
 tests/testData/model*
+tests/testData/jpg/
 
 # mac
 *.DS_Store
