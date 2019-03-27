@@ -15,11 +15,11 @@ file(GLOB_RECURSE SRC_FILES
         src/*.c*
         src/*.h*
         src/*.t*
-        thirdparty/hello_tf_c_api/src/*.c*
-        thirdparty/hello_tf_c_api/src/*.h*)
+        thirdParty/hello_tf_c_api/src/*.c*
+        thirdParty/hello_tf_c_api/src/*.h*)
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
-include_directories(${CMAKE_SOURCE_DIR}/thirdparty/hello_tf_c_api/src)
+include_directories(${CMAKE_SOURCE_DIR}/thirdParty/hello_tf_c_api/src)
 add_library(itkTensorFlowLib ${SRC_FILES})
 target_link_libraries (itkTensorFlowLib PUBLIC ${ITK_LIBRARIES})
 

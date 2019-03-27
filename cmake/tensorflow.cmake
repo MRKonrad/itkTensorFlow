@@ -9,15 +9,15 @@ elseif(WIN32)
     set(DOWNLOADPATH "https://github.com/Neargye/tensorflow/releases/download/v1.13.1/libtensorflow-cpu-windows-x86_64-1.13.1.zip")
 endif()
 
-if (NOT EXISTS ${CMAKE_SOURCE_DIR}/thirdparty/tensorflow)
-    make_directory(${CMAKE_SOURCE_DIR}/thirdparty/tensorflow)
+if (NOT EXISTS ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow)
+    make_directory(${CMAKE_SOURCE_DIR}/thirdParty/tensorflow)
 endif()
 
-if (NOT EXISTS ${CMAKE_SOURCE_DIR}/thirdparty/tensorflow/lib/libtensorflow.so)
+if (NOT EXISTS ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib/libtensorflow.so)
     file(
             DOWNLOAD
                 ${DOWNLOADPATH}
-                ${CMAKE_SOURCE_DIR}/thirdparty/tensorflow/libtensorflow.tar.gz
+                ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/libtensorflow.tar.gz
             STATUS
                 status
             LOG
@@ -30,12 +30,12 @@ if (NOT EXISTS ${CMAKE_SOURCE_DIR}/thirdparty/tensorflow/lib/libtensorflow.so)
     endif()
 
     execute_process(
-            COMMAND cmake -E tar xvzf ${CMAKE_SOURCE_DIR}/thirdparty/tensorflow/libtensorflow.tar.gz
-            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/thirdparty/tensorflow)
-    file(REMOVE ${CMAKE_SOURCE_DIR}/thirdparty/tensorflow/libtensorflow.tar.gz)
+            COMMAND cmake -E tar xvzf ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/libtensorflow.tar.gz
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow)
+    file(REMOVE ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/libtensorflow.tar.gz)
 
-    include_directories(${CMAKE_SOURCE_DIR}/thirdparty/tensorflow/include/tensorflow/c)
-    link_directories(${CMAKE_SOURCE_DIR}/thirdparty/tensorflow/lib)
+    include_directories(${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/include/tensorflow/c)
+    link_directories(${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib)
 
 endif()
 
