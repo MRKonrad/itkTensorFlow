@@ -27,27 +27,27 @@ TEST(itkTensorFlow, printGraphInfo) {
 //
 //}
 
-TEST(itkTensorFlow, sessionRun_model) {
-
-    long sizeX = 384, sizeY=384, sizeZ=1;
-    const std::vector<std::int64_t> input_dims = {1, sizeX, sizeY, sizeZ};
-    const std::vector<float> input_vals (sizeX * sizeY * sizeZ, 1);
-
-    TF_Tensor* input_tensor = tf_utils::CreateTensor(TF_FLOAT,
-                                                     input_dims.data(), input_dims.size(),
-                                                     input_vals.data(), input_vals.size() * sizeof(float));
-    TF_Tensor* output_tensor = nullptr;
-
-    EXPECT_NO_THROW(sessionRun(input_tensor, output_tensor, "../../tests/testData/model.pb", "input_1", "conv2d_7/truediv"));
-
-    const auto data = static_cast<float*>(TF_TensorData(output_tensor));
-
-    std::cout << "Output vals: " << data[0] << ", " << data[1] << ", " << data[2] << ", " << data[3] << std::endl;
-
-    tf_utils::DeleteTensor(input_tensor);
-    tf_utils::DeleteTensor(output_tensor);
-
-}
+//TEST(itkTensorFlow, sessionRun_model) {
+//
+//    long sizeX = 384, sizeY=384, sizeZ=1;
+//    const std::vector<std::int64_t> input_dims = {1, sizeX, sizeY, sizeZ};
+//    const std::vector<float> input_vals (sizeX * sizeY * sizeZ, 1);
+//
+//    TF_Tensor* input_tensor = tf_utils::CreateTensor(TF_FLOAT,
+//                                                     input_dims.data(), input_dims.size(),
+//                                                     input_vals.data(), input_vals.size() * sizeof(float));
+//    TF_Tensor* output_tensor = nullptr;
+//
+//    EXPECT_NO_THROW(sessionRun(input_tensor, output_tensor, "../../tests/testData/model.pb", "input_1", "conv2d_7/truediv"));
+//
+//    const auto data = static_cast<float*>(TF_TensorData(output_tensor));
+//
+//    std::cout << "Output vals: " << data[0] << ", " << data[1] << ", " << data[2] << ", " << data[3] << std::endl;
+//
+//    tf_utils::DeleteTensor(input_tensor);
+//    tf_utils::DeleteTensor(output_tensor);
+//
+//}
 
 TEST(itkTensorFlow, sessionRun_model2) {
 
