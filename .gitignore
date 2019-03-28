@@ -1,4 +1,4 @@
-thirdParty/
+thirdParty/tensorflow
 tests/testData/log
 tests/testData/temp
 tests/testData/model*
