@@ -34,13 +34,12 @@ if (NOT EXISTS ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib/libtensorflow.so)
             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow)
     file(REMOVE ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/libtensorflow.tar.gz)
 
-    include_directories(${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/include/tensorflow/c)
-    link_directories(${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib)
-
 endif()
+
+include_directories(${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/include/tensorflow/c)
+link_directories(${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib)
 
 if(WIN32)
     configure_file(tensorflow/lib/tensorflow.dll ${CMAKE_CURRENT_BINARY_DIR}/tensorflow.dll COPYONLY)
     configure_file(tensorflow/lib/tensorflow.dll ${CMAKE_CURRENT_BINARY_DIR}/test/tensorflow.dll COPYONLY)
 endif()
-
