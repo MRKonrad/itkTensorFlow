@@ -103,7 +103,7 @@ TEST(itkTensorFlow, tralala1) {
 
     char *argv[] = {
             (char*) "",
-            (char*) "../../tests/testData/dicom/T1map.dcm",
+            (char*) "../../tests/testData/dicom/T1Map.dcm",
             (char*) "../../tests/testData/temp/tralala1.png",
     };
 
