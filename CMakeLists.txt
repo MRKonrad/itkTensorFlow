@@ -15,8 +15,7 @@ file(GLOB_RECURSE SRC_FILES
         src/*.c*
         src/*.h*
         src/*.t*
-        thirdParty/hello_tf_c_api/src/*.c*
-        thirdParty/hello_tf_c_api/src/*.h*)
+        thirdParty/hello_tf_c_api/src/tf_utils.cpp)
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_SOURCE_DIR}/thirdParty/hello_tf_c_api/src)

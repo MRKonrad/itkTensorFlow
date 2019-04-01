@@ -9,7 +9,7 @@
 #include "samplePipeline2.h"
 #include "samplePipeline1.h"
 
-TEST(itkTensorFlow, printTensorFlowVersion) {
+TEST(itkTensorFlow, printTensorFlowVersion_test) {
 
     EXPECT_NO_THROW(printTensorFlowVersion());
 

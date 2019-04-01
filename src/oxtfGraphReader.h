@@ -11,6 +11,8 @@
 #include <string>
 #include <c_api.h> // TensorFlow C API header
 
+// TODO: move implementation to .cpp file
+
 namespace oxtf {
 
     class GraphReader {
@@ -33,7 +35,7 @@ namespace oxtf {
         }
 
         //destructor
-        ~GraphReader() {
+        virtual ~GraphReader() {
             tf_utils::DeleteGraph(_graph);
         }
 
@@ -81,50 +83,6 @@ namespace oxtf {
                     GetOpOutputInfo(_graph, op, 0, &_outputOperationDims, &_outputOperationSize, &_outputOperationType);
                 }
             }
-
-            return 0; //EXIT_SUCCESS
-        }
-
-        int GetOpOutputInfo(TF_Graph* graph, TF_Operation* op, int nth_output, std::int64_t *num_dims, std::vector<std::int64_t> *dims, TF_DataType *type) {
-
-            TF_Status* status = TF_NewStatus();
-            const int num_outputs = TF_OperationNumOutputs(op);
-
-            if (num_outputs == 0){
-                return 1; //EXIT_FAILURE
-            }
-
-            if (nth_output > num_outputs){
-                std::cout << "Incorrect nth_output: " << nth_output << ". Number of outputs: " << num_outputs << std::endl;
-                return 1; //EXIT_FAILURE
-            }
-
-            const TF_Output output = {op, nth_output};
-            *type = TF_OperationOutputType(output);
-
-            const std::int64_t temp_num_dims = TF_GraphGetTensorNumDims(graph, output, status);
-
-            if (TF_GetCode(status) != TF_OK) {
-                std::cout << "Can't get tensor dimensionality" << std::endl;
-                return 1; //EXIT_FAILURE
-            }
-
-            *num_dims = temp_num_dims;
-
-            std::vector<std::int64_t> temp_dims(*num_dims);
-            TF_GraphGetTensorShape(graph, output, temp_dims.data(), *num_dims, status);
-
-            if (TF_GetCode(status) != TF_OK) {
-                std::cout << "Can't get get tensor shape" << std::endl;
-                return 1; //EXIT_FAILURE
-            }
-
-            dims->clear();
-            for (int j = 0; j < *num_dims; ++j) {
-                dims->push_back(temp_dims[j]);
-            }
-
-            TF_DeleteStatus(status);
 
             return 0; //EXIT_SUCCESS
         }
@@ -188,6 +146,50 @@ namespace oxtf {
         int64_t _outputOperationDims;
         std::vector<std::int64_t> _outputOperationSize;
         TF_DataType _outputOperationType;
+
+        int GetOpOutputInfo(TF_Graph* graph, TF_Operation* op, int nth_output, std::int64_t *num_dims, std::vector<std::int64_t> *dims, TF_DataType *type) {
+
+            TF_Status* status = TF_NewStatus();
+            const int num_outputs = TF_OperationNumOutputs(op);
+
+            if (num_outputs == 0){
+                return 1; //EXIT_FAILURE
+            }
+
+            if (nth_output > num_outputs){
+                std::cout << "Incorrect nth_output: " << nth_output << ". Number of outputs: " << num_outputs << std::endl;
+                return 1; //EXIT_FAILURE
+            }
+
+            const TF_Output output = {op, nth_output};
+            *type = TF_OperationOutputType(output);
+
+            const std::int64_t temp_num_dims = TF_GraphGetTensorNumDims(graph, output, status);
+
+            if (TF_GetCode(status) != TF_OK) {
+                std::cout << "Can't get tensor dimensionality" << std::endl;
+                return 1; //EXIT_FAILURE
+            }
+
+            *num_dims = temp_num_dims;
+
+            std::vector<std::int64_t> temp_dims(*num_dims);
+            TF_GraphGetTensorShape(graph, output, temp_dims.data(), *num_dims, status);
+
+            if (TF_GetCode(status) != TF_OK) {
+                std::cout << "Can't get get tensor shape" << std::endl;
+                return 1; //EXIT_FAILURE
+            }
+
+            dims->clear();
+            for (int j = 0; j < *num_dims; ++j) {
+                dims->push_back(temp_dims[j]);
+            }
+
+            TF_DeleteStatus(status);
+
+            return 0; //EXIT_SUCCESS
+        }
 
     };
 

@@ -6,7 +6,7 @@
 
 #include "oxtfGraphReader.h"
 
-TEST(tfGraphReader, tfGraphReader_test) {
+TEST(GraphReader, GraphReader_test) {
 
     std::string graphPath = "../../tests/testData/model2.pb";
 
