@@ -151,6 +151,73 @@ TEST(itkTensorFlow, tralala2) {
 
 }
 
+TEST(itkTensorFlow, TF_DataTypeSize){
+
+    //std::cout << typeid(float) << std::endl;
+    std::cout << (typeid(std::float_t) == typeid(float)) << std::endl;
+    std::cout << (typeid(std::int32_t) == typeid(float)) << std::endl;
+
+    std::vector<std::string> stdTypeNames;
+    stdTypeNames.push_back("");
+    stdTypeNames.push_back(typeid(std::float_t).name());
+    stdTypeNames.push_back(typeid(std::double_t).name());
+    stdTypeNames.push_back(typeid(std::int32_t).name());
+    stdTypeNames.push_back(typeid(std::uint8_t).name());
+    stdTypeNames.push_back(typeid(std::int16_t).name());
+    stdTypeNames.push_back(typeid(std::int8_t).name());
+    stdTypeNames.push_back("");
+    stdTypeNames.push_back(typeid(std::complex<float_t >).name());
+    stdTypeNames.push_back(typeid(std::int64_t).name());
+    stdTypeNames.push_back("");
+    stdTypeNames.push_back("");
+    stdTypeNames.push_back("");
+    stdTypeNames.push_back("");
+    stdTypeNames.push_back("");
+    stdTypeNames.push_back("");
+    stdTypeNames.push_back("");
+    stdTypeNames.push_back(typeid(std::uint16_t).name());
+    stdTypeNames.push_back(typeid(std::complex<double_t >).name());
+    stdTypeNames.push_back("");
+    stdTypeNames.push_back("");
+    stdTypeNames.push_back("");
+    stdTypeNames.push_back(typeid(std::uint32_t).name());
+    stdTypeNames.push_back(typeid(std::uint64_t).name());
+
+    size_t stdTypeSizes[]= {
+            999,
+            sizeof(std::float_t),
+            sizeof(std::double_t),
+            sizeof(std::int32_t),
+            sizeof(std::uint8_t),
+            sizeof(std::int16_t),
+            sizeof(std::int8_t),
+            999,
+            sizeof(std::complex<float_t >),
+            sizeof(std::int64_t),
+            999,
+            999,
+            999,
+            999,
+            999,
+            999,
+            999,
+            sizeof(std::uint16_t),
+            sizeof(std::complex<double_t >),
+            999,
+            999,
+            999,
+            sizeof(std::uint32_t),
+            sizeof(std::uint64_t)
+    };
+
+    std::cout << std::endl;
+    for (int i = 1; i <= 23; i++) {
+        std::cout << TFDataTypeToString((TF_DataType)i) << " \t\tsize: " << TF_DataTypeSize((TF_DataType)i)
+                  << "\tstd: " << stdTypeNames[i] << " size: "<< stdTypeSizes[i] << std::endl;
+    }
+
+}
+
 
 
 

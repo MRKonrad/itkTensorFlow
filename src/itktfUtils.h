@@ -25,8 +25,7 @@ int printGraphInfo(std::string graphPath);
 
 int sessionRun(TF_Tensor* input_tensor, TF_Tensor*& output_tensor, std::string graphPath, std::string inputNodeName, std::string outputNodeName);
 
-inline char fileSeparator()
-{
+inline char fileSeparator() {
 #ifdef _WIN32
     return '\\';
 #else
