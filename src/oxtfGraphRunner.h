@@ -6,7 +6,7 @@
 #define ITKTENSORFLOW_TFPROCESSING_HXX
 
 
-class tfProcessing {
+class GraphRunner {
 
 };
 
