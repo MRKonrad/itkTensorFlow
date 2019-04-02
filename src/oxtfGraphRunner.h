@@ -25,6 +25,12 @@ namespace oxtf {
         virtual ~GraphRunner() = default;
 
         int run(){
+
+            if (TF_TensorType(_inputTensor) != _graphReader->getInputOperationType()){
+                std::cout << "This graph needs: " << _graphReader->getInputOperationType() << " as input type" << std::endl;
+                return 1; // EXIT_FAILURE
+            }
+
             int temp = sessionRun(
                     _inputTensor,
                     _outputTensor,

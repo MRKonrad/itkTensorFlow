@@ -49,6 +49,7 @@ int itkImageToTensor(const typename ImageType::Pointer inputImage, TF_Tensor** o
     } else if ( typeid(PixelType) == typeid(std::uint64_t) ){
         dataType = TF_UINT64;
     } else {
+        std::cout << "Incompatible data type" << std::endl;
         return 1; // EXIT_FAILURE
     }
 
