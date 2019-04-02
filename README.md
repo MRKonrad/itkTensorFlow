@@ -1,4 +1,3 @@
-
 # itkTensorFlow
 ITK filter using provided tensorflow .pd model.
 Heavily based on [Neargye/hello_tf_c_api](https://github.com/Neargye/hello_tf_c_api)
@@ -6,9 +5,20 @@ Heavily based on [Neargye/hello_tf_c_api](https://github.com/Neargye/hello_tf_c_
 Travis build:  
 [![Build Status](https://travis-ci.org/MRKonrad/itkTensorFlow.svg?branch=master)](https://travis-ci.org/MRKonrad/itkTensorFlow)
 
+# How to use
+OSX/Linux
+```console
+git clone https://github.com/MRKonrad/itkTensorFlow.git
+cd itkTensorflow
+git submodule update --init --recursive
+mkdir bin
+cd bin
+cmake ..
+cmake --build .
+```
 
 # How to see a tensorboard from a model
-```bash
+```console
 python ~/Code/tensorflow/tensorflow/python/tools/import_pb_to_tensorboard.py --model_dir tests/testData/model.pb --log_dir tests/testData/log
 tensorboard --logdir tests/testData/log
 ```
@@ -34,3 +44,6 @@ ImageType = itk::Image< PixelType, 2 >;
 **Pro:** makes sense with itk logic  
 **Con:** number of itkImageFilter have to be defined in a constructor. itkImageFilter constructor does not accept arguments. Hence the n has to be defined in the compile time  
 **Partial solution:** allow big number of inputs 
+
+## Other
+* colormap in rgb: https://itk.org/Doxygen/html/classitk_1_1ScalarToRGBColormapImageFilter.html
