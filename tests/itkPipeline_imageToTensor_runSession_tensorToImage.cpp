@@ -17,10 +17,10 @@
 #include "oxtfGraphReader.h"
 #include "oxtfGraphRunner.h"
 
-TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipeline_test) {
+TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineRgb_test) {
 
     std::string inputFilename = "../../tests/testData/jpg/image2.jpg";
-    std::string outputFilename = "../../tests/testData/temp/itkPipeline_imageToTensor_runSession_tensorToImage.png";
+    std::string outputFilename = "../../tests/testData/temp/itkPipeline_imageToTensor_runSession_tensorToImage_rgb.png";
     std::string graphFilename = "../../tests/testData/model2.pb";
 
     oxtf::GraphReader graphReader;
@@ -131,6 +131,120 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipeline_test) {
     WriterType::Pointer writer = WriterType::New();
     writer->SetFileName(outputFilename);
     writer->SetInput(rescaleIntensity->GetOutput());
+    writer->Update();
+
+}
+
+TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineDicom_test) {
+
+    std::string inputFilename = "../../tests/testData/dicom/T1Map.dcm";
+    std::string outputFilename = "../../tests/testData/temp/itkPipeline_imageToTensor_runSession_tensorToImage_dicom.dcm";
+    std::string graphFilename = "../../tests/testData/model2.pb";
+
+    oxtf::GraphReader graphReader;
+    graphReader.setGraphPath(graphFilename);
+    graphReader.readGraph();
+
+    typedef int dcmPixelType;
+    typedef unsigned char tfPixelTypeIn;
+    typedef std::int64_t tfPixelTypeOut;
+    typedef itk::Image<dcmPixelType, 2> dcmImageType;
+    typedef itk::Image<tfPixelTypeIn, 2> dcmImageTypeWithTfPixelTypeIn;
+    typedef itk::Image<tfPixelTypeIn, 3> tfImageTypeIn;
+    typedef itk::Image<tfPixelTypeOut, 2> tfImageTypeOut;
+
+
+    typedef itk::ImageFileReader<dcmImageType> ReaderType;
+    ReaderType::Pointer reader = ReaderType::New();
+    reader->SetFileName(inputFilename);
+    reader->Update();
+
+    typedef  itk::RescaleIntensityImageFilter< dcmImageType, dcmImageTypeWithTfPixelTypeIn  > RescaleIntensityType;
+    RescaleIntensityType::Pointer rescaleIntensity = RescaleIntensityType::New();
+    rescaleIntensity->SetInput(reader->GetOutput());
+    rescaleIntensity->Update();
+
+    typedef itk::ImageRegion< 2 > RegionType;
+    RegionType region = reader->GetOutput()->GetLargestPossibleRegion();
+
+    dcmImageTypeWithTfPixelTypeIn::SizeType lowerExtendRegion;
+    lowerExtendRegion[0] = 0;
+    lowerExtendRegion[1] = 0;
+
+    dcmImageTypeWithTfPixelTypeIn::SizeType upperExtendRegion;
+    upperExtendRegion[0] = 513 - region.GetSize()[0];
+    upperExtendRegion[1] = 513 - region.GetSize()[1];
+
+    dcmPixelType zeroPixel(0);
+
+    typedef itk::ConstantPadImageFilter< dcmImageTypeWithTfPixelTypeIn, dcmImageTypeWithTfPixelTypeIn > ConstantPadType;
+    ConstantPadType::Pointer constantPad = ConstantPadType::New();
+    constantPad->SetPadLowerBound(lowerExtendRegion);
+    constantPad->SetPadUpperBound(upperExtendRegion);
+    constantPad->SetConstant( zeroPixel );
+    constantPad->SetInput(rescaleIntensity->GetOutput());
+    constantPad->Update();
+
+    //***********************
+    //*** RGB to 3d start ***
+    //***********************
+
+    typedef itk::TileImageFilter<dcmImageTypeWithTfPixelTypeIn, tfImageTypeIn> TileImageFilterType;
+    TileImageFilterType::Pointer tiler = TileImageFilterType::New();
+    itk::FixedArray<unsigned int, 3> layout;
+    layout[0] = 1;
+    layout[1] = 1;
+    layout[2] = 0;
+    tiler->SetLayout(layout);
+
+    tfPixelTypeIn tempPixel;
+    for (unsigned int i = 0; i < 3; i++) {
+        dcmImageTypeWithTfPixelTypeIn::Pointer input = constantPad->GetOutput();
+        input->DisconnectPipeline();
+        tiler->SetInput(i, input);
+    }
+    tiler->Update();
+
+    //***********************
+    //*** RGB to 3d stop  ***
+    //***********************
+
+    //*******************************************
+    //*** What we actually want to test start ***
+    //*******************************************
+
+    TF_Tensor *inputTensor;
+    itkImageToTensor<tfImageTypeIn>(tiler->GetOutput(), &inputTensor);
+
+    oxtf::GraphRunner graphRunner;
+    graphRunner.setGraphReader(&graphReader);
+    graphRunner.setInputTensor(inputTensor);
+
+    EXPECT_NO_THROW(graphRunner.run());
+
+    TF_Tensor *outputTensor = graphRunner.getOutputTensor();
+
+    tfImageTypeOut::Pointer image = tfImageTypeOut::New();
+    tensorToItkImage<tfImageTypeOut>(outputTensor, image);
+
+    //*******************************************
+    //*** What we actually want to test stop  ***
+    //*******************************************
+
+    typedef  itk::RescaleIntensityImageFilter< tfImageTypeOut, dcmImageType  > RescaleIntensityType2;
+    RescaleIntensityType2::Pointer rescaleIntensity2 = RescaleIntensityType2::New();
+    rescaleIntensity2->SetInput(image);
+    rescaleIntensity2->Update();
+
+    auto pos = outputFilename.rfind(fileSeparator());
+    if (pos!= std::string::npos) {
+        itk::FileTools::CreateDirectory(outputFilename.substr(0, pos));
+    }
+
+    typedef itk::ImageFileWriter<dcmImageType> WriterType;
+    WriterType::Pointer writer = WriterType::New();
+    writer->SetFileName(outputFilename);
+    writer->SetInput(rescaleIntensity2->GetOutput());
     writer->Update();
 
 }

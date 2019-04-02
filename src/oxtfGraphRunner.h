@@ -32,26 +32,6 @@ namespace oxtf {
                     _graphReader->getInputOperationName(),
                     _graphReader->getOutputOperationName());
 
-//            const auto data = static_cast<std::int64_t *>(TF_TensorData(_outputTensor));
-//
-//            for (int i = 0; i < 500*358; i++){
-//                if (data[i] > 0){
-//                    std::cout << i << " ";
-//                }
-//                //std::cout << data[i+10000] << " ";
-//            }
-//            std::cout << std::endl;
-//            std::cout << std::endl;
-//
-//            int NumDims = TF_NumDims(_outputTensor);
-//            std::cout << "output_tensor size: ";
-//            for (int i = 0; i < NumDims; ++i){
-//                std::cout << TF_Dim(_outputTensor, i) << " ";
-//            }
-//            std::cout << TFDataTypeToString(TF_TensorType(_outputTensor)) << std::endl;
-//
-//            std::cout << _outputTensor << std::endl;
-
             return temp;
         }
 
