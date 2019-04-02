@@ -6,10 +6,12 @@
 
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
+#include "itkFileTools.h"
 #include "itkVectorIndexSelectionCastImageFilter.h"
 #include "itkTileImageFilter.h"
 #include "itkExtractImageFilter.h"
 #include "itkComposeImageFilter.h"
+#include "itkTestingComparisonImageFilter.h"
 
 #include "itkImageToTensor.h"
 #include "tensorToItkImage.h"
@@ -35,14 +37,29 @@ TEST(itkPipeline_imageToTensor_tensorToImage, pipelineGrayscale_test){
     ImageType::Pointer image = ImageType::New();
     tensorToItkImage<ImageType>(tensor, image);
 
+    auto pos = outputFilename.rfind(fileSeparator());
+    if (pos!= std::string::npos) {
+        itk::FileTools::CreateDirectory(outputFilename.substr(0, pos));
+    }
+
     typedef itk::ImageFileWriter<ImageType> WriterType;
     WriterType::Pointer writer = WriterType::New();
     writer->SetFileName(outputFilename);
     writer->SetInput(image);
     writer->Update();
 
+    //***********************
+    //*** compare         ***
+    //***********************
 
+    typedef itk::Testing::ComparisonImageFilter<ImageType, ImageType> ComparisonImageFilter2dType;
+    ComparisonImageFilter2dType::Pointer diff = ComparisonImageFilter2dType::New();
+    diff->SetValidInput(reader->GetOutput());
+    diff->SetTestInput(image);
+    diff->Update();
+    diff->UpdateLargestPossibleRegion();
 
+    ASSERT_LE(diff->GetMaximumDifference(), 0);
 }
 
 TEST(itkPipeline_imageToTensor_tensorToImage, pipelineRgb_test) {
@@ -133,11 +150,29 @@ TEST(itkPipeline_imageToTensor_tensorToImage, pipelineRgb_test) {
     //*** 3d to RGB stop  ***
     //***********************
 
+    auto pos = outputFilename.rfind(fileSeparator());
+    if (pos!= std::string::npos) {
+        itk::FileTools::CreateDirectory(outputFilename.substr(0, pos));
+    }
+
     typedef itk::ImageFileWriter<RgbImageType> WriterTypeRGB;
     WriterTypeRGB::Pointer writer = WriterTypeRGB::New();
     writer->SetFileName(outputFilename);
     writer->SetInput(composer->GetOutput());
     writer->Update();
 
+    //***********************
+    //*** compare         ***
+    //***********************
+
+    // it would be nice to comapre RGBs, but ComparisonImageFilter does not like rgb pixels
+    typedef itk::Testing::ComparisonImageFilter<GrayImageType3d, GrayImageType3d> ComparisonImageFilter2dType;
+    ComparisonImageFilter2dType::Pointer diff = ComparisonImageFilter2dType::New();
+    diff->SetValidInput(tiler->GetOutput());
+    diff->SetTestInput(image);
+    diff->Update();
+    diff->UpdateLargestPossibleRegion();
+
+    ASSERT_LE(diff->GetMaximumDifference(), 0);
 }
 
