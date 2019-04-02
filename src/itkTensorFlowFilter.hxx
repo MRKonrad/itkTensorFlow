@@ -92,6 +92,14 @@ namespace itk {
 
         sessionRun(input_tensor, output_tensor, m_ModelPath, m_InputNodeName, m_OutputNodeName);
 
+        const auto data1 = static_cast<PixelInType *>(TF_TensorData(input_tensor));
+
+        for (int i = 0; i < 100; i++){
+            std::cout << (int)data1[i] << " ";
+        }
+        std::cout << std::endl;
+        std::cout << std::endl;
+
         int NumDims = TF_NumDims(input_tensor);
         std::cout << "output_tensor size: ";
         for (int i = 0; i < NumDims; ++i){

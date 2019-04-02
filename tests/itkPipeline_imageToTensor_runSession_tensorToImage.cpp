@@ -9,108 +9,128 @@
 #include "itkFileTools.h"
 #include "itkVectorIndexSelectionCastImageFilter.h"
 #include "itkTileImageFilter.h"
-#include "itkExtractImageFilter.h"
-#include "itkComposeImageFilter.h"
+#include "itkRescaleIntensityImageFilter.h"
+#include "itkConstantPadImageFilter.h"
 
 #include "itkImageToTensor.h"
 #include "tensorToItkImage.h"
+#include "oxtfGraphReader.h"
+#include "oxtfGraphRunner.h"
 
-TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineRgb_test) {
+TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipeline_test) {
 
-//    std::string inputFilename = "../../tests/testData/jpg/image2.jpg";
-//    std::string outputFilename = "../../tests/testData/temp/itkPipeline_imageToTensor_tensorToImage_rgb.png";
-//    std::string modelFilename = "../../tests/testData/model2.pb";
-//
-//    typedef itk::RGBPixel<unsigned char> RgbPixelType;
-//    typedef unsigned char GrayPixelType;
-//    typedef itk::Image<RgbPixelType, 2> RgbImageType;
-//    typedef itk::Image<GrayPixelType, 2> GrayImageType2d;
-//    typedef itk::Image<GrayPixelType, 3> GrayImageType3d;
-//
-//    typedef itk::ImageFileReader<RgbImageType> ReaderType;
-//    ReaderType::Pointer reader = ReaderType::New();
-//    reader->SetFileName(inputFilename);
-//    reader->Update();
-//
-//    //***********************
-//    //*** RGB to 3d start ***
-//    //***********************
-//    typedef itk::VectorIndexSelectionCastImageFilter<RgbImageType, GrayImageType3d> ExtractFromVectorFilterType;
-//    ExtractFromVectorFilterType::Pointer extractFromVectorFilter = ExtractFromVectorFilterType::New();
-//    extractFromVectorFilter->SetInput(reader->GetOutput());
-//
-//    typedef itk::TileImageFilter<GrayImageType3d, GrayImageType3d> TileImageFilterType;
-//    TileImageFilterType::Pointer tiler = TileImageFilterType::New();
-//    itk::FixedArray<unsigned int, 3> layout;
-//    layout[0] = 1;
-//    layout[1] = 1;
-//    layout[2] = 0;
-//    tiler->SetLayout(layout);
-//
-//    RgbPixelType tempPixel;
-//    for (unsigned int i = 0; i < tempPixel.Size(); i++) {
-//        extractFromVectorFilter->SetIndex(i);
-//        extractFromVectorFilter->Update();
-//        GrayImageType3d::Pointer input = extractFromVectorFilter->GetOutput();
-//        input->DisconnectPipeline();
-//        tiler->SetInput(i, input);
-//    }
-//    tiler->Update();
-//
-//    //***********************
-//    //*** RGB to 3d stop  ***
-//    //***********************
-//
-//    //*******************************************
-//    //*** What we actually want to test start ***
-//    //*******************************************
-//    TF_Tensor *tensor;
-//    itkImageToTensor<GrayImageType3d>(tiler->GetOutput(), &tensor);
-//
-//    GrayImageType3d::Pointer image = GrayImageType3d::New();
-//    tensorToItkImage<GrayImageType3d>(tensor, image);
-//
-//    //*******************************************
-//    //*** What we actually want to test stop  ***
-//    //*******************************************
-//
-//    //***********************
-//    //*** 3d to RGB start ***
-//    //***********************
-//
-//    typedef itk::ExtractImageFilter<GrayImageType3d, GrayImageType2d> ExtractFromVolumeFilterType;
-//    ExtractFromVolumeFilterType::Pointer extractFromVolumeFilter = ExtractFromVolumeFilterType::New();
-//    extractFromVolumeFilter->SetInput(image);
-//    extractFromVolumeFilter->SetDirectionCollapseToIdentity();
-//
-//    typedef itk::ComposeImageFilter<GrayImageType2d, RgbImageType> ComposeImageFilterType;
-//    ComposeImageFilterType::Pointer composer = ComposeImageFilterType::New();
-//
-//    GrayImageType3d::SizeType desiredSize = image->GetLargestPossibleRegion().GetSize();
-//    GrayImageType3d::IndexType desiredIndex = image->GetLargestPossibleRegion().GetIndex();
-//    for (unsigned int i = 0; i < tempPixel.Size(); i++) {
-//        desiredSize[2] = 0;
-//        desiredIndex[2] = i;
-//        GrayImageType3d::RegionType desiredRegion(desiredIndex, desiredSize);
-//        extractFromVolumeFilter->SetExtractionRegion(desiredRegion);
-//        extractFromVolumeFilter->Update();
-//
-//        GrayImageType2d::Pointer input = extractFromVolumeFilter->GetOutput();
-//        input->DisconnectPipeline();
-//        composer->SetInput(i, input);
-//    }
-//
-//    //***********************
-//    //*** 3d to RGB stop  ***
-//    //***********************
-//
-//    auto pos = outputFilename.rfind(fileSeparator());
-//    if (pos!= std::string::npos) {
-//        itk::FileTools::CreateDirectory(outputFilename.substr(0, pos));
-//    }
-//    typedef itk::ImageFileWriter<RgbImageType> WriterTypeRGB;
-//    WriterTypeRGB::Pointer writer = WriterTypeRGB::New();
-//    writer->SetFileName(outputFilename);
-//    writer->SetInput(composer->GetOutput());
-//    writer->Update();
+    std::string inputFilename = "../../tests/testData/jpg/image2.jpg";
+    std::string outputFilename = "../../tests/testData/temp/itkPipeline_imageToTensor_runSession_tensorToImage.png";
+    std::string graphFilename = "../../tests/testData/model2.pb";
+
+    oxtf::GraphReader graphReader;
+    graphReader.setGraphPath(graphFilename);
+    graphReader.readGraph();
+
+    typedef itk::RGBPixel<unsigned char> RgbPixelType;
+    typedef unsigned char GrayPixelTypeIn;
+    typedef std::int64_t GrayPixelTypeOut;
+    typedef unsigned short PixelTypeOut;
+    typedef itk::Image<RgbPixelType, 2> RgbImageType;
+    typedef itk::Image<GrayPixelTypeIn, 3> GrayImageTypeIn;
+    typedef itk::Image<GrayPixelTypeOut, 2> GrayImageTypeOut;
+    typedef itk::Image<PixelTypeOut, 2> ImageTypeOut;
+
+    typedef itk::ImageFileReader<RgbImageType> ReaderType;
+    ReaderType::Pointer reader = ReaderType::New();
+    reader->SetFileName(inputFilename);
+    reader->Update();
+
+    typedef itk::ImageRegion< 2 > RegionType;
+    RegionType region = reader->GetOutput()->GetLargestPossibleRegion();
+
+    RgbImageType::SizeType lowerExtendRegion;
+    lowerExtendRegion[0] = 0;
+    lowerExtendRegion[1] = 0;
+
+    RgbImageType::SizeType upperExtendRegion;
+    upperExtendRegion[0] = 513 - region.GetSize()[0];
+    upperExtendRegion[1] = 513 - region.GetSize()[1];
+
+    RgbPixelType zeroPixel;
+    zeroPixel.SetRed(0);
+    zeroPixel.SetGreen(0);
+    zeroPixel.SetBlue(0);
+
+    typedef itk::ConstantPadImageFilter< RgbImageType, RgbImageType > ConstantPadType;
+    ConstantPadType::Pointer constantPad = ConstantPadType::New();
+    constantPad->SetPadLowerBound(lowerExtendRegion);
+    constantPad->SetPadUpperBound(upperExtendRegion);
+    constantPad->SetConstant( zeroPixel );
+    constantPad->SetInput(reader->GetOutput());
+    constantPad->Update();
+
+    //***********************
+    //*** RGB to 3d start ***
+    //***********************
+
+    typedef itk::VectorIndexSelectionCastImageFilter<RgbImageType, GrayImageTypeIn> ExtractFromVectorFilterType;
+    ExtractFromVectorFilterType::Pointer extractFromVectorFilter = ExtractFromVectorFilterType::New();
+    extractFromVectorFilter->SetInput(reader->GetOutput());
+
+    typedef itk::TileImageFilter<GrayImageTypeIn, GrayImageTypeIn> TileImageFilterType;
+    TileImageFilterType::Pointer tiler = TileImageFilterType::New();
+    itk::FixedArray<unsigned int, 3> layout;
+    layout[0] = 1;
+    layout[1] = 1;
+    layout[2] = 0;
+    tiler->SetLayout(layout);
+
+    RgbPixelType tempPixel;
+    for (unsigned int i = 0; i < tempPixel.Size(); i++) {
+        extractFromVectorFilter->SetIndex(i);
+        extractFromVectorFilter->Update();
+        GrayImageTypeIn::Pointer input = extractFromVectorFilter->GetOutput();
+        input->DisconnectPipeline();
+        tiler->SetInput(i, input);
+    }
+    tiler->Update();
+
+    //***********************
+    //*** RGB to 3d stop  ***
+    //***********************
+
+    //*******************************************
+    //*** What we actually want to test start ***
+    //*******************************************
+
+    TF_Tensor *inputTensor;
+    itkImageToTensor<GrayImageTypeIn>(tiler->GetOutput(), &inputTensor);
+
+    oxtf::GraphRunner graphRunner;
+    graphRunner.setGraphReader(&graphReader);
+    graphRunner.setInputTensor(inputTensor);
+
+    EXPECT_NO_THROW(graphRunner.run());
+
+    TF_Tensor *outputTensor = graphRunner.getOutputTensor();
+
+    GrayImageTypeOut::Pointer image = GrayImageTypeOut::New();
+    tensorToItkImage<GrayImageTypeOut>(outputTensor, image);
+
+    //*******************************************
+    //*** What we actually want to test stop  ***
+    //*******************************************
+
+    typedef  itk::RescaleIntensityImageFilter< GrayImageTypeOut, ImageTypeOut  > RescaleIntensityType;
+    RescaleIntensityType::Pointer rescaleIntensity = RescaleIntensityType::New();
+    rescaleIntensity->SetInput(image);
+    rescaleIntensity->Update();
+
+    auto pos = outputFilename.rfind(fileSeparator());
+    if (pos!= std::string::npos) {
+        itk::FileTools::CreateDirectory(outputFilename.substr(0, pos));
+    }
+
+    typedef itk::ImageFileWriter<ImageTypeOut> WriterType;
+    WriterType::Pointer writer = WriterType::New();
+    writer->SetFileName(outputFilename);
+    writer->SetInput(rescaleIntensity->GetOutput());
+    writer->Update();
+
 }

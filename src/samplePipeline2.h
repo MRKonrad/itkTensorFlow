@@ -29,7 +29,7 @@ int samplePipeline2(int argc, char **argv){
     std::string outputFilename = argv[2];
 
     //using PixelType = itk::RGBPixel< unsigned char >;
-    using PixelType = unsigned char ;
+    using PixelType = unsigned char;
 
     typedef itk::Image< PixelType, 2 > InputImageType;
     typedef itk::Image< PixelType, 2 > FilterImageType;

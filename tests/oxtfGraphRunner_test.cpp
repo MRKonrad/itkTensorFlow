@@ -21,15 +21,14 @@ TEST(GraphRunner, GraphRunner_test) {
     TF_Tensor* inputTensor = tf_utils::CreateTensor(TF_UINT8,
                                                      input_dims.data(), input_dims.size(),
                                                      input_vals.data(), input_vals.size() * sizeof(uint8_t));
-    TF_Tensor* outputTensor = nullptr;
 
     oxtf::GraphRunner graphRunner;
     graphRunner.setGraphReader(&graphReader);
     graphRunner.setInputTensor(inputTensor);
-    graphRunner.setOutputTensor(outputTensor);
 
     // process
     EXPECT_NO_THROW(graphRunner.run());
+    TF_Tensor* outputTensor = graphRunner.getOutputTensor();
 
     // tidy up
     TF_DeleteTensor(inputTensor);

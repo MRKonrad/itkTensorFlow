@@ -27,21 +27,30 @@ TEST(itkPipeline_imageToTensor_tensorToImage, pipelineGrayscale_test){
     typedef itk::Image< PixelType, 2 > ImageType;
     typedef itk::ImageFileReader<ImageType> ReaderType;
 
+    // reading
     ReaderType::Pointer reader = ReaderType::New();
     reader->SetFileName(inputFilename);
     reader->Update();
 
+    // the important part 1
     TF_Tensor* tensor;
     itkImageToTensor<ImageType>(reader->GetOutput(), &tensor);
 
+    // the important part 2
     ImageType::Pointer image = ImageType::New();
     tensorToItkImage<ImageType>(tensor, image);
 
+    // for comparison filter
+    image->SetOrigin(reader->GetOutput()->GetOrigin());
+    image->SetSpacing(reader->GetOutput()->GetSpacing());
+
+    // mkdir
     auto pos = outputFilename.rfind(fileSeparator());
     if (pos!= std::string::npos) {
         itk::FileTools::CreateDirectory(outputFilename.substr(0, pos));
     }
 
+    // writing
     typedef itk::ImageFileWriter<ImageType> WriterType;
     WriterType::Pointer writer = WriterType::New();
     writer->SetFileName(outputFilename);
@@ -81,6 +90,7 @@ TEST(itkPipeline_imageToTensor_tensorToImage, pipelineRgb_test) {
     //***********************
     //*** RGB to 3d start ***
     //***********************
+
     typedef itk::VectorIndexSelectionCastImageFilter<RgbImageType, GrayImageType3d> ExtractFromVectorFilterType;
     ExtractFromVectorFilterType::Pointer extractFromVectorFilter = ExtractFromVectorFilterType::New();
     extractFromVectorFilter->SetInput(reader->GetOutput());
@@ -110,6 +120,7 @@ TEST(itkPipeline_imageToTensor_tensorToImage, pipelineRgb_test) {
     //*******************************************
     //*** What we actually want to test start ***
     //*******************************************
+
     TF_Tensor* tensor;
     itkImageToTensor<GrayImageType3d>(tiler->GetOutput(), &tensor);
 

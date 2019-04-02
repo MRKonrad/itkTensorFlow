@@ -5,12 +5,18 @@
 #ifndef ITKTENSORFLOW_ITKIMAGETOTENSOR_H
 #define ITKTENSORFLOW_ITKIMAGETOTENSOR_H
 
-#include "itkPermuteAxesImageFilter.h"
+#include "itkImage.h"
 #include <c_api.h>
 #include "tf_utils.hpp"
 
 
-
+/**
+ * sadly I do not know how to use itkPermuteAxesImageFilter here
+ * @tparam ImageType
+ * @param inputImage
+ * @param outputTensor
+ * @return
+ */
 template <typename ImageType>
 int itkImageToTensor(const typename ImageType::Pointer inputImage, TF_Tensor** outputTensor){
 
@@ -55,26 +61,28 @@ int itkImageToTensor(const typename ImageType::Pointer inputImage, TF_Tensor** o
         dims[i] = inputImage->GetLargestPossibleRegion().GetSize()[i-1];
     }
 
-    // then convert the axes
-    typedef itk::PermuteAxesImageFilter<ImageType> PermuteFilterType;
-    typename PermuteFilterType::PermuteOrderArrayType order;
-    for (int i = 0; i < num_dims-1; i++){
-        order[i] = num_dims-2-i;
-    }
-    typename PermuteFilterType::Pointer permuteFilter = PermuteFilterType::New();
-    permuteFilter->SetInput(inputImage);
-    permuteFilter->Update();
+    std::vector<PixelType> input_vals(nPixels, 0);
 
-//    *outputTensor = tf_utils::CreateTensor(dataType,
-//                                          dims,
-//                                          num_dims,
-//                                          inputImage->GetBufferPointer(),
-//                                          nPixels * TF_DataTypeSize(dataType));
+    if (num_dims > 4){
+        std::cout << "itkImageToTensor not ready for more than 4 dims" << std::endl;
+        return 1; // EXIT_FAILURE
+    }
+
+    for (int i = 0; i < dims[1] * dims[2]; ++i){
+        if (num_dims == 3){
+            input_vals[i] = inputImage->GetBufferPointer()[i];
+        }
+        else if (num_dims == 4) {
+            for (int j = 0; j < dims[3]; j++){
+                input_vals[i * dims[3] + j] = inputImage->GetBufferPointer()[i + j * dims[1] * dims[2]];
+            }
+        }
+    }
 
     *outputTensor = tf_utils::CreateTensor(dataType,
                                            dims,
                                            num_dims,
-                                           permuteFilter->GetOutput()->GetBufferPointer(),
+                                           input_vals.data(),
                                            nPixels * TF_DataTypeSize(dataType));
 
     delete [] dims;
