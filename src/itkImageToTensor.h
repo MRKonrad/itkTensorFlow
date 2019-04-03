@@ -18,7 +18,7 @@
  * @return
  */
 template <typename ImageType>
-int itkImageToTensor(const typename ImageType::Pointer inputImage, TF_Tensor** outputTensor){
+int itkImageToTensor(const typename ImageType::Pointer inputImage, TF_Tensor** outputTensor, unsigned long num_dims = 0){
 
     typedef typename ImageType::PixelType PixelType;
 
@@ -49,17 +49,20 @@ int itkImageToTensor(const typename ImageType::Pointer inputImage, TF_Tensor** o
     } else if ( typeid(PixelType) == typeid(std::uint64_t) ){
         dataType = TF_UINT64;
     } else {
-        std::cout << "Incompatible data type" << std::endl;
+        std::cout << "itkImageToTensor: incompatible data type" << std::endl;
         return 1; // EXIT_FAILURE
     }
 
     // first get info about the image
     auto nPixels = inputImage->GetLargestPossibleRegion().GetNumberOfPixels();
-    auto num_dims = inputImage->GetLargestPossibleRegion().GetSize().GetSizeDimension() + 1;
-    auto dims = new std::int64_t[num_dims];
-    dims[0] = 1;
-    for (int i = 1; i < num_dims; i++){
-        dims[i] = inputImage->GetLargestPossibleRegion().GetSize()[i-1];
+    if (num_dims == 0){
+        num_dims = inputImage->GetLargestPossibleRegion().GetSize().GetSizeDimension() + 1;
+    }
+
+    std::vector<std::int64_t> dims(num_dims, 1);
+    int image_num_dims = inputImage->GetLargestPossibleRegion().GetIndex().GetIndexDimension ();
+    for (int i = 0; i < image_num_dims; i++){
+        dims[i+1] = inputImage->GetLargestPossibleRegion().GetSize()[i];
     }
 
     std::vector<PixelType> input_vals(nPixels, 0);
@@ -81,12 +84,10 @@ int itkImageToTensor(const typename ImageType::Pointer inputImage, TF_Tensor** o
     }
 
     *outputTensor = tf_utils::CreateTensor(dataType,
-                                           dims,
+                                           dims.data(),
                                            num_dims,
                                            input_vals.data(),
                                            nPixels * TF_DataTypeSize(dataType));
-
-    delete [] dims;
 
     return 0; //EXIT_SUCCESS
 }

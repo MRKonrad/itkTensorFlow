@@ -36,8 +36,6 @@ TEST(tensorToItkImage, tensorToItkImage3d_test) {
                                                     input_dims.data(), input_dims.size(),
                                                     input_vals.data(), input_vals.size() * sizeof(float));
 
-
-
     using ImageType = itk::Image< std::float_t, 3 >;
     ImageType::Pointer image = ImageType::New();
 

@@ -27,7 +27,7 @@ namespace oxtf {
         int run(){
 
             if (TF_TensorType(_inputTensor) != _graphReader->getInputOperationType()){
-                std::cout << "This graph needs: " << _graphReader->getInputOperationType() << " as input type" << std::endl;
+                std::cout << "GraphRunner:run: this graph needs: " << TFDataTypeToString(_graphReader->getInputOperationType()) << " as input type" << std::endl;
                 return 1; // EXIT_FAILURE
             }
 
@@ -37,6 +37,11 @@ namespace oxtf {
                     _graphReader->getGraphPath(),
                     _graphReader->getInputOperationName(),
                     _graphReader->getOutputOperationName());
+
+            if (TF_TensorType(_outputTensor) != _graphReader->getOutputOperationType()){
+                std::cout << "GraphRunner:run: this graph needs: " << TFDataTypeToString(_graphReader->getOutputOperationType()) << " as output type" << std::endl;
+                return 1; // EXIT_FAILURE
+            }
 
             return temp;
         }

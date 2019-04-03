@@ -11,11 +11,14 @@
 #include "itkTileImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkConstantPadImageFilter.h"
+#include "itkExtractImageFilter.h"
 
 #include "itkImageToTensor.h"
 #include "tensorToItkImage.h"
 #include "oxtfGraphReader.h"
 #include "oxtfGraphRunner.h"
+
+#include <string>
 
 TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineRgb_test) {
 
@@ -30,7 +33,7 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineRgb_test) {
     typedef itk::RGBPixel<unsigned char> RgbPixelType;
     typedef unsigned char GrayPixelTypeIn;
     typedef std::int64_t GrayPixelTypeOut;
-    typedef unsigned short PixelTypeOut;
+    typedef unsigned char PixelTypeOut;
     typedef itk::Image<RgbPixelType, 2> RgbImageType;
     typedef itk::Image<GrayPixelTypeIn, 3> GrayImageTypeIn;
     typedef itk::Image<GrayPixelTypeOut, 2> GrayImageTypeOut;
@@ -71,7 +74,7 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineRgb_test) {
 
     typedef itk::VectorIndexSelectionCastImageFilter<RgbImageType, GrayImageTypeIn> ExtractFromVectorFilterType;
     ExtractFromVectorFilterType::Pointer extractFromVectorFilter = ExtractFromVectorFilterType::New();
-    extractFromVectorFilter->SetInput(reader->GetOutput());
+    extractFromVectorFilter->SetInput(constantPad->GetOutput());
 
     typedef itk::TileImageFilter<GrayImageTypeIn, GrayImageTypeIn> TileImageFilterType;
     TileImageFilterType::Pointer tiler = TileImageFilterType::New();
@@ -207,7 +210,7 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineDicom_test) {
 
     //***********************
     //*** RGB to 3d stop  ***
-    //***********************
+    //**********************
 
     //*******************************************
     //*** What we actually want to test start ***
@@ -247,4 +250,108 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineDicom_test) {
     writer->SetInput(rescaleIntensity2->GetOutput());
     writer->Update();
 
+}
+
+TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineDicom2_test) {
+
+    std::string inputFilename = "../../tests/testData/dicom/T1Map.dcm";
+    std::string outputFilename = "../../tests/testData/temp/itkPipeline_imageToTensor_runSession_tensorToImage_dicom2";
+    std::string graphFilename = "../../tests/testData/model.pb";
+
+    oxtf::GraphReader graphReader;
+    graphReader.setGraphPath(graphFilename);
+    if (graphReader.readGraph() != 0){ //needs exit success
+        return;
+    }
+
+    typedef float PixelTypeIn;
+    typedef unsigned char PixelTypeOut;
+    typedef itk::Image<PixelTypeIn, 2> tfImageTypeIn;
+    typedef itk::Image<PixelTypeIn, 3> tfImageTypeOut;
+    typedef itk::Image<PixelTypeIn, 2> ImageTypeOutFloat;
+    typedef itk::Image<PixelTypeOut, 2> ImageTypeOut;
+
+
+    typedef itk::ImageFileReader<tfImageTypeIn> ReaderType;
+    ReaderType::Pointer reader = ReaderType::New();
+    reader->SetFileName(inputFilename);
+    reader->Update();
+
+    typedef itk::ImageRegion< 2 > RegionType;
+    RegionType region = reader->GetOutput()->GetLargestPossibleRegion();
+
+    tfImageTypeIn::SizeType lowerExtendRegion;
+    lowerExtendRegion[0] = 0;
+    lowerExtendRegion[1] = 0;
+
+    tfImageTypeIn::SizeType upperExtendRegion;
+    upperExtendRegion[0] = 384 - region.GetSize()[0];
+    upperExtendRegion[1] = 384 - region.GetSize()[1];
+
+    PixelTypeIn zeroPixel(0);
+
+    typedef itk::ConstantPadImageFilter< tfImageTypeIn, tfImageTypeIn > ConstantPadType;
+    ConstantPadType::Pointer constantPad = ConstantPadType::New();
+    constantPad->SetPadLowerBound(lowerExtendRegion);
+    constantPad->SetPadUpperBound(upperExtendRegion);
+    constantPad->SetConstant( zeroPixel );
+    constantPad->SetInput(reader->GetOutput());
+    constantPad->Update();
+
+    //*******************************************
+    //*** What we actually want to test start ***
+    //*******************************************
+
+    TF_Tensor *inputTensor;
+    itkImageToTensor<tfImageTypeIn>(constantPad->GetOutput(), &inputTensor, 4);
+
+    oxtf::GraphRunner graphRunner;
+    graphRunner.setGraphReader(&graphReader);
+    graphRunner.setInputTensor(inputTensor);
+
+    EXPECT_NO_THROW(graphRunner.run());
+
+    TF_Tensor *outputTensor = graphRunner.getOutputTensor();
+
+    tfImageTypeOut::Pointer image = tfImageTypeOut::New();
+    tensorToItkImage<tfImageTypeOut>(outputTensor, image);
+
+    //*******************************************
+    //*** What we actually want to test stop  ***
+    //*******************************************
+
+    typedef itk::ExtractImageFilter<tfImageTypeOut, ImageTypeOutFloat> ExtractImageFilterType;
+    ExtractImageFilterType::Pointer extractor = ExtractImageFilterType::New();
+    extractor->SetInput(image);
+    extractor->SetDirectionCollapseToIdentity();
+
+    typedef itk::ImageRegion< 3 > RegionType3d;
+    RegionType3d region3d = image->GetLargestPossibleRegion();
+    RegionType3d::SizeType size = region3d.GetSize();
+    RegionType3d::IndexType index = region3d.GetIndex();
+
+    unsigned long nImages = image->GetLargestPossibleRegion().GetSize()[2];
+    for (unsigned int i = 0; i < nImages; i++) {
+        size[2] = 0;
+        index[2] = i;
+        region3d.SetSize(size);
+        region3d.SetIndex(index);
+        extractor->SetExtractionRegion(region3d);
+
+        typedef itk::RescaleIntensityImageFilter<ImageTypeOutFloat, ImageTypeOut> RescaleIntensityType2;
+        RescaleIntensityType2::Pointer rescaleIntensity2 = RescaleIntensityType2::New();
+        rescaleIntensity2->SetInput(extractor->GetOutput());
+        rescaleIntensity2->Update();
+
+        auto pos = outputFilename.rfind(fileSeparator());
+        if (pos != std::string::npos) {
+            itk::FileTools::CreateDirectory(outputFilename.substr(0, pos));
+        }
+
+        typedef itk::ImageFileWriter<ImageTypeOut> WriterType;
+        WriterType::Pointer writer = WriterType::New();
+        writer->SetFileName(outputFilename + "_" + std::to_string(i) + ".png");
+        writer->SetInput(rescaleIntensity2->GetOutput());
+        writer->Update();
+    }
 }

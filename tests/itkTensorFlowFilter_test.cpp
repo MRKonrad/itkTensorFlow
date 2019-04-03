@@ -17,6 +17,12 @@ TEST(itkTensorFlow, printTensorFlowVersion_test) {
 
 TEST(itkTensorFlow, printGraphInfo) {
 
+    EXPECT_NO_THROW(printGraphInfo("../../tests/testData/model.pb"));
+
+}
+
+TEST(itkTensorFlow, printGraphInfo2) {
+
     EXPECT_NO_THROW(printGraphInfo("../../tests/testData/model2.pb"));
 
 }

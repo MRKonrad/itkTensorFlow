@@ -22,54 +22,59 @@ int tensorToItkImage(const TF_Tensor* inputTensor, ImageType* outputImage) {
 
     typedef typename ImageType::PixelType PixelType;
 
+    if (inputTensor == nullptr){
+        std::cout << "tensorToItkImage: empty input tensor" << std::endl;
+        return 1; // EXIT_FAILURE
+    }
+
     TF_DataType dataType = TF_TensorType(inputTensor);
 
     if (dataType == TF_FLOAT && typeid(PixelType) != typeid(std::float_t)) {
-        std::cout << "Output image pixel type not compatible with " << TFDataTypeToString(TF_FLOAT) << std::endl;
+        std::cout << "tensorToItkImage: output image pixel type not compatible with " << TFDataTypeToString(TF_FLOAT) << std::endl;
         return 1; // EXIT_FAILURE
     }
     if (dataType == TF_DOUBLE && typeid(PixelType) != typeid(std::double_t)) {
-        std::cout << "Output image pixel type not compatible with " << TFDataTypeToString(TF_DOUBLE) << std::endl;
+        std::cout << "tensorToItkImage: output image pixel type not compatible with " << TFDataTypeToString(TF_DOUBLE) << std::endl;
         return 1; // EXIT_FAILURE
     }
     if (dataType == TF_INT32 && typeid(PixelType) != typeid(std::int32_t)) {
-        std::cout << "Output image pixel type not compatible with " << TFDataTypeToString(TF_INT32) << std::endl;
+        std::cout << "tensorToItkImage: output image pixel type not compatible with " << TFDataTypeToString(TF_INT32) << std::endl;
         return 1; // EXIT_FAILURE
     }
     if (dataType == TF_UINT8 && typeid(PixelType) != typeid(std::uint8_t)) {
-        std::cout << "Output image pixel type not compatible with " << TFDataTypeToString(TF_UINT8) << std::endl;
+        std::cout << "tensorToItkImage: output image pixel type not compatible with " << TFDataTypeToString(TF_UINT8) << std::endl;
         return 1; // EXIT_FAILURE
     }
     if (dataType == TF_INT16 && typeid(PixelType) != typeid(std::int16_t)) {
-        std::cout << "Output image pixel type not compatible with " << TFDataTypeToString(TF_INT16) << std::endl;
+        std::cout << "tensorToItkImage: output image pixel type not compatible with " << TFDataTypeToString(TF_INT16) << std::endl;
         return 1; // EXIT_FAILURE
     }
     if (dataType == TF_INT8 && typeid(PixelType) != typeid(std::int8_t)) {
-        std::cout << "Output image pixel type not compatible with " << TFDataTypeToString(TF_INT8) << std::endl;
+        std::cout << "tensorToItkImage: output image pixel type not compatible with " << TFDataTypeToString(TF_INT8) << std::endl;
         return 1; // EXIT_FAILURE
     }
     if (dataType == TF_COMPLEX64 && typeid(PixelType) != typeid(std::complex<std::float_t>)) {
-        std::cout << "Output image pixel type not compatible with " << TFDataTypeToString(TF_COMPLEX64) << std::endl;
+        std::cout << "tensorToItkImage: output image pixel type not compatible with " << TFDataTypeToString(TF_COMPLEX64) << std::endl;
         return 1; // EXIT_FAILURE
     }
     if (dataType == TF_INT64 && typeid(PixelType) != typeid(std::int64_t)) {
-        std::cout << "Output image pixel type not compatible with " << TFDataTypeToString(TF_INT64) << std::endl;
+        std::cout << "tensorToItkImage: output image pixel type not compatible with " << TFDataTypeToString(TF_INT64) << std::endl;
         return 1; // EXIT_FAILURE
     }
     if (dataType == TF_UINT16 && typeid(PixelType) != typeid(std::uint16_t)) {
-        std::cout << "Output image pixel type not compatible with " << TFDataTypeToString(TF_UINT16) << std::endl;
+        std::cout << "tensorToItkImage: output image pixel type not compatible with " << TFDataTypeToString(TF_UINT16) << std::endl;
         return 1; // EXIT_FAILURE
     }
     if (dataType == TF_COMPLEX128 && typeid(PixelType) != typeid(std::complex<std::double_t>)) {
-        std::cout << "Output image pixel type not compatible with " << TFDataTypeToString(TF_COMPLEX128) << std::endl;
+        std::cout << "tensorToItkImage: output image pixel type not compatible with " << TFDataTypeToString(TF_COMPLEX128) << std::endl;
         return 1; // EXIT_FAILURE
     }
     if (dataType == TF_UINT32 && typeid(PixelType) != typeid(std::uint32_t)) {
-        std::cout << "Output image pixel type not compatible with " << TFDataTypeToString(TF_UINT32) << std::endl;
+        std::cout << "tensorToItkImage: output image pixel type not compatible with " << TFDataTypeToString(TF_UINT32) << std::endl;
         return 1; // EXIT_FAILURE
     }
     if (dataType == TF_UINT64 && typeid(PixelType) != typeid(std::uint64_t)) {
-        std::cout << "Output image pixel type not compatible with " << TFDataTypeToString(TF_UINT64) << std::endl;
+        std::cout << "tensorToItkImage: output image pixel type not compatible with " << TFDataTypeToString(TF_UINT64) << std::endl;
         return 1; // EXIT_FAILURE
     }
 
@@ -86,7 +91,7 @@ int tensorToItkImage(const TF_Tensor* inputTensor, ImageType* outputImage) {
     auto image_num_dims = start.GetIndexDimension() + 1;
 
     if (tensor_num_dims != image_num_dims) {
-        std::cout << "Output image num_dims: " << image_num_dims << " Tensor num_dims: " << tensor_num_dims
+        std::cout << "tensorToItkImage: output image num_dims: " << image_num_dims << " Tensor num_dims: " << tensor_num_dims
                   << std::endl;
         return 1; // EXIT_FAILURE
     }
