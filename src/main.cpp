@@ -2,7 +2,7 @@
 // Created by Konrad Werys on 24/03/2019.
 //
 
-#include "itktfUtils.h"
+#include "oxtfUtils.h"
 
 int main() {
     printTensorFlowVersion();

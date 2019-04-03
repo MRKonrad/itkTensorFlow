@@ -6,9 +6,7 @@
 #define ITKTENSORFLOW_TFPROCESSING_HXX
 
 #include "oxtfGraphReader.h"
-#include "itktfUtils.h"
-
-// TODO: move implementation to .cpp file
+#include "oxtfUtils.h"
 
 namespace oxtf {
 
@@ -16,59 +14,20 @@ namespace oxtf {
 
     public:
 
-        GraphRunner(){
-            _graphReader = nullptr;
-            _inputTensor = nullptr;
-            _outputTensor = nullptr;
-        }
+        GraphRunner();
 
         virtual ~GraphRunner() = default;
 
-        int run(){
+        int run();
 
-            if (TF_TensorType(_inputTensor) != _graphReader->getInputOperationType()){
-                std::cout << "GraphRunner:run: this graph needs: " << TFDataTypeToString(_graphReader->getInputOperationType()) << " as input type" << std::endl;
-                return 1; // EXIT_FAILURE
-            }
+        GraphReader *getGraphReader() const;
+        void setGraphReader(GraphReader *_graphReader);
 
-            int temp = sessionRun(
-                    _inputTensor,
-                    _outputTensor,
-                    _graphReader->getGraphPath(),
-                    _graphReader->getInputOperationName(),
-                    _graphReader->getOutputOperationName());
+        TF_Tensor *getInputTensor() const;
+        void setInputTensor(TF_Tensor *_inputTensor);
 
-            if (TF_TensorType(_outputTensor) != _graphReader->getOutputOperationType()){
-                std::cout << "GraphRunner:run: this graph needs: " << TFDataTypeToString(_graphReader->getOutputOperationType()) << " as output type" << std::endl;
-                return 1; // EXIT_FAILURE
-            }
-
-            return temp;
-        }
-
-        GraphReader *getGraphReader() const {
-            return _graphReader;
-        }
-
-        void setGraphReader(GraphReader *_graphReader) {
-            GraphRunner::_graphReader = _graphReader;
-        }
-
-        TF_Tensor *getInputTensor() const {
-            return _inputTensor;
-        }
-
-        void setInputTensor(TF_Tensor *_inputTensor) {
-            GraphRunner::_inputTensor = _inputTensor;
-        }
-
-        TF_Tensor *getOutputTensor() const {
-            return _outputTensor;
-        }
-
-        void setOutputTensor(TF_Tensor *_outputTensor) {
-            GraphRunner::_outputTensor = _outputTensor;
-        }
+        TF_Tensor *getOutputTensor() const;
+        void setOutputTensor(TF_Tensor *_outputTensor);
 
     private:
 

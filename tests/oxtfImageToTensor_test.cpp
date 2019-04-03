@@ -4,10 +4,10 @@
 
 #include "gtest/gtest.h"
 
-#include "itkImageToTensor.h"
+#include "oxtfImageToTensor.h"
 
 
-TEST(itkImageToTensor, itkImageToTensor2d_test) {
+TEST(ImageToTensor, ImageToTensor2d_test) {
 
     using ImageType = itk::Image< std::uint64_t, 2 >;
     ImageType::Pointer image = ImageType::New();
@@ -29,13 +29,13 @@ TEST(itkImageToTensor, itkImageToTensor2d_test) {
 
     TF_Tensor* tensor;
 
-    EXPECT_NO_THROW(itkImageToTensor<ImageType>(image, &tensor));
+    EXPECT_NO_THROW(oxtf::ImageToTensor<ImageType>(image, &tensor));
 
     TF_DeleteTensor(tensor);
 
 }
 
-TEST(itkImageToTensor, itkImageToTensor3d_test) {
+TEST(ImageToTensor, ImageToTensor3d_test) {
 
     using ImageType = itk::Image< unsigned char, 3 >;
     ImageType::Pointer image = ImageType::New();
@@ -59,7 +59,7 @@ TEST(itkImageToTensor, itkImageToTensor3d_test) {
 
     TF_Tensor* tensor;
 
-    EXPECT_NO_THROW(itkImageToTensor<ImageType>(image, &tensor));
+    EXPECT_NO_THROW(oxtf::ImageToTensor<ImageType>(image, &tensor));
 
     TF_DeleteTensor(tensor);
 

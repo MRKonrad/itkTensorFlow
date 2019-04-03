@@ -13,8 +13,8 @@
 #include "itkComposeImageFilter.h"
 #include "itkTestingComparisonImageFilter.h"
 
-#include "itkImageToTensor.h"
-#include "tensorToItkImage.h"
+#include "oxtfImageToTensor.h"
+#include "oxtfTensorToItkImage.h"
 
 
 TEST(itkPipeline_imageToTensor_tensorToImage, pipelineGrayscale_test){
@@ -34,11 +34,11 @@ TEST(itkPipeline_imageToTensor_tensorToImage, pipelineGrayscale_test){
 
     // the important part 1
     TF_Tensor* tensor;
-    itkImageToTensor<ImageType>(reader->GetOutput(), &tensor);
+    oxtf::ImageToTensor<ImageType>(reader->GetOutput(), &tensor);
 
     // the important part 2
     ImageType::Pointer image = ImageType::New();
-    tensorToItkImage<ImageType>(tensor, image);
+    oxtf::TensorToImage<ImageType>(tensor, image);
 
     // for comparison filter
     image->SetOrigin(reader->GetOutput()->GetOrigin());
@@ -122,10 +122,10 @@ TEST(itkPipeline_imageToTensor_tensorToImage, pipelineRgb_test) {
     //*******************************************
 
     TF_Tensor* tensor;
-    itkImageToTensor<GrayImageType3d>(tiler->GetOutput(), &tensor);
+    oxtf::ImageToTensor<GrayImageType3d>(tiler->GetOutput(), &tensor);
 
     GrayImageType3d::Pointer image = GrayImageType3d::New();
-    tensorToItkImage<GrayImageType3d>(tensor, image);
+    oxtf::TensorToImage<GrayImageType3d>(tensor, image);
 
     //*******************************************
     //*** What we actually want to test stop  ***

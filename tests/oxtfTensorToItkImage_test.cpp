@@ -3,9 +3,9 @@
 //
 
 #include "gtest/gtest.h"
-#include "tensorToItkImage.h"
+#include "oxtfTensorToItkImage.h"
 
-TEST(tensorToItkImage, tensorToItkImage2d_test) {
+TEST(TensorToImage, TensorToImage2d_test) {
 
     long sizeX = 256, sizeY = 128;
     const std::vector<std::int64_t> input_dims = {1, sizeX, sizeY};
@@ -20,13 +20,13 @@ TEST(tensorToItkImage, tensorToItkImage2d_test) {
     using ImageType = itk::Image< std::uint8_t, 2 >;
     ImageType::Pointer image = ImageType::New();
 
-    EXPECT_NO_THROW(tensorToItkImage<ImageType>(inputTensor, image));
+    EXPECT_NO_THROW(oxtf::TensorToImage<ImageType>(inputTensor, image));
 
     TF_DeleteTensor(inputTensor);
 
 }
 
-TEST(tensorToItkImage, tensorToItkImage3d_test) {
+TEST(TensorToImage, TensorToImage3d_test) {
 
     long sizeX = 128, sizeY = 256, sizeZ = 3;
     const std::vector<std::int64_t> input_dims = {1, sizeX, sizeY, sizeZ};
@@ -39,7 +39,7 @@ TEST(tensorToItkImage, tensorToItkImage3d_test) {
     using ImageType = itk::Image< std::float_t, 3 >;
     ImageType::Pointer image = ImageType::New();
 
-    EXPECT_NO_THROW(tensorToItkImage<ImageType>(inputTensor, image));
+    EXPECT_NO_THROW(oxtf::TensorToImage<ImageType>(inputTensor, image));
 
     TF_DeleteTensor(inputTensor);
 

@@ -13,8 +13,8 @@
 #include "itkConstantPadImageFilter.h"
 #include "itkExtractImageFilter.h"
 
-#include "itkImageToTensor.h"
-#include "tensorToItkImage.h"
+#include "oxtfImageToTensor.h"
+#include "oxtfTensorToItkImage.h"
 #include "oxtfGraphReader.h"
 #include "oxtfGraphRunner.h"
 
@@ -103,7 +103,7 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineRgb_test) {
     //*******************************************
 
     TF_Tensor *inputTensor;
-    itkImageToTensor<GrayImageTypeIn>(tiler->GetOutput(), &inputTensor);
+    oxtf::ImageToTensor<GrayImageTypeIn>(tiler->GetOutput(), &inputTensor);
 
     oxtf::GraphRunner graphRunner;
     graphRunner.setGraphReader(&graphReader);
@@ -114,7 +114,7 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineRgb_test) {
     TF_Tensor *outputTensor = graphRunner.getOutputTensor();
 
     GrayImageTypeOut::Pointer image = GrayImageTypeOut::New();
-    tensorToItkImage<GrayImageTypeOut>(outputTensor, image);
+    oxtf::TensorToImage<GrayImageTypeOut>(outputTensor, image);
 
     //*******************************************
     //*** What we actually want to test stop  ***
@@ -217,7 +217,7 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineDicom_test) {
     //*******************************************
 
     TF_Tensor *inputTensor;
-    itkImageToTensor<tfImageTypeIn>(tiler->GetOutput(), &inputTensor);
+    oxtf::ImageToTensor<tfImageTypeIn>(tiler->GetOutput(), &inputTensor);
 
     oxtf::GraphRunner graphRunner;
     graphRunner.setGraphReader(&graphReader);
@@ -228,7 +228,7 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineDicom_test) {
     TF_Tensor *outputTensor = graphRunner.getOutputTensor();
 
     tfImageTypeOut::Pointer image = tfImageTypeOut::New();
-    tensorToItkImage<tfImageTypeOut>(outputTensor, image);
+    oxtf::TensorToImage<tfImageTypeOut>(outputTensor, image);
 
     //*******************************************
     //*** What we actually want to test stop  ***
@@ -303,7 +303,7 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineDicom2_test) {
     //*******************************************
 
     TF_Tensor *inputTensor;
-    itkImageToTensor<tfImageTypeIn>(constantPad->GetOutput(), &inputTensor, 4);
+    oxtf::ImageToTensor<tfImageTypeIn>(constantPad->GetOutput(), &inputTensor, 4);
 
     oxtf::GraphRunner graphRunner;
     graphRunner.setGraphReader(&graphReader);
@@ -314,7 +314,7 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineDicom2_test) {
     TF_Tensor *outputTensor = graphRunner.getOutputTensor();
 
     tfImageTypeOut::Pointer image = tfImageTypeOut::New();
-    tensorToItkImage<tfImageTypeOut>(outputTensor, image);
+    oxtf::TensorToImage<tfImageTypeOut>(outputTensor, image);
 
     //*******************************************
     //*** What we actually want to test stop  ***

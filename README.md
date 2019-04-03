@@ -1,9 +1,11 @@
 # itkTensorFlow
-ITK filter using provided tensorflow .pd model.
+ITK pipeline using provided tensorflow .pd model.  
 Heavily based on [Neargye/hello_tf_c_api](https://github.com/Neargye/hello_tf_c_api)
 
-Travis build:  
-[![Build Status](https://travis-ci.org/MRKonrad/itkTensorFlow.svg?branch=master)](https://travis-ci.org/MRKonrad/itkTensorFlow)
+| System   |      Badge      |
+|----------|:---------------:|
+| Travis OSX/Linux build | [![Build Status](https://travis-ci.org/MRKonrad/itkTensorFlow.svg?branch=master)](https://travis-ci.org/MRKonrad/itkTensorFlow)| 
+
 
 # How to use
 OSX/Linux
@@ -24,10 +26,11 @@ tensorboard --logdir tests/testData/log
 ```
 
 # Models
+The sample model used in tests can be found here:
 https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/model_zoo.md
 https://colab.research.google.com/github/tensorflow/models/blob/master/research/deeplab/deeplab_demo.ipynb
 
-# Notes
+# Thoughts
 
 ## How to provide n 2d input images
 * itkImage with third dimension as the n-th image

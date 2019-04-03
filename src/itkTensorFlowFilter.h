@@ -6,7 +6,7 @@
 #define ITKTENSORFLOW_ITKTENSORFLOWFILER_H
 
 #include "itkImageToImageFilter.h"
-#include "itktfUtils.h"
+#include "oxtfUtils.h"
 
 namespace itk
 {
@@ -35,15 +35,6 @@ namespace itk
         itkSetMacro( ModelPath, std::string );
         itkGetMacro( ModelPath, std::string );
 
-        itkSetMacro( InputNodeName, std::string );
-        itkGetMacro( InputNodeName, std::string );
-
-        itkSetMacro( OutputNodeName, std::string );
-        itkGetMacro( OutputNodeName, std::string );
-
-        itkSetMacro( InputTensorTF_DataType, TF_DataType );
-        itkGetMacro( InputTensorTF_DataType, TF_DataType );
-
 
     protected:
         TensorFlowImageFilter();
@@ -56,9 +47,6 @@ namespace itk
         ITK_DISALLOW_COPY_AND_ASSIGN(TensorFlowImageFilter); //purposely not implemented
 
         std::string m_ModelPath;
-        std::string m_InputNodeName;
-        std::string m_OutputNodeName;
-        TF_DataType m_InputTensorTF_DataType;
     };
 } //namespace ITK
 
