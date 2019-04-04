@@ -6,8 +6,6 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-
-
 find_package(ITK REQUIRED HINTS ${ITK_DIR_HINTS})
 include(${ITK_USE_FILE})
 
@@ -19,8 +17,12 @@ file(GLOB_RECURSE SRC_FILES
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_SOURCE_DIR}/thirdParty/hello_tf_c_api/src)
+
 add_library(itkTensorFlowLib ${SRC_FILES})
 target_link_libraries (itkTensorFlowLib PUBLIC ${ITK_LIBRARIES})
+
+include(GenerateExportHeader)
+generate_export_header(itkTensorFlowLib)
 
 include(cmake/tensorflow.cmake)
 

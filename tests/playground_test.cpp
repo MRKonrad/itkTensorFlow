@@ -20,7 +20,7 @@ TEST(playground, printGraphInfo) {
     if (!doPrint)
         std::cout.setstate(std::ios_base::failbit);
 
-    EXPECT_NO_THROW(printGraphInfo("../../tests/testData/model.pb"));
+    EXPECT_NO_THROW(printGraphInfo("../../tests/testData/model_ocmr7.pb"));
 
     if (!doPrint)
         std::cout.setstate(std::ios_base::failbit);
@@ -34,7 +34,7 @@ TEST(playground, printGraphInfo2) {
     if (!doPrint)
         std::cout.setstate(std::ios_base::failbit);
 
-    EXPECT_NO_THROW(printGraphInfo("../../tests/testData/model2.pb"));
+    EXPECT_NO_THROW(printGraphInfo("../../tests/testData/model_deeplab.pb"));
 
     if (!doPrint)
         std::cout.setstate(std::ios_base::failbit);
@@ -52,7 +52,7 @@ TEST(playground, sessionRun_model2) {
                                                      input_vals.data(), input_vals.size() * sizeof(uint8_t));
     TF_Tensor* output_tensor = nullptr;
 
-    EXPECT_NO_THROW(sessionRun(input_tensor, output_tensor, "../../tests/testData/model2.pb", "ImageTensor", "SemanticPredictions"));
+    EXPECT_NO_THROW(sessionRun(input_tensor, output_tensor, "../../tests/testData/model_deeplab.pb", "ImageTensor", "SemanticPredictions"));
 
     const auto data = static_cast<float*>(TF_TensorData(output_tensor));
 

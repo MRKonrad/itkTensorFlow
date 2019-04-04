@@ -7,6 +7,7 @@
 
 #include "oxtfGraphReader.h"
 #include "oxtfUtils.h"
+#include <chrono>
 
 namespace oxtf {
 

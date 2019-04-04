@@ -8,7 +8,7 @@
 
 TEST(GraphReader, GraphReader_test) {
 
-    std::string graphPath = "../../tests/testData/model2.pb";
+    std::string graphPath = "../../tests/testData/model_deeplab.pb";
 
     // ground truth input
     std::string gt_InputOperationName = "ImageTensor";

@@ -3,6 +3,7 @@ tests/testData/log
 tests/testData/temp
 tests/testData/model*
 tests/testData/jpg/
+tests/testData/dicom/Volunteer*
 
 # mac
 *.DS_Store

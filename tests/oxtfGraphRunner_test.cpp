@@ -8,7 +8,7 @@
 
 TEST(GraphRunner, GraphRunner_test) {
 
-    std::string graphPath = "../../tests/testData/model2.pb";
+    std::string graphPath = "../../tests/testData/model_deeplab.pb";
 
     oxtf::GraphReader graphReader;
     graphReader.setGraphPath(graphPath);
