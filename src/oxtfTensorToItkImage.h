@@ -27,75 +27,75 @@ namespace oxtf {
         typedef typename ImageType::PixelType PixelType;
 
         if (inputTensor == nullptr) {
-            std::cout << "TensorToImage: empty input tensor" << std::endl;
+            std::cerr << "TensorToImage: empty input tensor" << std::endl;
             return 1; // EXIT_FAILURE
         }
 
         TF_DataType dataType = TF_TensorType(inputTensor);
 
         if (dataType == TF_FLOAT && typeid(PixelType) != typeid(std::float_t)) {
-            std::cout << "TensorToImage: output image pixel type not compatible with " << TFDataTypeToString(TF_FLOAT)
+            std::cerr << "TensorToImage: output image pixel type not compatible with " << TFDataTypeToString(TF_FLOAT)
                       << std::endl;
             return 1; // EXIT_FAILURE
         }
         if (dataType == TF_DOUBLE && typeid(PixelType) != typeid(std::double_t)) {
-            std::cout << "TensorToImage: output image pixel type not compatible with " << TFDataTypeToString(TF_DOUBLE)
+            std::cerr << "TensorToImage: output image pixel type not compatible with " << TFDataTypeToString(TF_DOUBLE)
                       << std::endl;
             return 1; // EXIT_FAILURE
         }
         if (dataType == TF_INT32 && typeid(PixelType) != typeid(std::int32_t)) {
-            std::cout << "TensorToImage: output image pixel type not compatible with " << TFDataTypeToString(TF_INT32)
+            std::cerr << "TensorToImage: output image pixel type not compatible with " << TFDataTypeToString(TF_INT32)
                       << std::endl;
             return 1; // EXIT_FAILURE
         }
         if (dataType == TF_UINT8 && typeid(PixelType) != typeid(std::uint8_t)) {
-            std::cout << "TensorToImage: output image pixel type not compatible with " << TFDataTypeToString(TF_UINT8)
+            std::cerr << "TensorToImage: output image pixel type not compatible with " << TFDataTypeToString(TF_UINT8)
                       << std::endl;
             return 1; // EXIT_FAILURE
         }
         if (dataType == TF_INT16 && typeid(PixelType) != typeid(std::int16_t)) {
-            std::cout << "TensorToImage: output image pixel type not compatible with " << TFDataTypeToString(TF_INT16)
+            std::cerr << "TensorToImage: output image pixel type not compatible with " << TFDataTypeToString(TF_INT16)
                       << std::endl;
             return 1; // EXIT_FAILURE
         }
         if (dataType == TF_INT8 && typeid(PixelType) != typeid(std::int8_t)) {
-            std::cout << "TensorToImage: output image pixel type not compatible with " << TFDataTypeToString(TF_INT8)
+            std::cerr << "TensorToImage: output image pixel type not compatible with " << TFDataTypeToString(TF_INT8)
                       << std::endl;
             return 1; // EXIT_FAILURE
         }
         if (dataType == TF_COMPLEX64 && typeid(PixelType) != typeid(std::complex<std::float_t>)) {
-            std::cout << "TensorToImage: output image pixel type not compatible with "
+            std::cerr << "TensorToImage: output image pixel type not compatible with "
                       << TFDataTypeToString(TF_COMPLEX64) << std::endl;
             return 1; // EXIT_FAILURE
         }
         if (dataType == TF_INT64 && typeid(PixelType) != typeid(std::int64_t)) {
-            std::cout << "TensorToImage: output image pixel type not compatible with " << TFDataTypeToString(TF_INT64)
+            std::cerr << "TensorToImage: output image pixel type not compatible with " << TFDataTypeToString(TF_INT64)
                       << std::endl;
             return 1; // EXIT_FAILURE
         }
         if (dataType == TF_UINT16 && typeid(PixelType) != typeid(std::uint16_t)) {
-            std::cout << "TensorToImage: output image pixel type not compatible with " << TFDataTypeToString(TF_UINT16)
+            std::cerr << "TensorToImage: output image pixel type not compatible with " << TFDataTypeToString(TF_UINT16)
                       << std::endl;
             return 1; // EXIT_FAILURE
         }
         if (dataType == TF_COMPLEX128 && typeid(PixelType) != typeid(std::complex<std::double_t>)) {
-            std::cout << "TensorToImage: output image pixel type not compatible with "
+            std::cerr << "TensorToImage: output image pixel type not compatible with "
                       << TFDataTypeToString(TF_COMPLEX128) << std::endl;
             return 1; // EXIT_FAILURE
         }
         if (dataType == TF_UINT32 && typeid(PixelType) != typeid(std::uint32_t)) {
-            std::cout << "TensorToImage: output image pixel type not compatible with " << TFDataTypeToString(TF_UINT32)
+            std::cerr << "TensorToImage: output image pixel type not compatible with " << TFDataTypeToString(TF_UINT32)
                       << std::endl;
             return 1; // EXIT_FAILURE
         }
         if (dataType == TF_UINT64 && typeid(PixelType) != typeid(std::uint64_t)) {
-            std::cout << "TensorToImage: output image pixel type not compatible with " << TFDataTypeToString(TF_UINT64)
+            std::cerr << "TensorToImage: output image pixel type not compatible with " << TFDataTypeToString(TF_UINT64)
                       << std::endl;
             return 1; // EXIT_FAILURE
         }
 
         if (TF_DataTypeSize(dataType) != sizeof(PixelType)) {
-            std::cout << "Size of TF_DataType " << TFDataTypeToString(dataType) << ": " << TF_DataTypeSize(dataType)
+            std::cerr << "Size of TF_DataType " << TFDataTypeToString(dataType) << ": " << TF_DataTypeSize(dataType)
                       << " differs from size of PixelType: " << sizeof(PixelType) << std::endl;
             return 1; // EXIT_FAILURE
         }
@@ -104,11 +104,11 @@ namespace oxtf {
         start.Fill(0);
 
         auto tensor_num_dims = TF_NumDims(inputTensor);
-        auto image_num_dims = start.GetIndexDimension() + 1;
+        auto image_num_dims = start.GetIndexDimension();
 
-        if (tensor_num_dims != image_num_dims) {
-            std::cout << "TensorToImage: output image num_dims: " << image_num_dims << " Tensor num_dims: "
-                      << tensor_num_dims << std::endl;
+        if (tensor_num_dims - 1 != image_num_dims) {
+            std::cerr << "TensorToImage: output image num_dims: " << image_num_dims << " tensor num_dims: "
+                      << tensor_num_dims  << " (tensor should have 1 more dim) " << std::endl;
             return 1; // EXIT_FAILURE
         }
 
@@ -127,9 +127,9 @@ namespace oxtf {
         const auto tensor_data = static_cast<PixelType *>(TF_TensorData(inputTensor));
 
         for (int i = 0; i < size_temp[0] * size_temp[1]; ++i) {
-            if (image_num_dims == 3) {
+            if (image_num_dims == 2) {
                 outputImage->GetBufferPointer()[i] = tensor_data[i];
-            } else if (image_num_dims == 4) {
+            } else if (image_num_dims == 3) {
 
                 for (int j = 0; j < size_temp[2]; j++) {
                     outputImage->GetBufferPointer()[i + j * size_temp[0] * size_temp[1]] = tensor_data[

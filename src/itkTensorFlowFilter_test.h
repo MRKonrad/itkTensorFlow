@@ -45,7 +45,7 @@ namespace itk
         virtual void GenerateOutputInformation() ITK_OVERRIDE;
 
         /** Check if input/output types and sizes are compatible with graph's types and sizes */
-        virtual int VerifyTypesAndSizes();
+        virtual int VerifySizes();
 
     private:
         ITK_DISALLOW_COPY_AND_ASSIGN(TensorFlowImageFilter); //purposely not implemented

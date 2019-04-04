@@ -10,7 +10,7 @@ namespace oxtf {
     GraphRunner::run(){
 
         if (TF_TensorType(_inputTensor) != _graphReader->getInputOperationType()){
-            std::cout << "GraphRunner:run: this graph needs: " << TFDataTypeToString(_graphReader->getInputOperationType()) << " as input type" << std::endl;
+            std::cerr << "GraphRunner:run: this graph needs: " << TFDataTypeToString(_graphReader->getInputOperationType()) << " as input type" << std::endl;
             return 1; // EXIT_FAILURE
         }
 
@@ -28,7 +28,7 @@ namespace oxtf {
         std::cout << "GraphRunner::run time: " << float(duration.count())/1000. << " seconds. " << std::endl;
 
         if (TF_TensorType(_outputTensor) != _graphReader->getOutputOperationType()){
-            std::cout << "GraphRunner:run: this graph needs: " << TFDataTypeToString(_graphReader->getOutputOperationType()) << " as output type" << std::endl;
+            std::cerr << "GraphRunner:run: this graph needs: " << TFDataTypeToString(_graphReader->getOutputOperationType()) << " as output type" << std::endl;
             return 1; // EXIT_FAILURE
         }
 

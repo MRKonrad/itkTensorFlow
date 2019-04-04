@@ -47,6 +47,12 @@ namespace oxtf {
 
                 _outputOperationName = name;
                 GetOpOutputInfo(_graph, op, 0, &_outputOperationDims, &_outputOperationSize, &_outputOperationType);
+                if (_outputOperationDims >= 3){
+                    if (       _outputOperationSize[1] > _operationWithBiggest2nd3rdSize[1]
+                            && _outputOperationSize[2] > _operationWithBiggest2nd3rdSize[2] ){
+                        _operationWithBiggest2nd3rdSize = _outputOperationSize;
+                    }
+                }
             }
         }
 
@@ -108,6 +114,11 @@ namespace oxtf {
         return _outputOperationType;
     }
 
+    const std::vector<int64_t> &
+    GraphReader::getOperationWithBiggest2nd3rdSize() const {
+        return _operationWithBiggest2nd3rdSize;
+    }
+
     GraphReader::GraphReader() {
         _graphPath = "";
 
@@ -120,6 +131,8 @@ namespace oxtf {
         _outputOperationName = "";
         _outputOperationDims = 0;
         _outputOperationType = TF_FLOAT;
+
+        _operationWithBiggest2nd3rdSize.resize(3, -1);
     }
 
     GraphReader::~GraphReader() {

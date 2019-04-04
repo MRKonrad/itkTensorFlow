@@ -9,7 +9,7 @@
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkImageAlgorithm.h"
-#include "itkTensorFlowFilter.h"
+#include "itkTensorFlowFilter_test.h"
 #include "oxtfImageToTensor.h"
 #include "oxtfTensorToItkImage.h"
 #include "oxtfGraphRunner.h"
@@ -71,7 +71,33 @@ namespace itk {
 
     template< class TImageIn, class TImageOut>
     int TensorFlowImageFilter< TImageIn, TImageOut >
-    ::VerifyTypesAndSizes() {
+    ::VerifySizes() {
+
+        typename TImageIn::SizeType inputSize = this->GetInput(0)->GetLargestPossibleRegion().GetSize();
+
+        int inputImageNumDims = inputSize.GetSizeDimension();
+        int graphInputDims = (int)this->m_GraphReader->getInputOperationDims();
+        if (inputImageNumDims != graphInputDims-1){
+            std::cerr << "inputImageNumDims: " << inputImageNumDims << " graphInputDims: " << graphInputDims <<
+                      ". graphInputDims should be 1 more than graphInputDims " << std::endl;
+            throw std::runtime_error("Number of dimensions is different in the graph input and input image ");
+        }
+
+        int outputImageNumDims = this->GetOutput(0)->GetLargestPossibleRegion().GetSize().GetSizeDimension();
+        int graphOutputDims = (int)this->m_GraphReader->getOutputOperationDims();
+        if (outputImageNumDims != graphOutputDims-1){
+            std::cerr << "outputImageNumDims: " << outputImageNumDims << " graphOutputDims: " << graphOutputDims <<
+                      ". outputImageNumDims should be 1 more than graphOutputDims " << std::endl;
+            throw std::runtime_error("Number of dimensions is different in the graph output and output image ");
+        }
+
+        std::vector<std::int64_t> biggestTensor2nd3rd = this->m_GraphReader->getOperationWithBiggest2nd3rdSize();
+        if (inputSize[0] > biggestTensor2nd3rd[1] || inputSize[1] > biggestTensor2nd3rd[2]){
+            std::cerr << "Image is bigger than the biggest tensor in the graph.\nImage: [" <<
+                      inputSize[0] << " " << inputSize[1] << "] biggest tensor: [" << biggestTensor2nd3rd[1] <<
+                      " " << biggestTensor2nd3rd[2] << "] " << std::endl;
+            throw std::runtime_error("Image is bigger than the biggest tensor in the graph ");
+        }
 
         return EXIT_SUCCESS;
     };
@@ -80,7 +106,7 @@ namespace itk {
     void TensorFlowImageFilter< TImageIn, TImageOut >
     ::GenerateData() {
 
-        VerifyTypesAndSizes();
+        VerifySizes();
 
         TF_Tensor *inputTensor;
         if( oxtf::ImageToTensor<TImageIn>(this->GetInput(), &inputTensor, 4) != EXIT_SUCCESS ){

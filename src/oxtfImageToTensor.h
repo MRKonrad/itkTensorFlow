@@ -54,7 +54,7 @@ namespace oxtf {
          } else if (typeid(PixelType) == typeid(std::uint64_t)) {
              dataType = TF_UINT64;
          } else {
-             std::cout << "ImageToTensor: incompatible data type" << std::endl;
+             std::cerr << "ImageToTensor: incompatible data type" << std::endl;
              return 1; // EXIT_FAILURE
          }
 
@@ -73,7 +73,7 @@ namespace oxtf {
          std::vector<PixelType> input_vals(nPixels, 0);
 
          if (num_dims > 4) {
-             std::cout << "ImageToTensor not ready for more than 4 dims" << std::endl;
+             std::cerr << "ImageToTensor not ready for more than 4 dims" << std::endl;
              return 1; // EXIT_FAILURE
          }
 

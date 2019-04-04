@@ -37,6 +37,8 @@ namespace oxtf {
         const std::vector<int64_t> &getOutputOperationSize() const;
         TF_DataType getOutputOperationType() const;
 
+        const std::vector<int64_t> &getOperationWithBiggest2nd3rdSize() const;
+
         // constuctor
         GraphReader();
 
@@ -58,6 +60,8 @@ namespace oxtf {
         int64_t _outputOperationDims;
         std::vector<std::int64_t> _outputOperationSize;
         TF_DataType _outputOperationType;
+
+        std::vector<std::int64_t> _operationWithBiggest2nd3rdSize;
 
         int GetOpOutputInfo(
                 TF_Graph* graph,
