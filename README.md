@@ -30,6 +30,9 @@ The sample model used in tests can be found here:
 https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/model_zoo.md
 https://colab.research.google.com/github/tensorflow/models/blob/master/research/deeplab/deeplab_demo.ipynb
 
+# TODO:
+* remove dependency to hello_tf_c_api 
+
 # Thoughts
 
 ## How to provide n 2d input images

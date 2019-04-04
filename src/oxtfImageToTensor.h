@@ -23,7 +23,7 @@ namespace oxtf {
 
      template<typename ImageType>
      int
-     ImageToTensor(const typename ImageType::Pointer inputImage, TF_Tensor **outputTensor, unsigned long num_dims = 0) {
+     ImageToTensor(const ImageType* inputImage, TF_Tensor **outputTensor, unsigned long num_dims = 0) {
 
          typedef typename ImageType::PixelType PixelType;
 
