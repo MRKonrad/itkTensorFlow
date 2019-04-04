@@ -9,7 +9,7 @@
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkImageAlgorithm.h"
-#include "itkTensorFlowFilter_test.h"
+#include "itkTensorFlowFilter.h"
 #include "oxtfImageToTensor.h"
 #include "oxtfTensorToItkImage.h"
 #include "oxtfGraphRunner.h"

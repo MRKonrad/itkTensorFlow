@@ -13,14 +13,13 @@
 
 namespace oxtf {
 
-/**
- * sadly I do not know how to use itkPermuteAxesImageFilter here
- * @tparam ImageType
- * @param inputImage
- * @param outputTensor
- * @return
- */
-
+    /**
+     * sadly I do not know how to use itkPermuteAxesImageFilter here
+     * @tparam ImageType
+     * @param inputImage
+     * @param outputTensor
+     * @return
+     */
      template<typename ImageType>
      int
      ImageToTensor(const ImageType* inputImage, TF_Tensor **outputTensor, unsigned long num_dims = 0) {

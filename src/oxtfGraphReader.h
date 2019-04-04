@@ -39,6 +39,14 @@ namespace oxtf {
 
         const std::vector<int64_t> &getOperationWithBiggest2nd3rdSize() const;
 
+        int64_t getMaxX() const{
+            return _operationWithBiggest2nd3rdSize[1];
+        }
+
+        int64_t getMaxY() const{
+            return _operationWithBiggest2nd3rdSize[2];
+        }
+
         // constuctor
         GraphReader();
 

@@ -4,7 +4,7 @@
 
 #include "gtest/gtest.h"
 
-#include "itkTensorFlowFilter_test.h"
+#include "itkTensorFlowFilter.h"
 
 
 TEST(itkTensorFlowFilter, itkTensorFlowFilter_incorrectInputType_shouldThrowError) {

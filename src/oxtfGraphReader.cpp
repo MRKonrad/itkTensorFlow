@@ -34,6 +34,7 @@ namespace oxtf {
             const int num_outputs = TF_OperationNumOutputs(op);
             const int num_inputs = TF_OperationNumInputs(op);
 
+            // get input params
             if (_inputOperationDims == 0){
                 if (num_outputs != 1){
                     std::cout << "GraphReader can only handle graphs with one input";
@@ -41,17 +42,16 @@ namespace oxtf {
                 }
                 _inputOperationName = name;
                 GetOpOutputInfo(_graph, op, 0, &_inputOperationDims, &_inputOperationSize, &_inputOperationType);
-            } else {
-                // TODO: find more pretty solution
-                // currently overwriting the all output params with each operation.
+            }
 
-                _outputOperationName = name;
-                GetOpOutputInfo(_graph, op, 0, &_outputOperationDims, &_outputOperationSize, &_outputOperationType);
-                if (_outputOperationDims >= 3){
-                    if (       _outputOperationSize[1] > _operationWithBiggest2nd3rdSize[1]
-                            && _outputOperationSize[2] > _operationWithBiggest2nd3rdSize[2] ){
-                        _operationWithBiggest2nd3rdSize = _outputOperationSize;
-                    }
+            // get output params
+            // TODO: find more pretty solution, currently overwriting the all output params with each operation.
+            _outputOperationName = name;
+            GetOpOutputInfo(_graph, op, 0, &_outputOperationDims, &_outputOperationSize, &_outputOperationType);
+            if (_outputOperationDims >= 3){
+                if (       _outputOperationSize[1] > _operationWithBiggest2nd3rdSize[1]
+                        && _outputOperationSize[2] > _operationWithBiggest2nd3rdSize[2] ){
+                    _operationWithBiggest2nd3rdSize = _outputOperationSize;
                 }
             }
         }

@@ -15,7 +15,7 @@
 #include "itkFlipImageFilter.h"
 #include "itkThresholdImageFilter.h"
 
-#include "itkTensorFlowFilter_test.h"
+#include "itkTensorFlowFilter.h"
 
 #include <string>
 
