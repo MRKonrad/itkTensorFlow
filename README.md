@@ -26,9 +26,13 @@ tensorboard --logdir tests/testData/log
 ```
 
 # Models
-The sample model used in tests can be found here:
-https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/model_zoo.md
-https://colab.research.google.com/github/tensorflow/models/blob/master/research/deeplab/deeplab_demo.ipynb
+The sample model used in tests can be found in a nice jupyter notebook:
+https://colab.research.google.com/github/tensorflow/models/blob/master/research/deeplab/deeplab_demo.ipynb  
+In this notebook, to get the image indexing right, I was playing with rotated image:
+http://mrkonrad.github.io/MRKonrad/files/cnnRotatedImage/image2_90.jpg  
+http://mrkonrad.github.io/MRKonrad/files/cnnRotatedImage/image2_180.jpg  
+http://mrkonrad.github.io/MRKonrad/files/cnnRotatedImage/image2_270.jpg  
+
 
 # TODO:
 * remove dependency to hello_tf_c_api 

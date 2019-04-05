@@ -10,8 +10,9 @@
 #include "itkFileTools.h"
 #include "itkVectorIndexSelectionCastImageFilter.h"
 #include "itkTileImageFilter.h"
-#include "itkRescaleIntensityImageFilter.h"
+#include "itkMultiplyImageFilter.h"
 #include "itkConstantPadImageFilter.h"
+#include "itkCropImageFilter.h"
 #include "itkExtractImageFilter.h"
 #include "itkFlipImageFilter.h"
 #include "itkThresholdImageFilter.h"
@@ -26,9 +27,6 @@
 
 namespace oxtf {
 
-    /**
-     * TODO: move to seperate folder app?
-     */
     class PipelineBuilder {
 
     public:
@@ -85,7 +83,7 @@ namespace oxtf {
          */
         template< typename TImage>
         typename TImage::Pointer
-        padImage(TImage* image, int64_t x, int64_t y);
+        padImage(typename TImage::Pointer image, int64_t x, int64_t y);
 
         /**
          * TODO: should I make is static or move to Utils?
@@ -96,7 +94,7 @@ namespace oxtf {
          */
         template< typename TImage>
         typename TImage::Pointer
-        flipImage(TImage* image, const std::vector<bool> &flipAxes);
+        flipImage(typename TImage::Pointer image, const std::vector<bool> &flipAxes);
 
         /**
          * TODO: should I make is static or move to Utils?
@@ -107,7 +105,7 @@ namespace oxtf {
          */
         template< typename TImage>
         typename TImage::Pointer
-        thresholdImage(TImage* image, float threshold);
+        thresholdImage(typename TImage::Pointer image, float threshold);
 
         /**
          * TODO: should I make is static or move to Utils?
@@ -118,7 +116,21 @@ namespace oxtf {
          */
         template< typename TImage>
         typename TImage::Pointer
-        runGraphOnImage(TImage* image, const oxtf::GraphReader *graphReader);
+        runGraphOnImage(typename TImage::Pointer image, const oxtf::GraphReader *graphReader);
+
+        template< typename TImage>
+        typename TImage::Pointer
+        cropImage(typename TImage::Pointer image, unsigned long x, unsigned long y);
+
+        /**
+         *
+         * @tparam TImage
+         * @param factor
+         * @return
+         */
+        template< typename TImage>
+        typename TImage::Pointer
+        multiplyImage(typename TImage::Pointer, float factor);
 
         /**
          * TODO: should I make is static or move to Utils?
@@ -134,16 +146,49 @@ namespace oxtf {
 
         ~PipelineBuilder() = default;
 
+        const std::vector<std::string> &getInputImagesGrayscalePaths() const;
+
+        void setInputImagesGrayscalePaths(const std::vector<std::string> &_inputImagesGrayscalePaths);
+
+        const std::string &getInputImageRgbPath() const;
+
+        void setInputImageRgbPath(const std::string &_inputImageRgbPath);
+
+        const std::string &getOutputDirPath() const;
+
+        void setOutputDirPath(const std::string &_outputDirPath);
+
+        const std::string &getGraphPath() const;
+
+        void setGraphPath(const std::string &_graphPath);
+
+        bool isPaddingOrNor() const;
+
+        void setPaddingOrNot(bool _doPadding);
+
+        const std::vector<bool> &getFlipAxes() const;
+
+        void setFlipAxes(const std::vector<bool> &_flipAxes);
+
+        float getThreshold() const;
+
+        void setThreshold(float _threshold);
+
+        float getMultiplyOutputByFactor() const;
+
+        void setMultiplyOutputByFactor(float _multiplyOutputByFactor);
+
     private:
-        std::vector<std::string> _input_images_grayscale_paths;
-        std::string _input_image_rgb_path;
+        std::vector<std::string> _inputImagesGrayscalePaths;
+        std::string _inputImageRgbPath;
 
-        std::string _output_dir_path;
-        std::string _graph_path;
+        std::string _outputDirPath;
+        std::string _graphPath;
 
-        bool _doPadding;
+        bool _paddingOrNor;
         std::vector<bool> _flipAxes;
         float _threshold;
+        float _multiplyOutputByFactor;
     };
 
 } // namespace oxtf

@@ -1,4 +1,5 @@
 # download sample model
+# https://colab.research.google.com/github/tensorflow/models/blob/master/research/deeplab/deeplab_demo.ipynb
 
 if (NOT EXISTS ${CMAKE_SOURCE_DIR}/tests/testData)
     make_directory(${CMAKE_SOURCE_DIR}/tests/testData)

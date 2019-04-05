@@ -16,12 +16,15 @@ namespace oxtf {
 
     template <typename ImagePixelType, typename TensorPixelType>
     int
-    convertBuffer(std::vector<std::int64_t> dims, ImagePixelType* pixelBuffer, TensorPixelType* tensorBuffer){
+    convertImageBufferToTensorBuffer(std::vector<std::int64_t> dims, ImagePixelType *pixelBuffer,
+                                     TensorPixelType *tensorBuffer){
         for (int x = 0; x < dims[1]; x++){
             for (int y = 0; y < dims[2]; y++){
                 for (int z = 0; z < dims[3]; z++){
                     tensorBuffer[ y * dims[1] * dims[3] + x * dims[3] + z ] =
                             static_cast<TensorPixelType>(pixelBuffer[ x + y * dims[1] + z * dims[1] * dims[2] ]);
+//                    tensorBuffer[ x * dims[2] * dims[3] + y * dims[3] + z ] =
+//                            static_cast<TensorPixelType>(pixelBuffer[ x + y * dims[1] + z * dims[1] * dims[2] ]);
                 }
             }
         }
@@ -33,7 +36,7 @@ namespace oxtf {
                      unsigned long nPixels, TF_DataType dataType, size_t num_dims){
 
         std::vector<TensorPixelType> input_vals(nPixels, 0);
-        convertBuffer(dims, pixelBuffer, input_vals.data());
+        convertImageBufferToTensorBuffer(dims, pixelBuffer, input_vals.data());
         *outputTensor = tf_utils::CreateTensor(dataType, dims.data(), num_dims, input_vals.data(), nPixels * TF_DataTypeSize(dataType));
 
         return 0; // EXIT_SUCCESS
@@ -56,17 +59,20 @@ namespace oxtf {
         auto nPixels = inputImage->GetLargestPossibleRegion().GetNumberOfPixels();
         auto num_dims = inputImage->GetLargestPossibleRegion().GetSize().GetSizeDimension() + 1;
 
-        std::vector<std::int64_t> dims(4, 1);
-        int image_num_dims = inputImage->GetLargestPossibleRegion().GetIndex().GetIndexDimension();
-        for (int i = 0; i < image_num_dims; i++) {
-            dims[i + 1] = inputImage->GetLargestPossibleRegion().GetSize()[i];
-        }
-
         if (num_dims > 4) {
             std::cerr << "ImageToTensor not ready for more than 4 dims" << std::endl;
             return 1; // EXIT_FAILURE
         }
 
+        std::vector<std::int64_t> dims(4, 1);
+        dims[1] = inputImage->GetLargestPossibleRegion().GetSize()[1];
+        dims[2] = inputImage->GetLargestPossibleRegion().GetSize()[0];
+        if (num_dims > 3) {
+            dims[3] = inputImage->GetLargestPossibleRegion().GetSize()[2];
+        }
+
+        // TODO: clean this!!!
+        num_dims = 4;
 
         if (dataType == TF_FLOAT) {
             CreateTensor<PixelType, std::float_t>(outputTensor, dims, inputImage->GetBufferPointer(), nPixels, dataType, num_dims);

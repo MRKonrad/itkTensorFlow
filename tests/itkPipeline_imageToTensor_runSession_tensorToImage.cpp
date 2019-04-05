@@ -258,7 +258,7 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineDicom2_test) {
 
     std::string inputFilename = "../../tests/testData/dicom/Volunteer_T1Map.dcm";
     std::string outputFilename = "../../tests/testData/temp/itkPipeline_imageToTensor_runSession_tensorToImage_dicom2";
-    std::string graphFilename = "../../tests/testData/model_ocmr27.pb";
+    std::string graphFilename = "../../tests/testData/model_ocmr7.pb";
 
     oxtf::GraphReader graphReader;
     graphReader.setGraphPath(graphFilename);

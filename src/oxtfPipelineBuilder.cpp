@@ -6,46 +6,56 @@
 
 namespace oxtf {
 
+    PipelineBuilder
+    ::PipelineBuilder(){
+        _paddingOrNor = true;
+        _flipAxes = std::vector<bool>(3, false);
+        _threshold = NAN;
+        _multiplyOutputByFactor = 255;
+    };
+
     int
     PipelineBuilder
     ::runPipeline (){
 
         typedef float PixelTypeIn;
         typedef itk::Image<PixelTypeIn, 3> ImageType;
-        ImageType* image;
-        oxtf::GraphReader *graphReader;
+        typename ImageType::SizeType size;
+        oxtf::GraphReader *graphReader = graphReaderMaker(_graphPath);
 
-        graphReader = graphReaderMaker(_graph_path);
+        typename ImageType::Pointer imageIn = readInputImage<ImageType>();
 
-        image = readInputImage<ImageType>();
-
-        if (_doPadding) {
-            image = padImage(image, graphReader->getMaxX(), graphReader->getMaxY());
+        if (_paddingOrNor) {
+            size = imageIn->GetLargestPossibleRegion().GetSize();
+            imageIn = padImage<ImageType>(imageIn, graphReader->getMaxX(), graphReader->getMaxY());
         }
 
         if (_flipAxes[0] || _flipAxes[1] || _flipAxes[2]){
-            image = flipImage(image, _flipAxes);
+            imageIn = flipImage<ImageType>(imageIn, _flipAxes);
         }
 
-        if (_threshold != NAN){
-            image = thresholdImage(image, _threshold);
+        if (!isnan(_threshold)){
+            imageIn = thresholdImage<ImageType>(imageIn, _threshold);
         }
 
-        image = runGraphOnImage(image, graphReader);
+        typename ImageType::Pointer imageOut = runGraphOnImage<ImageType>(imageIn, graphReader);
 
-        writeImages(image, _output_dir_path);
+        if (_flipAxes[0] || _flipAxes[1] || _flipAxes[2]){
+            imageOut = flipImage<ImageType>(imageOut, _flipAxes);
+        }
+
+        if (_paddingOrNor) {
+            imageOut = cropImage<ImageType>(imageOut, size[0], size[1]);
+        }
+
+        imageOut = multiplyImage<ImageType>(imageOut, _multiplyOutputByFactor);
+
+        writeImages<ImageType>(imageOut, _outputDirPath);
 
         delete graphReader;
 
         return 0; // EXIT_SUCCESS
     }
-
-    PipelineBuilder
-    ::PipelineBuilder(){
-        _doPadding = true;
-        _flipAxes = std::vector<bool>(3, false);
-        _threshold = NAN;
-    };
 
     oxtf::GraphReader *
     PipelineBuilder
@@ -68,17 +78,17 @@ namespace oxtf {
     PipelineBuilder
     ::readInputImage(){
 
-        if (_input_images_grayscale_paths.empty() && _input_image_rgb_path.empty()){
+        if (_inputImagesGrayscalePaths.empty() && _inputImageRgbPath.empty()){
             throw std::runtime_error("Provide input_images_grayscale_paths OR input_image_rgb_path");
         }
-        if (!_input_images_grayscale_paths.empty() && !_input_image_rgb_path.empty()){
+        if (!_inputImagesGrayscalePaths.empty() && !_inputImageRgbPath.empty()){
             throw std::runtime_error("Provide input_images_grayscale_paths OR input_image_rgb_path, not both");
         }
 
-        if        (!_input_images_grayscale_paths.empty()) {
-            return readInputImageRgb<TImage>(_input_image_rgb_path);
-        } else if (!_input_image_rgb_path.empty()){
-            return readInputImageGray<TImage>(_input_images_grayscale_paths);
+        if        (!_inputImagesGrayscalePaths.empty()) {
+            return readInputImageGray<TImage>(_inputImagesGrayscalePaths);
+        } else if (!_inputImageRgbPath.empty()){
+            return readInputImageRgb<TImage>(_inputImageRgbPath);
         }
 
         return nullptr;
@@ -144,6 +154,7 @@ namespace oxtf {
 
             reader->SetFileName(images_paths[i]);
             reader->Update();
+
             typename TImage2d::Pointer input = reader->GetOutput();
             input->DisconnectPipeline();
             tiler->SetInput(i, input);
@@ -155,7 +166,7 @@ namespace oxtf {
     template< typename TImage>
     typename TImage::Pointer
     PipelineBuilder
-    ::padImage(TImage* image, int64_t x, int64_t y){
+    ::padImage(typename TImage::Pointer image, int64_t x, int64_t y){
 
         typedef itk::ImageRegion< 3 > RegionType;
         RegionType region = image->GetLargestPossibleRegion();
@@ -190,7 +201,7 @@ namespace oxtf {
     template< typename TImage>
     typename TImage::Pointer
     PipelineBuilder
-    ::flipImage(TImage* image, const std::vector<bool> &flipAxes){
+    ::flipImage(typename TImage::Pointer image, const std::vector<bool> &flipAxes){
 
         itk::FixedArray<bool, 3> localflipAxes;
         localflipAxes[0] = flipAxes[0];
@@ -209,8 +220,11 @@ namespace oxtf {
     template< typename TImage>
     typename TImage::Pointer
     PipelineBuilder
-    ::thresholdImage(TImage* image, float threshold){
+    ::thresholdImage(typename TImage::Pointer image, float threshold){
 
+        if (isnan(threshold)){
+            return image;
+        }
         typedef itk::ThresholdImageFilter <TImage> ThresholdImageFilterType;
         typename ThresholdImageFilterType::Pointer thresholdFilter = ThresholdImageFilterType::New();
         thresholdFilter->SetInput(image);
@@ -224,10 +238,11 @@ namespace oxtf {
     template< typename TImage>
     typename TImage::Pointer
     PipelineBuilder
-    ::runGraphOnImage(TImage* imageIn, const oxtf::GraphReader *graphReader){
+    ::runGraphOnImage(typename TImage::Pointer imageIn, const oxtf::GraphReader *graphReader){
 
         TF_Tensor *inputTensor;
-        oxtf::ImageToTensor<TImage>(imageIn, &inputTensor);
+
+        oxtf::ImageToTensorWithCasting<TImage>(imageIn, graphReader->getInputOperationType(), &inputTensor);
 
         oxtf::GraphRunner graphRunner;
         graphRunner.setGraphReader(graphReader);
@@ -240,14 +255,154 @@ namespace oxtf {
         typename TImage::Pointer imageOut = TImage::New();
         oxtf::TensorToImage<TImage>(outputTensor, imageOut);
 
-        return nullptr;
+        return imageOut;
+    }
+
+    template< typename TImage>
+    typename TImage::Pointer
+    PipelineBuilder
+    ::cropImage(typename TImage::Pointer image, unsigned long x, unsigned long y){
+
+        typename TImage::SizeType imageSize = image->GetLargestPossibleRegion().GetSize();
+
+        typename TImage::SizeType lowerCropRegion;
+        lowerCropRegion[0] = 0;
+        lowerCropRegion[1] = 0;
+        lowerCropRegion[2] = 0;
+
+        typename TImage::SizeType upperCropRegion;
+        upperCropRegion[0] = imageSize[0] - x;
+        upperCropRegion[1] = imageSize[1] - y;
+        upperCropRegion[2] = 0;
+
+        typedef itk::CropImageFilter<TImage, TImage> CropImageFilterType;
+        typename CropImageFilterType::Pointer cropImageFilter = CropImageFilterType::New();
+        cropImageFilter->SetInput(image);
+        cropImageFilter->SetLowerBoundaryCropSize(lowerCropRegion);
+        cropImageFilter->SetUpperBoundaryCropSize(upperCropRegion);
+        cropImageFilter->Update();
+
+        return cropImageFilter->GetOutput();
+    }
+
+    template< typename TImage>
+    typename TImage::Pointer
+    PipelineBuilder
+    ::multiplyImage(typename TImage::Pointer image, float factor){
+
+        if (factor == 1){
+            return image;
+        }
+
+        typedef itk::MultiplyImageFilter<TImage> MultiplierType;
+        typename MultiplierType::Pointer multiplier = MultiplierType::New();
+        multiplier->SetInput(image);
+        multiplier->SetConstant(factor);
+        multiplier->Update();
+
+        return multiplier->GetOutput();
     }
 
     template< typename TImage>
     int
     PipelineBuilder
     ::writeImages(TImage *image, const std::string &output_dir){
+
+        typedef typename TImage::PixelType PixelType;
+        typedef itk::Image<unsigned char, 2> TImageOut;
+
+        typedef itk::ExtractImageFilter<TImage, TImageOut> ExtractImageFilterType;
+        typename ExtractImageFilterType::Pointer extractor = ExtractImageFilterType::New();
+        extractor->SetInput(image);
+        extractor->SetDirectionCollapseToIdentity();
+
+        typedef itk::ImageRegion< 3 > RegionType3d;
+        RegionType3d region3d = image->GetLargestPossibleRegion();
+        RegionType3d::SizeType size = region3d.GetSize();
+        RegionType3d::IndexType index = region3d.GetIndex();
+
+        unsigned long nImages = image->GetLargestPossibleRegion().GetSize()[2];
+        for (unsigned int i = 0; i < nImages; i++) {
+            size[2] = 0;
+            index[2] = i;
+            region3d.SetSize(size);
+            region3d.SetIndex(index);
+            extractor->SetExtractionRegion(region3d);
+
+            itk::FileTools::CreateDirectory(output_dir);
+
+            typedef itk::ImageFileWriter<TImageOut> WriterType;
+            WriterType::Pointer writer = WriterType::New();
+            writer->SetFileName(output_dir + fileSeparator() + "image_" + std::to_string(i) + ".png");
+            writer->SetInput(extractor->GetOutput());
+            writer->Update();
+        }
+
         return 0; // EXIT_SUCCESS
+    }
+
+    const std::vector<std::string> &PipelineBuilder::getInputImagesGrayscalePaths() const {
+        return _inputImagesGrayscalePaths;
+    }
+
+    void PipelineBuilder::setInputImagesGrayscalePaths(const std::vector<std::string> &_inputImagesGrayscalePaths) {
+        PipelineBuilder::_inputImagesGrayscalePaths = _inputImagesGrayscalePaths;
+    }
+
+    const std::string &PipelineBuilder::getInputImageRgbPath() const {
+        return _inputImageRgbPath;
+    }
+
+    void PipelineBuilder::setInputImageRgbPath(const std::string &_inputImageRgbPath) {
+        PipelineBuilder::_inputImageRgbPath = _inputImageRgbPath;
+    }
+
+    const std::string &PipelineBuilder::getOutputDirPath() const {
+        return _outputDirPath;
+    }
+
+    void PipelineBuilder::setOutputDirPath(const std::string &_outputDirPath) {
+        PipelineBuilder::_outputDirPath = _outputDirPath;
+    }
+
+    const std::string &PipelineBuilder::getGraphPath() const {
+        return _graphPath;
+    }
+
+    void PipelineBuilder::setGraphPath(const std::string &_graphPath) {
+        PipelineBuilder::_graphPath = _graphPath;
+    }
+
+    bool PipelineBuilder::isPaddingOrNor() const {
+        return _paddingOrNor;
+    }
+
+    void PipelineBuilder::setPaddingOrNot(bool _doPadding) {
+        PipelineBuilder::_paddingOrNor = _doPadding;
+    }
+
+    const std::vector<bool> &PipelineBuilder::getFlipAxes() const {
+        return _flipAxes;
+    }
+
+    void PipelineBuilder::setFlipAxes(const std::vector<bool> &_flipAxes) {
+        PipelineBuilder::_flipAxes = _flipAxes;
+    }
+
+    float PipelineBuilder::getThreshold() const {
+        return _threshold;
+    }
+
+    void PipelineBuilder::setThreshold(float _threshold) {
+        PipelineBuilder::_threshold = _threshold;
+    }
+
+    float PipelineBuilder::getMultiplyOutputByFactor() const {
+        return _multiplyOutputByFactor;
+    }
+
+    void PipelineBuilder::setMultiplyOutputByFactor(float _multiplyOutputByFactor) {
+        PipelineBuilder::_multiplyOutputByFactor = _multiplyOutputByFactor;
     }
 
 } // namespace oxtf
