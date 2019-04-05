@@ -35,13 +35,13 @@ namespace oxtf {
         return temp;
     }
 
-    GraphReader *
+    const GraphReader *
     GraphRunner::getGraphReader() const {
         return _graphReader;
     }
 
     void
-    GraphRunner::setGraphReader(GraphReader *_graphReader) {
+    GraphRunner::setGraphReader(const GraphReader *_graphReader) {
         GraphRunner::_graphReader = _graphReader;
     }
 

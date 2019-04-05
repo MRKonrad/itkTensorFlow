@@ -109,7 +109,7 @@ namespace itk {
         VerifySizes();
 
         TF_Tensor *inputTensor;
-        if( oxtf::ImageToTensor<TImageIn>(this->GetInput(), &inputTensor, 4) != EXIT_SUCCESS ){
+        if( oxtf::ImageToTensor<TImageIn>(this->GetInput(), &inputTensor) != EXIT_SUCCESS ){
             throw std::runtime_error("Error in oxtf::ImageToTensor");
         }
 

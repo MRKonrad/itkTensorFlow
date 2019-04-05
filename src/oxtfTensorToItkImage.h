@@ -112,13 +112,15 @@ namespace oxtf {
             return 1; // EXIT_FAILURE
         }
 
-        typename ImageType::SizeType size_temp;
+        std::vector<std::int64_t> dims(4, 1);
+        typename ImageType::SizeType size;
         for (int i = 1; i < tensor_num_dims; i++) {
-            size_temp[i - 1] = TF_Dim(inputTensor, i);
+            size[i - 1] = TF_Dim(inputTensor, i);
+            dims[i] = TF_Dim(inputTensor, i);
         }
 
         typename ImageType::RegionType region_temp;
-        region_temp.SetSize(size_temp);
+        region_temp.SetSize(size);
         region_temp.SetIndex(start);
 
         outputImage->SetRegions(region_temp);
@@ -126,14 +128,11 @@ namespace oxtf {
 
         const auto tensor_data = static_cast<PixelType *>(TF_TensorData(inputTensor));
 
-        for (int i = 0; i < size_temp[0] * size_temp[1]; ++i) {
-            if (image_num_dims == 2) {
-                outputImage->GetBufferPointer()[i] = tensor_data[i];
-            } else if (image_num_dims == 3) {
-
-                for (int j = 0; j < size_temp[2]; j++) {
-                    outputImage->GetBufferPointer()[i + j * size_temp[0] * size_temp[1]] = tensor_data[
-                            i * size_temp[2] + j];
+        for (int x = 0; x < dims[1]; x++){
+            for (int y = 0; y < dims[2]; y++){
+                for (int z = 0; z < dims[3]; z++){
+                    outputImage->GetBufferPointer()[x + y * dims[1] + z * dims[1] * dims[2]] =
+                            tensor_data[ y * dims[1] * dims[3] + x * dims[3] + z ];
                 }
             }
         }

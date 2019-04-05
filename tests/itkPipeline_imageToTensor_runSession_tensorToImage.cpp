@@ -330,7 +330,7 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineDicom2_test) {
     //*******************************************
 
     TF_Tensor *inputTensor;
-    oxtf::ImageToTensor<tfImageTypeIn>(thresholdFilter->GetOutput(), &inputTensor, 4);
+    oxtf::ImageToTensor<tfImageTypeIn>(thresholdFilter->GetOutput(), &inputTensor);
 
     oxtf::GraphRunner graphRunner;
     graphRunner.setGraphReader(&graphReader);

@@ -39,6 +39,97 @@ namespace oxtf {
          */
         int runPipeline ();
 
+        /**
+         *
+         * @param graph_path
+         * @return
+         */
+        oxtf::GraphReader* graphReaderMaker(const std::string &graph_path);
+
+        /**
+         *
+         * @tparam TImage
+         * @return
+         */
+        template< typename TImage>
+        typename TImage::Pointer
+        readInputImage();
+
+        /**
+         * TODO: should I make is static or move to Utils?
+         * @tparam TImage
+         * @param image_path
+         * @return
+         */
+        template< typename TImage>
+        typename TImage::Pointer
+        readInputImageRgb(const std::string &image_path);
+
+        /**
+         * TODO: should I make is static or move to Utils?
+         * @tparam TImage
+         * @param images_paths
+         * @return
+         */
+        template< typename TImage>
+        typename TImage::Pointer
+        readInputImageGray(const std::vector<std::string> &images_paths);
+
+        /**
+         * TODO: should I make is static or move to Utils?
+         * @tparam TImage
+         * @param image
+         * @param x
+         * @param y
+         * @return
+         */
+        template< typename TImage>
+        typename TImage::Pointer
+        padImage(TImage* image, int64_t x, int64_t y);
+
+        /**
+         * TODO: should I make is static or move to Utils?
+         * @tparam TImage
+         * @param image
+         * @param flipAxes
+         * @return
+         */
+        template< typename TImage>
+        typename TImage::Pointer
+        flipImage(TImage* image, const std::vector<bool> &flipAxes);
+
+        /**
+         * TODO: should I make is static or move to Utils?
+         * @tparam TImage
+         * @param image
+         * @param threshold
+         * @return
+         */
+        template< typename TImage>
+        typename TImage::Pointer
+        thresholdImage(TImage* image, float threshold);
+
+        /**
+         * TODO: should I make is static or move to Utils?
+         * @tparam TImage
+         * @param image
+         * @param graphReader
+         * @return
+         */
+        template< typename TImage>
+        typename TImage::Pointer
+        runGraphOnImage(TImage* image, const oxtf::GraphReader *graphReader);
+
+        /**
+         * TODO: should I make is static or move to Utils?
+         * @tparam TImage
+         * @param image
+         * @param output_dir
+         * @return
+         */
+        template< typename TImage>
+        int writeImages(TImage *image, const std::string &output_dir);
+
         PipelineBuilder();
 
         ~PipelineBuilder() = default;
@@ -53,91 +144,6 @@ namespace oxtf {
         bool _doPadding;
         std::vector<bool> _flipAxes;
         float _threshold;
-
-        /**
-         *
-         * @param graph_path
-         * @return
-         */
-        oxtf::GraphReader* graphReaderMaker(const std::string &graph_path);
-
-        /**
-         *
-         * @tparam TImage
-         * @return
-         */
-        template< typename TImage>
-        TImage* readInputImage();
-
-        /**
-         * TODO: should I make is static or move to Utils?
-         * @tparam TImage
-         * @param image_path
-         * @return
-         */
-        template< typename TImage>
-        TImage* readInputImageRgb(const std::string &image_path);
-
-        /**
-         * TODO: should I make is static or move to Utils?
-         * @tparam TImage
-         * @param images_paths
-         * @return
-         */
-        template< typename TImage>
-        TImage* readInputImageGray(const std::vector<std::string> &images_paths);
-
-        /**
-         * TODO: should I make is static or move to Utils?
-         * @tparam TImage
-         * @param image
-         * @param x
-         * @param y
-         * @return
-         */
-        template< typename TImage>
-        TImage* padImage(TImage* image, int64_t x, int64_t y);
-
-        /**
-         * TODO: should I make is static or move to Utils?
-         * @tparam TImage
-         * @param image
-         * @param flipAxes
-         * @return
-         */
-        template< typename TImage>
-        TImage* flipImage(TImage* image, const std::vector<bool> &flipAxes);
-
-        /**
-         * TODO: should I make is static or move to Utils?
-         * @tparam TImage
-         * @param image
-         * @param threshold
-         * @return
-         */
-        template< typename TImage>
-        TImage* thresholdImage(TImage* image, float threshold);
-
-        /**
-         * TODO: should I make is static or move to Utils?
-         * @tparam TImage
-         * @param image
-         * @param graphReader
-         * @return
-         */
-        template< typename TImage>
-        TImage* runGraphOnImage(TImage* image, const oxtf::GraphReader *graphReader);
-
-        /**
-         * TODO: should I make is static or move to Utils?
-         * @tparam TImage
-         * @param image
-         * @param output_dir
-         * @return
-         */
-        template< typename TImage>
-        int writeImages(TImage *image, const std::string &output_dir);
-
     };
 
 } // namespace oxtf

@@ -64,7 +64,7 @@ namespace oxtf {
     }
 
     template< typename TImage>
-    TImage*
+    typename TImage::Pointer
     PipelineBuilder
     ::readInputImage(){
 
@@ -85,54 +85,164 @@ namespace oxtf {
     }
 
     template< typename TImage>
-    TImage*
+    typename TImage::Pointer
     PipelineBuilder
     ::readInputImageRgb(const std::string &image_path){
-        return nullptr;
+
+        typedef itk::RGBPixel<unsigned char> RgbPixelType;
+        typedef itk::Image<RgbPixelType, 2> RgbImageType;
+
+        typedef itk::ImageFileReader<RgbImageType> ReaderType;
+        ReaderType::Pointer reader = ReaderType::New();
+        reader->SetFileName(image_path);
+        reader->Update();
+
+        typedef itk::VectorIndexSelectionCastImageFilter<RgbImageType, TImage> ExtractFromVectorFilterType;
+        typename ExtractFromVectorFilterType::Pointer extractFromVectorFilter = ExtractFromVectorFilterType::New();
+        extractFromVectorFilter->SetInput(reader->GetOutput());
+
+        typedef itk::TileImageFilter<TImage, TImage> TileImageFilterType;
+        typename TileImageFilterType::Pointer tiler = TileImageFilterType::New();
+        itk::FixedArray<unsigned int, 3> layout;
+        layout[0] = 1;
+        layout[1] = 1;
+        layout[2] = 0;
+        tiler->SetLayout(layout);
+
+        RgbPixelType tempPixel;
+        for (unsigned int i = 0; i < tempPixel.Size(); i++) {
+            extractFromVectorFilter->SetIndex(i);
+            extractFromVectorFilter->Update();
+            typename TImage::Pointer input = extractFromVectorFilter->GetOutput();
+            input->DisconnectPipeline();
+            tiler->SetInput(i, input);
+        }
+        tiler->Update();
+        return tiler->GetOutput();
     }
 
     template< typename TImage>
-    TImage*
+    typename TImage::Pointer
     PipelineBuilder
     ::readInputImageGray(const std::vector<std::string> &images_paths){
-        return nullptr;
+
+        typedef typename TImage::PixelType PixelType;
+        typedef itk::Image<PixelType, 2> TImage2d;
+
+        typedef itk::ImageFileReader<TImage2d> ReaderType;
+        typename ReaderType::Pointer reader = ReaderType::New();
+
+        typedef itk::TileImageFilter<TImage2d, TImage> TileImageFilterType;
+        typename TileImageFilterType::Pointer tiler = TileImageFilterType::New();
+        itk::FixedArray<unsigned int, 3> layout;
+        layout[0] = 1;
+        layout[1] = 1;
+        layout[2] = 0;
+        tiler->SetLayout(layout);
+
+        for (unsigned int i = 0; i < images_paths.size(); ++i) {
+
+            reader->SetFileName(images_paths[i]);
+            reader->Update();
+            typename TImage2d::Pointer input = reader->GetOutput();
+            input->DisconnectPipeline();
+            tiler->SetInput(i, input);
+        }
+        tiler->Update();
+        return tiler->GetOutput();
     }
 
     template< typename TImage>
-    TImage*
+    typename TImage::Pointer
     PipelineBuilder
     ::padImage(TImage* image, int64_t x, int64_t y){
-        return nullptr;
+
+        typedef itk::ImageRegion< 3 > RegionType;
+        RegionType region = image->GetLargestPossibleRegion();
+
+        if (x < region.GetSize()[0] || y < region.GetSize()[1]){
+            throw std::runtime_error("padImage error ");
+        }
+
+        typename TImage::SizeType lowerExtendRegion;
+        lowerExtendRegion[0] = 0;
+        lowerExtendRegion[1] = 0;
+        lowerExtendRegion[2] = 0;
+
+        typename TImage::SizeType upperExtendRegion;
+        upperExtendRegion[0] = x - region.GetSize()[0];
+        upperExtendRegion[1] = y - region.GetSize()[1];
+        upperExtendRegion[2] = 0;
+
+        typename TImage::PixelType zeroPixel(0);
+
+        typedef itk::ConstantPadImageFilter< TImage, TImage > ConstantPadType;
+        typename ConstantPadType::Pointer constantPad = ConstantPadType::New();
+        constantPad->SetPadLowerBound(lowerExtendRegion);
+        constantPad->SetPadUpperBound(upperExtendRegion);
+        constantPad->SetConstant(zeroPixel);
+        constantPad->SetInput(image);
+        constantPad->Update();
+
+        return constantPad->GetOutput();
     }
 
     template< typename TImage>
-    TImage*
+    typename TImage::Pointer
     PipelineBuilder
     ::flipImage(TImage* image, const std::vector<bool> &flipAxes){
-        return nullptr;
+
+        itk::FixedArray<bool, 3> localflipAxes;
+        localflipAxes[0] = flipAxes[0];
+        localflipAxes[1] = flipAxes[1];
+        localflipAxes[2] = flipAxes[2];
+
+        typedef itk::FlipImageFilter <TImage> FlipImageFilterType;
+        typename FlipImageFilterType::Pointer flipFilter = FlipImageFilterType::New ();
+        flipFilter->SetInput(image);
+        flipFilter->SetFlipAxes(localflipAxes);
+        flipFilter->Update();
+
+        return flipFilter->GetOutput();
     }
 
     template< typename TImage>
-    TImage*
+    typename TImage::Pointer
     PipelineBuilder
     ::thresholdImage(TImage* image, float threshold){
-        return nullptr;
+
+        typedef itk::ThresholdImageFilter <TImage> ThresholdImageFilterType;
+        typename ThresholdImageFilterType::Pointer thresholdFilter = ThresholdImageFilterType::New();
+        thresholdFilter->SetInput(image);
+        thresholdFilter->ThresholdAbove(threshold);
+        thresholdFilter->SetOutsideValue(threshold);
+        thresholdFilter->Update();
+
+        return thresholdFilter->GetOutput();
     }
 
     template< typename TImage>
-    TImage*
+    typename TImage::Pointer
     PipelineBuilder
-    ::runGraphOnImage(TImage* image, const oxtf::GraphReader *graphReader){
+    ::runGraphOnImage(TImage* imageIn, const oxtf::GraphReader *graphReader){
+
+        TF_Tensor *inputTensor;
+        oxtf::ImageToTensor<TImage>(imageIn, &inputTensor);
+
+        oxtf::GraphRunner graphRunner;
+        graphRunner.setGraphReader(graphReader);
+        graphRunner.setInputTensor(inputTensor);
+
+        graphRunner.run();
+
+        TF_Tensor *outputTensor = graphRunner.getOutputTensor();
+
+        typename TImage::Pointer imageOut = TImage::New();
+        oxtf::TensorToImage<TImage>(outputTensor, imageOut);
+
         return nullptr;
     }
 
-    /**
-     * TODO: should I make is static or move to Utils?
-     * @tparam TImage
-     * @param image
-     * @param output_dir
-     * @return
-     */
     template< typename TImage>
     int
     PipelineBuilder

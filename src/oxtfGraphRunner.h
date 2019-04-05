@@ -21,8 +21,8 @@ namespace oxtf {
 
         int run();
 
-        GraphReader *getGraphReader() const;
-        void setGraphReader(GraphReader *_graphReader);
+        const GraphReader *getGraphReader() const;
+        void setGraphReader(const GraphReader *_graphReader);
 
         TF_Tensor *getInputTensor() const;
         void setInputTensor(TF_Tensor *_inputTensor);
@@ -32,7 +32,7 @@ namespace oxtf {
 
     private:
 
-        GraphReader *_graphReader;
+        const GraphReader *_graphReader;
         TF_Tensor* _inputTensor;
         TF_Tensor* _outputTensor;
 
