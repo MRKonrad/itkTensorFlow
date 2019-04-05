@@ -175,26 +175,26 @@ TEST(PipelineBuilder, PipelineBuilder_runPipeline) {
 
 }
 
-TEST(PipelineBuilder, PipelineBuilder_runPipeline2) {
-
-    typedef itk::Image<float, 3> ImageType;
-
-    std::vector<std::string> inputFilenames;
-    inputFilenames.emplace_back( "../../tests/testData/dicom/Volunteer_T1Map.dcm");
-    std::string outputDir = "../../tests/testData/temp/PipelineBuilder3";
-    std::string graphFilename = "../../tests/testData/model_ocmr7.pb";
-
-    oxtf::PipelineBuilder pipelineBuilder;
-    pipelineBuilder.setInputImagesGrayscalePaths(inputFilenames);
-    pipelineBuilder.setOutputDirPath(outputDir);
-    pipelineBuilder.setGraphPath(graphFilename);
-    pipelineBuilder.setMultiplyOutputByFactor(255);
-
-    std::vector<bool> flipAxes = std::vector<bool>(3, false);
-    flipAxes[1] = true;
-    pipelineBuilder.setFlipAxes(flipAxes);
-    pipelineBuilder.setThreshold(2500);
-
-    EXPECT_EQ(pipelineBuilder.runPipeline(), 0);
-
-}
+//TEST(PipelineBuilder, PipelineBuilder_runPipeline2) {
+//
+//    typedef itk::Image<float, 3> ImageType;
+//
+//    std::vector<std::string> inputFilenames;
+//    inputFilenames.emplace_back( "../../tests/testData/dicom/Volunteer_T1Map.dcm");
+//    std::string outputDir = "../../tests/testData/temp/PipelineBuilder3";
+//    std::string graphFilename = "../../tests/testData/model_ocmr7.pb";
+//
+//    oxtf::PipelineBuilder pipelineBuilder;
+//    pipelineBuilder.setInputImagesGrayscalePaths(inputFilenames);
+//    pipelineBuilder.setOutputDirPath(outputDir);
+//    pipelineBuilder.setGraphPath(graphFilename);
+//    pipelineBuilder.setMultiplyOutputByFactor(255);
+//
+//    std::vector<bool> flipAxes = std::vector<bool>(3, false);
+//    flipAxes[1] = true;
+//    pipelineBuilder.setFlipAxes(flipAxes);
+//    pipelineBuilder.setThreshold(2500);
+//
+//    EXPECT_EQ(pipelineBuilder.runPipeline(), 0);
+//
+//}
