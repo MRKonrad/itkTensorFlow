@@ -1,12 +1,14 @@
 # see https://github.com/Neargye/hello_tf_c_api
-# TODO: fix controvery: for win32 downloading .zip file and renaming it to tar.gz
 
 if(UNIX AND NOT APPLE)
-    set(DOWNLOADPATH "https://github.com/Neargye/tensorflow/releases/download/v1.13.1/libtensorflow-cpu-linux-x86_64-1.13.1.tar.gz")
+    set(DownloadUrl "https://github.com/Neargye/tensorflow/releases/download/v1.13.1/libtensorflow-cpu-linux-x86_64-1.13.1.tar.gz")
+    set(DownloadPath ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/libtensorflow.tar.gz)
 elseif(APPLE)
-    set(DOWNLOADPATH "https://github.com/Neargye/tensorflow/releases/download/v1.13.1/libtensorflow-cpu-darwin-x86_64-1.13.1.tar.gz")
+    set(DownloadUrl "https://github.com/Neargye/tensorflow/releases/download/v1.13.1/libtensorflow-cpu-darwin-x86_64-1.13.1.tar.gz")
+    set(DownloadPath ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/libtensorflow.tar.gz)
 elseif(WIN32)
-    set(DOWNLOADPATH "https://github.com/Neargye/tensorflow/releases/download/v1.13.1/libtensorflow-cpu-windows-x86_64-1.13.1.zip")
+    set(DownloadUrl "https://github.com/Neargye/tensorflow/releases/download/v1.13.1/libtensorflow-cpu-windows-x86_64-1.13.1.zip")
+    set(DownloadPath ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/libtensorflow.zip)
 endif()
 
 if (NOT EXISTS ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow)
@@ -16,8 +18,8 @@ endif()
 if (NOT EXISTS ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib/libtensorflow.so)
     file(
             DOWNLOAD
-                ${DOWNLOADPATH}
-                ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/libtensorflow.tar.gz
+                ${DownloadUrl}
+                ${DownloadPath}
             STATUS
                 status
             LOG
@@ -30,9 +32,9 @@ if (NOT EXISTS ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib/libtensorflow.so)
     endif()
 
     execute_process(
-            COMMAND cmake -E tar xvzf ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/libtensorflow.tar.gz
+            COMMAND cmake -E tar xvzf ${DownloadPath}
             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow)
-    file(REMOVE ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/libtensorflow.tar.gz)
+    file(REMOVE ${DownloadPath})
 
 endif()
 
