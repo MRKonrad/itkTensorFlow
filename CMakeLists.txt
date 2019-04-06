@@ -17,14 +17,18 @@ file(GLOB_RECURSE SRC_FILES
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_SOURCE_DIR}/thirdParty/hello_tf_c_api/src)
+include_directories(${PROJECT_BINARY_DIR}) # to make itktensorflowlib_export.h visible
 
-add_library(itkTensorFlowLib ${SRC_FILES})
-target_link_libraries (itkTensorFlowLib PUBLIC ${ITK_LIBRARIES})
+include(cmake/tensorflow.cmake)
+
+add_library(itkTensorFlowLib SHARED ${SRC_FILES})
+target_link_libraries (itkTensorFlowLib PUBLIC ${ITK_LIBRARIES} tensorflow)
 
 include(GenerateExportHeader)
 generate_export_header(itkTensorFlowLib)
 
-include(cmake/tensorflow.cmake)
+add_executable(itkTensorFlowExe app/main.cpp app/getopt.cpp app/getopt.h)
+target_link_libraries (itkTensorFlowExe PUBLIC itkTensorFlowLib)
 
 set(TOMATO_LIBS_TO_LINK ${TOMATO_LIBS_TO_LINK} ${ITK_LIBRARIES})
 
@@ -32,5 +36,5 @@ add_subdirectory(tests)
 
 get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
 foreach(dir ${dirs})
-  message(STATUS "dir='${dir}'")
+    message(STATUS "dir='${dir}'")
 endforeach()

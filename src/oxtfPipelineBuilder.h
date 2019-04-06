@@ -5,24 +5,7 @@
 #ifndef ITKTENSORFLOW_OXTF_PIPELINEBUILDER_H
 #define ITKTENSORFLOW_OXTF_PIPELINEBUILDER_H
 
-#include "itkImageFileReader.h"
-#include "itkImageFileWriter.h"
-#include "itkFileTools.h"
-#include "itkVectorIndexSelectionCastImageFilter.h"
-#include "itkTileImageFilter.h"
-#include "itkMultiplyImageFilter.h"
-#include "itkConstantPadImageFilter.h"
-#include "itkCropImageFilter.h"
-#include "itkExtractImageFilter.h"
-#include "itkFlipImageFilter.h"
-#include "itkThresholdImageFilter.h"
-
-#include "itkTensorFlowFilter.h"
-#include "oxtfImageToTensor.h"
-#include "oxtfTensorToItkImage.h"
 #include "oxtfGraphReader.h"
-#include "oxtfGraphRunner.h"
-
 #include <string>
 
 namespace oxtf {
@@ -146,6 +129,8 @@ namespace oxtf {
 
         ~PipelineBuilder() = default;
 
+        void disp();
+
         const std::vector<std::string> &getInputImagesGrayscalePaths() const;
 
         void setInputImagesGrayscalePaths(const std::vector<std::string> &_inputImagesGrayscalePaths);
@@ -181,9 +166,8 @@ namespace oxtf {
     private:
         std::vector<std::string> _inputImagesGrayscalePaths;
         std::string _inputImageRgbPath;
-
-        std::string _outputDirPath;
         std::string _graphPath;
+        std::string _outputDirPath;
 
         bool _paddingOrNor;
         std::vector<bool> _flipAxes;

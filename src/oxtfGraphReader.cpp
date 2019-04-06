@@ -4,13 +4,15 @@
 
 #include "oxtfGraphReader.h"
 
+#include "tf_utils.hpp"
+
 namespace oxtf {
 
     int GraphReader::readGraph() {
 
         // check path
         if (_graphPath.empty()) {
-            std::cout << "Can't load graph" << std::endl;
+            std::cerr << "Can't load graph" << std::endl;
             return 1; //EXIT_FAILURE
         }
 
@@ -19,7 +21,7 @@ namespace oxtf {
 
         // check if success
         if (_graph == nullptr) {
-            std::cout << "Can't load graph" << std::endl;
+            std::cerr << "Can't load graph" << std::endl;
             return 1; //EXIT_FAILURE
         }
 
@@ -37,7 +39,7 @@ namespace oxtf {
             // get input params
             if (_inputOperationDims == 0){
                 if (num_outputs != 1){
-                    std::cout << "GraphReader can only handle graphs with one input";
+                    std::cerr << "GraphReader can only handle graphs with one input";
                     return 1; //EXIT_FAILURE
                 }
                 _inputOperationName = name;

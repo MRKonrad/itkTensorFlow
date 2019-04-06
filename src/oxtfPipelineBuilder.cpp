@@ -4,6 +4,23 @@
 
 #include "oxtfPipelineBuilder.h"
 
+#include "itkImageFileReader.h"
+#include "itkImageFileWriter.h"
+#include "itkFileTools.h"
+#include "itkVectorIndexSelectionCastImageFilter.h"
+#include "itkTileImageFilter.h"
+#include "itkMultiplyImageFilter.h"
+#include "itkConstantPadImageFilter.h"
+#include "itkCropImageFilter.h"
+#include "itkExtractImageFilter.h"
+#include "itkFlipImageFilter.h"
+#include "itkThresholdImageFilter.h"
+
+#include "itkTensorFlowFilter.h"
+#include "oxtfImageToTensor.h"
+#include "oxtfTensorToItkImage.h"
+#include "oxtfGraphRunner.h"
+
 namespace oxtf {
 
     PipelineBuilder
@@ -14,6 +31,31 @@ namespace oxtf {
         _multiplyOutputByFactor = 255;
     };
 
+    void
+    PipelineBuilder
+    ::disp(){
+
+        std::cout << "PipelineBuilder" << std::endl;
+        std::cout << "inputImagesGrayscalePaths:" << std::endl;
+        for (int i = 0; i < _inputImagesGrayscalePaths.size(); i++){
+            std::cout << "\t" << _inputImagesGrayscalePaths[i] << std::endl;
+        }
+
+        std::cout << "inputImageRgbPath:" << _inputImageRgbPath << std::endl;
+        std::cout << "graphPath:" << _graphPath << std::endl;
+        std::cout << "outputDirPath:" << _outputDirPath << std::endl;
+        std::cout << "padding:" << (_paddingOrNor? "Yes" : "No") << std::endl;
+
+        for (int i = 0; i < _flipAxes.size(); i++){
+            std::cout << "_flipAxes[" << i << "]: " << (_flipAxes[i] ? "Yes" : "No") << std::endl;
+        }
+
+        std::cout << "threshold:" << _threshold << std::endl;
+        std::cout << "multiplyOutputByFactor:" << _multiplyOutputByFactor << std::endl;
+        std::cout << std::endl;
+
+    }
+
     int
     PipelineBuilder
     ::runPipeline (){
@@ -22,8 +64,13 @@ namespace oxtf {
         typedef itk::Image<PixelTypeIn, 3> ImageType;
         typename ImageType::SizeType size;
         oxtf::GraphReader *graphReader = graphReaderMaker(_graphPath);
+        if (!graphReader)
+            return 1; // EXIT_FAILURE
 
         typename ImageType::Pointer imageIn = readInputImage<ImageType>();
+
+        if (!imageIn)
+            return 1; // EXIT_FAILURE
 
         if (_paddingOrNor) {
             size = imageIn->GetLargestPossibleRegion().GetSize();
@@ -79,10 +126,12 @@ namespace oxtf {
     ::readInputImage(){
 
         if (_inputImagesGrayscalePaths.empty() && _inputImageRgbPath.empty()){
-            throw std::runtime_error("Provide input_images_grayscale_paths OR input_image_rgb_path");
+            std::cerr << "Provide input_images_grayscale_paths OR input_image_rgb_path" << std::endl;
+            return nullptr;
         }
         if (!_inputImagesGrayscalePaths.empty() && !_inputImageRgbPath.empty()){
-            throw std::runtime_error("Provide input_images_grayscale_paths OR input_image_rgb_path, not both");
+            std::cerr << "Provide input_images_grayscale_paths OR input_image_rgb_path, not both" << std::endl;
+            return nullptr;
         }
 
         if        (!_inputImagesGrayscalePaths.empty()) {

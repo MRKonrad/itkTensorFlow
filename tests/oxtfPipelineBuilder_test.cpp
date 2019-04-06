@@ -4,6 +4,7 @@
 
 #include "gtest/gtest.h"
 #include "oxtfPipelineBuilder.h"
+#include "itkImage.h"
 
 TEST(PipelineBuilder, PipelineBuilder_noImagePaths) {
 
