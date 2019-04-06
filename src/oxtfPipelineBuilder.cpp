@@ -242,7 +242,7 @@ namespace oxtf {
 
         TF_Tensor *inputTensor;
 
-        oxtf::ImageToTensorWithCasting<TImage>(imageIn, graphReader->getInputOperationType(), &inputTensor);
+        oxtf::ImageToTensor<TImage>::convertWithCasting(imageIn, graphReader->getInputOperationType(), &inputTensor);
 
         oxtf::GraphRunner graphRunner;
         graphRunner.setGraphReader(graphReader);

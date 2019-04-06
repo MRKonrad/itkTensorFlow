@@ -29,7 +29,7 @@ TEST(ImageToTensor, ImageToTensor2d_test) {
 
     TF_Tensor* tensor;
 
-    EXPECT_NO_THROW(oxtf::ImageToTensor<ImageType>(image, &tensor));
+    EXPECT_NO_THROW(oxtf::ImageToTensor<ImageType>::convert(image, &tensor));
 
     TF_DeleteTensor(tensor);
 
@@ -59,7 +59,7 @@ TEST(ImageToTensor, ImageToTensor3d_test) {
 
     TF_Tensor* tensor;
 
-    EXPECT_NO_THROW(oxtf::ImageToTensor<ImageType>(image, &tensor));
+    EXPECT_NO_THROW(oxtf::ImageToTensor<ImageType>::convert(image, &tensor));
 
     TF_DeleteTensor(tensor);
 
@@ -87,7 +87,7 @@ TEST(ImageToTensorWithCasting, ImageToTensorWithCasting2d_test) {
 
     TF_Tensor* tensor;
 
-    EXPECT_NO_THROW(oxtf::ImageToTensorWithCasting(image.GetPointer(), TF_UINT64, &tensor));
+    EXPECT_NO_THROW(oxtf::ImageToTensor<ImageType>::convertWithCasting(image.GetPointer(), TF_UINT64, &tensor));
 
     TF_DeleteTensor(tensor);
 
@@ -117,7 +117,7 @@ TEST(ImageToTensorWithCasting, ImageToTensorWithCasting3d_test) {
 
     TF_Tensor* tensor;
 
-    EXPECT_NO_THROW(oxtf::ImageToTensorWithCasting(image.GetPointer(), TF_UINT64, &tensor));
+    EXPECT_NO_THROW(oxtf::ImageToTensor<ImageType>::convertWithCasting(image.GetPointer(), TF_UINT64, &tensor));
 
     TF_DeleteTensor(tensor);
 

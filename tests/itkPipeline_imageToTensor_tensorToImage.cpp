@@ -34,7 +34,7 @@ TEST(itkPipeline_imageToTensor_tensorToImage, pipelineGrayscale_test){
 
     // the important part 1
     TF_Tensor* tensor;
-    oxtf::ImageToTensor<ImageType>(reader->GetOutput(), &tensor);
+    oxtf::ImageToTensor<ImageType>::convert(reader->GetOutput(), &tensor);
 
     // the important part 2
     ImageType::Pointer image = ImageType::New();
@@ -122,7 +122,7 @@ TEST(itkPipeline_imageToTensor_tensorToImage, pipelineRgb_test) {
     //*******************************************
 
     TF_Tensor* tensor;
-    oxtf::ImageToTensor<GrayImageType3d>(tiler->GetOutput(), &tensor);
+    oxtf::ImageToTensor<GrayImageType3d>::convert(tiler->GetOutput(), &tensor);
 
     GrayImageType3d::Pointer image = GrayImageType3d::New();
     oxtf::TensorToImage<GrayImageType3d>(tensor, image);

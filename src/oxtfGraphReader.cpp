@@ -46,8 +46,11 @@ namespace oxtf {
 
             // get output params
             // TODO: find more pretty solution, currently overwriting the all output params with each operation.
+            // Can i get the number of the operations in the graph?
             _outputOperationName = name;
             GetOpOutputInfo(_graph, op, 0, &_outputOperationDims, &_outputOperationSize, &_outputOperationType);
+
+            // biggest x and y
             if (_outputOperationDims >= 3){
                 if (       _outputOperationSize[1] > _operationWithBiggest2nd3rdSize[1]
                         && _outputOperationSize[2] > _operationWithBiggest2nd3rdSize[2] ){

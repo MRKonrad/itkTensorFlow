@@ -105,7 +105,7 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineRgb_test) {
     //*******************************************
 
     TF_Tensor *inputTensor;
-    oxtf::ImageToTensor<GrayImageTypeIn>(tiler->GetOutput(), &inputTensor);
+    oxtf::ImageToTensor<GrayImageTypeIn>::convert(tiler->GetOutput(), &inputTensor);
 
     oxtf::GraphRunner graphRunner;
     graphRunner.setGraphReader(&graphReader);
@@ -219,7 +219,7 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineDicom_test) {
     //*******************************************
 
     TF_Tensor *inputTensor;
-    oxtf::ImageToTensor<tfImageTypeIn>(tiler->GetOutput(), &inputTensor);
+    oxtf::ImageToTensor<tfImageTypeIn>::convert(tiler->GetOutput(), &inputTensor);
 
     oxtf::GraphRunner graphRunner;
     graphRunner.setGraphReader(&graphReader);
@@ -330,7 +330,7 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineDicom2_test) {
     //*******************************************
 
     TF_Tensor *inputTensor;
-    oxtf::ImageToTensor<tfImageTypeIn>(thresholdFilter->GetOutput(), &inputTensor);
+    oxtf::ImageToTensor<tfImageTypeIn>::convert(thresholdFilter->GetOutput(), &inputTensor);
 
     oxtf::GraphRunner graphRunner;
     graphRunner.setGraphReader(&graphReader);
