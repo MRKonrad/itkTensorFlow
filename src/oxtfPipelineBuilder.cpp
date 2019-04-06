@@ -253,7 +253,7 @@ namespace oxtf {
         TF_Tensor *outputTensor = graphRunner.getOutputTensor();
 
         typename TImage::Pointer imageOut = TImage::New();
-        oxtf::TensorToImage<TImage>(outputTensor, imageOut);
+        oxtf::TensorToImage<TImage>::convert(outputTensor, imageOut);
 
         return imageOut;
     }

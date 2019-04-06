@@ -38,7 +38,7 @@ TEST(itkPipeline_imageToTensor_tensorToImage, pipelineGrayscale_test){
 
     // the important part 2
     ImageType::Pointer image = ImageType::New();
-    oxtf::TensorToImage<ImageType>(tensor, image);
+    oxtf::TensorToImage<ImageType>::convert(tensor, image);
 
     // for comparison filter
     image->SetOrigin(reader->GetOutput()->GetOrigin());
@@ -125,7 +125,7 @@ TEST(itkPipeline_imageToTensor_tensorToImage, pipelineRgb_test) {
     oxtf::ImageToTensor<GrayImageType3d>::convert(tiler->GetOutput(), &tensor);
 
     GrayImageType3d::Pointer image = GrayImageType3d::New();
-    oxtf::TensorToImage<GrayImageType3d>(tensor, image);
+    oxtf::TensorToImage<GrayImageType3d>::convert(tensor, image);
 
     //*******************************************
     //*** What we actually want to test stop  ***

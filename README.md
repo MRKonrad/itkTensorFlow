@@ -58,3 +58,8 @@ ImageType = itk::Image< PixelType, 2 >;
 
 ## Other
 * colormap in rgb: https://itk.org/Doxygen/html/classitk_1_1ScalarToRGBColormapImageFilter.html
+
+## Conventional commits
+I am trying to follow the convetional commits guide:
+* https://www.conventionalcommits.org/en/v1.0.0-beta.2/
+* https://www.cheatography.com/albelop/cheat-sheets/conventional-commits/

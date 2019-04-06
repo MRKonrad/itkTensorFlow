@@ -124,7 +124,7 @@ namespace itk {
         TF_Tensor *outputTensor = graphRunner.getOutputTensor();
 
         typename TImageOut::Pointer image = TImageOut::New();
-        if( oxtf::TensorToImage<TImageOut>(outputTensor, this->GetOutput()) != EXIT_SUCCESS ){
+        if( oxtf::TensorToImage<TImageOut>::convert(outputTensor, this->GetOutput()) != EXIT_SUCCESS ){
             throw std::runtime_error("Error in oxtf::TensorToImage");
         }
 

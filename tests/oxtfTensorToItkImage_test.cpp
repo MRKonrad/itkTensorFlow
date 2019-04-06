@@ -15,12 +15,10 @@ TEST(TensorToImage, TensorToImage2d_test) {
                                                     input_dims.data(), input_dims.size(),
                                                     input_vals.data(), input_vals.size() * sizeof(uint8_t));
 
-
-
     using ImageType = itk::Image< std::uint8_t, 2 >;
     ImageType::Pointer image = ImageType::New();
 
-    EXPECT_NO_THROW(oxtf::TensorToImage<ImageType>(inputTensor, image));
+    EXPECT_NO_THROW(oxtf::TensorToImage<ImageType>::convert(inputTensor, image));
 
     TF_DeleteTensor(inputTensor);
 
@@ -39,7 +37,7 @@ TEST(TensorToImage, TensorToImage3d_test) {
     using ImageType = itk::Image< std::float_t, 3 >;
     ImageType::Pointer image = ImageType::New();
 
-    EXPECT_NO_THROW(oxtf::TensorToImage<ImageType>(inputTensor, image));
+    EXPECT_NO_THROW(oxtf::TensorToImage<ImageType>::convert(inputTensor, image));
 
     TF_DeleteTensor(inputTensor);
 

@@ -116,7 +116,7 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineRgb_test) {
     TF_Tensor *outputTensor = graphRunner.getOutputTensor();
 
     GrayImageTypeOut::Pointer image = GrayImageTypeOut::New();
-    oxtf::TensorToImage<GrayImageTypeOut>(outputTensor, image);
+    oxtf::TensorToImage<GrayImageTypeOut>::convert(outputTensor, image);
 
     //*******************************************
     //*** What we actually want to test stop  ***
@@ -230,7 +230,7 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineDicom_test) {
     TF_Tensor *outputTensor = graphRunner.getOutputTensor();
 
     tfImageTypeOut::Pointer image = tfImageTypeOut::New();
-    oxtf::TensorToImage<tfImageTypeOut>(outputTensor, image);
+    oxtf::TensorToImage<tfImageTypeOut>::convert(outputTensor, image);
 
     //*******************************************
     //*** What we actually want to test stop  ***
@@ -341,7 +341,7 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineDicom2_test) {
     TF_Tensor *outputTensor = graphRunner.getOutputTensor();
 
     tfImageTypeOut::Pointer image = tfImageTypeOut::New();
-    oxtf::TensorToImage<tfImageTypeOut>(outputTensor, image);
+    oxtf::TensorToImage<tfImageTypeOut>::convert(outputTensor, image);
 
     //*******************************************
     //*** What we actually want to test stop  ***
