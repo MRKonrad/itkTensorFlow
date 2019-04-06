@@ -19,13 +19,7 @@ cmake ..
 cmake --build .
 ```
 
-# How to see a tensorboard from a model
-```console
-python ~/Code/tensorflow/tensorflow/python/tools/import_pb_to_tensorboard.py --model_dir tests/testData/model.pb --log_dir tests/testData/log
-tensorboard --logdir tests/testData/log
-```
-
-# Models
+# Models/Graphs tested
 The sample model used in tests can be found in a nice jupyter notebook:
 https://colab.research.google.com/github/tensorflow/models/blob/master/research/deeplab/deeplab_demo.ipynb  
 In this notebook, to get the image indexing right, I was playing with rotated image:
@@ -36,8 +30,15 @@ http://mrkonrad.github.io/MRKonrad/files/cnnRotatedImage/image2_270.jpg
 
 # TODO:
 * remove dependency to hello_tf_c_api 
+* check with valgrind
 
 # Thoughts
+
+## How to see a tensorboard from a model
+```console
+python ~/Code/tensorflow/tensorflow/python/tools/import_pb_to_tensorboard.py --model_dir tests/testData/model.pb --log_dir tests/testData/log
+tensorboard --logdir tests/testData/log
+```
 
 ## How to provide n 2d input images
 * itkImage with third dimension as the n-th image

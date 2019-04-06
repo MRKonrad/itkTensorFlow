@@ -57,9 +57,10 @@ namespace oxtf {
 
         // first get info about the image
         auto nPixels = inputImage->GetLargestPossibleRegion().GetNumberOfPixels();
-        auto num_dims = inputImage->GetLargestPossibleRegion().GetSize().GetSizeDimension() + 1;
+        auto image_num_dims = inputImage->GetLargestPossibleRegion().GetSize().GetSizeDimension();
+        auto tensor_num_dims = 4;
 
-        if (num_dims > 4) {
+        if (image_num_dims > 3) {
             std::cerr << "ImageToTensor not ready for more than 4 dims" << std::endl;
             return 1; // EXIT_FAILURE
         }
@@ -67,37 +68,34 @@ namespace oxtf {
         std::vector<std::int64_t> dims(4, 1);
         dims[1] = inputImage->GetLargestPossibleRegion().GetSize()[1];
         dims[2] = inputImage->GetLargestPossibleRegion().GetSize()[0];
-        if (num_dims > 3) {
+        if (image_num_dims > 2) {
             dims[3] = inputImage->GetLargestPossibleRegion().GetSize()[2];
         }
 
-        // TODO: clean this!!!
-        num_dims = 4;
-
         if (dataType == TF_FLOAT) {
-            CreateTensor<PixelType, std::float_t>(outputTensor, dims, inputImage->GetBufferPointer(), nPixels, dataType, num_dims);
+            CreateTensor<PixelType, std::float_t>(outputTensor, dims, inputImage->GetBufferPointer(), nPixels, dataType, tensor_num_dims);
         } else if (dataType == TF_DOUBLE) {
-            CreateTensor<PixelType, std::double_t>(outputTensor, dims, inputImage->GetBufferPointer(), nPixels, dataType, num_dims);
+            CreateTensor<PixelType, std::double_t>(outputTensor, dims, inputImage->GetBufferPointer(), nPixels, dataType, tensor_num_dims);
         } else if (dataType == TF_INT32) {
-            CreateTensor<PixelType, std::int32_t>(outputTensor, dims, inputImage->GetBufferPointer(), nPixels, dataType, num_dims);
+            CreateTensor<PixelType, std::int32_t>(outputTensor, dims, inputImage->GetBufferPointer(), nPixels, dataType, tensor_num_dims);
         } else if (dataType == TF_UINT8) {
-            CreateTensor<PixelType, std::uint8_t>(outputTensor, dims, inputImage->GetBufferPointer(), nPixels, dataType, num_dims);
+            CreateTensor<PixelType, std::uint8_t>(outputTensor, dims, inputImage->GetBufferPointer(), nPixels, dataType, tensor_num_dims);
         } else if (dataType == TF_INT16) {
-            CreateTensor<PixelType, std::int16_t>(outputTensor, dims, inputImage->GetBufferPointer(), nPixels, dataType, num_dims);
+            CreateTensor<PixelType, std::int16_t>(outputTensor, dims, inputImage->GetBufferPointer(), nPixels, dataType, tensor_num_dims);
         } else if (dataType == TF_INT8) {
-            CreateTensor<PixelType, std::int8_t>(outputTensor, dims, inputImage->GetBufferPointer(), nPixels, dataType, num_dims);
+            CreateTensor<PixelType, std::int8_t>(outputTensor, dims, inputImage->GetBufferPointer(), nPixels, dataType, tensor_num_dims);
         } else if (dataType == TF_COMPLEX64) {
-            CreateTensor<PixelType, std::complex<std::float_t> >(outputTensor, dims, inputImage->GetBufferPointer(), nPixels, dataType, num_dims);
+            CreateTensor<PixelType, std::complex<std::float_t> >(outputTensor, dims, inputImage->GetBufferPointer(), nPixels, dataType, tensor_num_dims);
         } else if (dataType == TF_INT64) {
-            CreateTensor<PixelType, std::int64_t>(outputTensor, dims, inputImage->GetBufferPointer(), nPixels, dataType, num_dims);
+            CreateTensor<PixelType, std::int64_t>(outputTensor, dims, inputImage->GetBufferPointer(), nPixels, dataType, tensor_num_dims);
         } else if (dataType == TF_UINT16) {
-            CreateTensor<PixelType, std::uint16_t>(outputTensor, dims, inputImage->GetBufferPointer(), nPixels, dataType, num_dims);
+            CreateTensor<PixelType, std::uint16_t>(outputTensor, dims, inputImage->GetBufferPointer(), nPixels, dataType, tensor_num_dims);
         } else if (dataType == TF_COMPLEX128) {
-            CreateTensor<PixelType, std::complex<std::double_t>>(outputTensor, dims, inputImage->GetBufferPointer(), nPixels, dataType, num_dims);
+            CreateTensor<PixelType, std::complex<std::double_t>>(outputTensor, dims, inputImage->GetBufferPointer(), nPixels, dataType, tensor_num_dims);
         } else if (dataType == TF_UINT32) {
-            CreateTensor<PixelType, std::uint32_t>(outputTensor, dims, inputImage->GetBufferPointer(), nPixels, dataType, num_dims);
+            CreateTensor<PixelType, std::uint32_t>(outputTensor, dims, inputImage->GetBufferPointer(), nPixels, dataType, tensor_num_dims);
         } else if (dataType == TF_UINT64) {
-            CreateTensor<PixelType, std::uint64_t>(outputTensor, dims, inputImage->GetBufferPointer(), nPixels, dataType, num_dims);
+            CreateTensor<PixelType, std::uint64_t>(outputTensor, dims, inputImage->GetBufferPointer(), nPixels, dataType, tensor_num_dims);
         } else {
             std::cerr << "ImageToTensor: incompatible data type" << std::endl;
             return 1; // EXIT_FAILURE

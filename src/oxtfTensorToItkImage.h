@@ -66,7 +66,9 @@ namespace oxtf {
         size.Fill(1);
         size[0] = dims[1];
         size[1] = dims[2];
-        size[2] = dims[3];
+        if (image_num_dims > 2) {
+            size[2] = dims[3];
+        }
 
         typename ImageType::RegionType region_temp;
         region_temp.SetSize(size);
