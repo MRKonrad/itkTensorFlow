@@ -29,7 +29,7 @@ script:
   - make -j8
   - cd tests
   - ./itkTensorFlowTests
-  - cd ${TRAVIS_BUILD_DIR}
+  - cd ${TRAVIS_BUILD_DIR}/bin
   - make install
 
 before_deploy:
