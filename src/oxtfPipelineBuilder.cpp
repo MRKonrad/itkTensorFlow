@@ -41,17 +41,17 @@ namespace oxtf {
             std::cout << "\t" << _inputImagesGrayscalePaths[i] << std::endl;
         }
 
-        std::cout << "inputImageRgbPath:" << _inputImageRgbPath << std::endl;
-        std::cout << "graphPath:" << _graphPath << std::endl;
-        std::cout << "outputDirPath:" << _outputDirPath << std::endl;
-        std::cout << "padding:" << (_paddingOrNor? "Yes" : "No") << std::endl;
+        std::cout << "inputImageRgbPath:\n\t" << _inputImageRgbPath << std::endl;
+        std::cout << "graphPath:\n\t" << _graphPath << std::endl;
+        std::cout << "outputDirPath:\n\t" << _outputDirPath << std::endl;
+        std::cout << "padding: " << (_paddingOrNor? "Yes" : "No") << std::endl;
 
         for (int i = 0; i < _flipAxes.size(); i++){
             std::cout << "_flipAxes[" << i << "]: " << (_flipAxes[i] ? "Yes" : "No") << std::endl;
         }
 
-        std::cout << "threshold:" << _threshold << std::endl;
-        std::cout << "multiplyOutputByFactor:" << _multiplyOutputByFactor << std::endl;
+        std::cout << "threshold: " << _threshold << std::endl;
+        std::cout << "multiplyOutputByFactor: " << _multiplyOutputByFactor << std::endl;
         std::cout << std::endl;
 
     }
@@ -126,11 +126,11 @@ namespace oxtf {
     ::readInputImage(){
 
         if (_inputImagesGrayscalePaths.empty() && _inputImageRgbPath.empty()){
-            std::cerr << "Provide input_images_grayscale_paths OR input_image_rgb_path" << std::endl;
+            std::cerr << "Provide inputImagesGrayscalePaths OR inputImageRgbPath" << std::endl;
             return nullptr;
         }
         if (!_inputImagesGrayscalePaths.empty() && !_inputImageRgbPath.empty()){
-            std::cerr << "Provide input_images_grayscale_paths OR input_image_rgb_path, not both" << std::endl;
+            std::cerr << "Provide inputImagesGrayscalePaths OR inputImageRgbPath, not both" << std::endl;
             return nullptr;
         }
 

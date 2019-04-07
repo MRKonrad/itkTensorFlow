@@ -10,8 +10,8 @@ compiler:
 
 install:
   # download ITK
-  - cd ${TRAVIS_BUILD_DIR};
-  - cd ..;
+  - cd ${TRAVIS_BUILD_DIR}
+  - cd ..
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       curl -L -O https://www.dropbox.com/s/zi7wfc9qev2529d/ITK413_osx_install.zip;
       unzip -a -q ITK413_osx_install.zip;
@@ -20,12 +20,30 @@ install:
       curl -L -O https://www.dropbox.com/s/w35r9k376gg1cc3/ITK413_linux_install.zip;
       unzip -a -q ITK413_linux_install.zip;
     fi
-  - cd ${TRAVIS_BUILD_DIR};
+  - cd ${TRAVIS_BUILD_DIR}
 
 script:
   - mkdir bin
   - cd bin
-  - cmake .. -DITK_DIR_HINTS="../ITK_install"
+  - cmake .. -DITK_DIR_HINTS="../ITK_install" -DCMAKE_INSTALL_PREFIX=deployment
   - make -j8
   - cd tests
   - ./itkTensorFlowTests
+  - cd ${TRAVIS_BUILD_DIR}
+  - make install
+
+before_deploy:
+  - export exe_extended_name=itkTensorFlow_${TRAVIS_BRANCH}_${TRAVIS_OS_NAME}
+  - cd deployment
+  - zip -r ${exe_extended_name}.zip deployment
+
+deploy:
+  provider: releases # GitHub
+  api_key:
+    secure: ${GH_PERSONAL_ACCESS_TOKEN}
+  file_glob: ON # to use wildcards
+  file: deployment/*
+  skip_cleanup: ON
+  on:
+    tags: ON
+    condition: $CXX == gcc # I guess I have to pick one compiler

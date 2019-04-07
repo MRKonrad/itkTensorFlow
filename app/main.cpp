@@ -7,13 +7,13 @@
 #include <iostream>
 
 void printInfo(){
-    printf("\nUse: itkTensorFlowApp\n"
+    printf("\nUse: itkTensorFlowExe\n"
            "\t -r inputRgbFilePath\n"
            "\t -g inputGrayFilePaths, can be used multiple times\n"
            "\t -m inputGraphPath tensor flow model/graph (in .pb format)\n"
            "\t -o outputDirPath\n"
            " Enjoy!\n"
-           "author: Konrad Werys konrad.werys@cardiov.ox.ac.uk\n\n");
+           "author: Konrad Werys 2019 konrad.werys@cardiov.ox.ac.uk\n\n");
 }
 
 int main(int argc, char** argv) {
@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
     // *** PARSER ***
     // **************
 
-    if (argc != 2){
+    if (argc == 2){
         printInfo();
         return 1; // EXIT_FAILURE
     }

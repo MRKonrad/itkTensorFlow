@@ -10,7 +10,7 @@ TEST(PipelineBuilder, PipelineBuilder_noImagePaths) {
 
     oxtf::PipelineBuilder pipelineBuilder;
 
-    EXPECT_THROW(pipelineBuilder.runPipeline(), std::runtime_error);
+    EXPECT_NE(pipelineBuilder.runPipeline(), 0);
 
 }
 

@@ -5,6 +5,10 @@ project(itkTensorFlow)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_INSTALL_RPATH "@executable_path")
+
+set(ITK_DIR_HINTS "../ITK_install")
+set(CMAKE_INSTALL_PREFIX "install")
 
 find_package(ITK REQUIRED HINTS ${ITK_DIR_HINTS})
 include(${ITK_USE_FILE})
@@ -28,9 +32,13 @@ include(GenerateExportHeader)
 generate_export_header(itkTensorFlowLib)
 
 add_executable(itkTensorFlowExe app/main.cpp app/getopt.cpp app/getopt.h)
-target_link_libraries (itkTensorFlowExe PUBLIC itkTensorFlowLib)
+target_link_libraries (itkTensorFlowExe PUBLIC itkTensorFlowLib )
 
-set(TOMATO_LIBS_TO_LINK ${TOMATO_LIBS_TO_LINK} ${ITK_LIBRARIES})
+install (TARGETS itkTensorFlowExe DESTINATION .)
+install (TARGETS itkTensorFlowLib DESTINATION .)
+install (FILES ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib/libtensorflow.so DESTINATION .)
+install (FILES ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib/libtensorflow_framework.so DESTINATION .)
+install (FILES ${CMAKE_SOURCE_DIR}/scripts/sampleScript.sh DESTINATION .)
 
 add_subdirectory(tests)
 
