@@ -42,6 +42,6 @@ include_directories(${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/include/tensorflow
 link_directories(${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib)
 
 if(WIN32)
-    configure_file(tensorflow/lib/tensorflow.dll ${CMAKE_CURRENT_BINARY_DIR}/tensorflow.dll COPYONLY)
-    configure_file(tensorflow/lib/tensorflow.dll ${CMAKE_CURRENT_BINARY_DIR}/test/tensorflow.dll COPYONLY)
+    configure_file(thirdParty/tensorflow/lib/tensorflow.dll ${CMAKE_CURRENT_BINARY_DIR}/tensorflow.dll COPYONLY)
+    configure_file(thirdParty/tensorflow/lib/tensorflow.dll ${CMAKE_CURRENT_BINARY_DIR}/tests/tensorflow.dll COPYONLY)
 endif()
