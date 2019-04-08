@@ -25,3 +25,7 @@ add_test(NAME ctest_tests COMMAND itkTensorFlowTests)
 
 include(${PROJECT_SOURCE_DIR}/cmake/dowloadSampleModel.cmake)
 include(${PROJECT_SOURCE_DIR}/cmake/downloadSampleJpg.cmake)
+
+if(WIN32)
+  file(COPY testData DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+endif()

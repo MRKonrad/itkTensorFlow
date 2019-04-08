@@ -61,9 +61,9 @@ test_script:
   # TODO: should I add sth like this? https://github.com/mgerhardy/caveexpress/blob/master/appveyor.yml
   - cd
   - dir
-  - cd tests\%CONFIGURATION%
+  - cd bin\tests\%CONFIGURATION%
   - itkTensorFlowTests.exe
-  - cd ..\..
+  - cd ..\..\..
 
 artifacts:
   - path: deployment\*.*
