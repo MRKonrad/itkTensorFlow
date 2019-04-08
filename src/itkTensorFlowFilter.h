@@ -7,6 +7,7 @@
 
 #include "itkImageToImageFilter.h"
 #include "oxtfGraphReader.h"
+#include "itktensorflowlib_export.h"
 
 namespace itk
 {
@@ -57,7 +58,9 @@ namespace itk
 
 
 #ifndef ITK_MANUAL_INSTANTIATION
+#ifdef ITKTENSORFLOWLIB_EXPORT
 #include "itkTensorFlowFilter.hxx"
-#endif
+#endif // ITKTENSORFLOWLIB_EXPORT
+#endif // ITK_MANUAL_INSTANTIATION
 
 #endif //ITKTENSORFLOW_ITKTENSORFLOWFILER_H

@@ -8,6 +8,7 @@
 #include "itkImage.h"
 #include <c_api.h>
 #include "tf_utils.hpp"
+#include "itktensorflowlib_export.h"
 
 namespace oxtf {
 
@@ -76,6 +77,8 @@ namespace oxtf {
 
  } //namespace oxtf
 
+#ifdef ITKTENSORFLOWLIB_EXPORT
 #include "oxtfImageToTensor.hxx"
+#endif // ITKTENSORFLOWLIB_EXPORT
 
 #endif //ITKTENSORFLOW_ITKIMAGETOTENSOR_H
