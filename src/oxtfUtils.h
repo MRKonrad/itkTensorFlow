@@ -12,6 +12,7 @@
 #include <limits>
 #include <complex>
 #include <c_api.h> // TensorFlow C API header
+#include "itktensorflowlib_export.h"
 
 /**
  * based on https://github.com/Neargye/hello_tf_c_api
@@ -43,7 +44,7 @@ void PrintOp(TF_Graph* graph);
  * based on https://github.com/Neargye/hello_tf_c_api
  * @return
  */
-int printTensorFlowVersion();
+ITKTENSORFLOWLIB_EXPORT int printTensorFlowVersion();
 
 /**
  * based on https://github.com/Neargye/hello_tf_c_api

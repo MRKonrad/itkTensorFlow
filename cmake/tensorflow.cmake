@@ -15,16 +15,12 @@ if (NOT EXISTS ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow)
     make_directory(${CMAKE_SOURCE_DIR}/thirdParty/tensorflow)
 endif()
 
-if (NOT EXISTS ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib/libtensorflow.so)
-    file(
-            DOWNLOAD
-                ${DownloadUrl}
-                ${DownloadPath}
-            STATUS
-                status
-            LOG
-                log
-    )
+if (
+  NOT EXISTS ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib/libtensorflow.so AND
+  NOT EXISTS ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib/tensorflow.dll )
+
+    file( DOWNLOAD ${DownloadUrl} ${DownloadPath} STATUS status LOG log)
+    
     list(GET status 0 status_code)
     list(GET status 1 status_string)
     if(NOT status_code EQUAL 0)

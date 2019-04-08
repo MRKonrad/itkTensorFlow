@@ -5,12 +5,13 @@
 #ifndef ITKTENSORFLOW_OXTF_PIPELINEBUILDER_H
 #define ITKTENSORFLOW_OXTF_PIPELINEBUILDER_H
 
+#include "itktensorflowlib_export.h"
 #include "oxtfGraphReader.h"
 #include <string>
 
 namespace oxtf {
 
-    class PipelineBuilder {
+    class ITKTENSORFLOWLIB_EXPORT PipelineBuilder {
 
     public:
 
@@ -123,13 +124,15 @@ namespace oxtf {
          * @return
          */
         template< typename TImage>
-        int writeImages(TImage *image, const std::string &output_dir);
+		int writeImages(TImage *image, const std::string &output_dir);
 
         PipelineBuilder();
 
-        ~PipelineBuilder() = default;
+		// no virtual destructor, as otherwise I have windows errors about vf table, for example 
+		// >itkTensorFlowLibStatic.lib(oxtfPipelineBuilder.obj) : error LNK2019: unresolved external symbol "__declspec(dllimport) const oxtf::PipelineBuilder::`vftable'" (__imp_??_7PipelineBuilder@oxtf@@6B@) referenced in function "public: __cdecl oxtf::PipelineBuilder::PipelineBuilder(void)" (??0PipelineBuilder@oxtf@@QEAA@XZ)
+		~PipelineBuilder();
 
-        void disp();
+		void disp();
 
         const std::vector<std::string> &getInputImagesGrayscalePaths() const;
 

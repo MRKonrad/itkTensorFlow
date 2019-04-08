@@ -2,7 +2,8 @@
 // Created by Konrad Werys on 24/03/2019.
 //
 
-#include "itkTensorFlowApi.h"
+#include "oxtfPipelineBuilder.h"
+#include "oxtfUtils.h"
 #include "getopt.h"
 #include <iostream>
 

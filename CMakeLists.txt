@@ -26,6 +26,7 @@ include_directories(${PROJECT_BINARY_DIR}) # to make itktensorflowlib_export.h v
 include(cmake/tensorflow.cmake)
 
 add_library(itkTensorFlowLib SHARED ${SRC_FILES})
+add_library(itkTensorFlowLibStatic STATIC  ${SRC_FILES})
 target_link_libraries (itkTensorFlowLib PUBLIC ${ITK_LIBRARIES} tensorflow)
 
 include(GenerateExportHeader)
@@ -41,8 +42,3 @@ install (FILES ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib/libtensorflow_frame
 install (FILES ${CMAKE_SOURCE_DIR}/scripts/sampleScript.sh DESTINATION .)
 
 add_subdirectory(tests)
-
-get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
-foreach(dir ${dirs})
-    message(STATUS "dir='${dir}'")
-endforeach()

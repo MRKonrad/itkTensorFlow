@@ -31,6 +31,11 @@ namespace oxtf {
         _multiplyOutputByFactor = 255;
     };
 
+	PipelineBuilder
+	::~PipelineBuilder() {
+		//std::cout << "~PipelineBuilder()" << std::endl;
+	};
+
     void
     PipelineBuilder
     ::disp(){
