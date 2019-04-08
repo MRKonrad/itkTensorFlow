@@ -28,16 +28,15 @@ install:
   - cd ${TRAVIS_BUILD_DIR}
 
 script:
-  - mkdir bin
-  - cd bin
-  - cmake .. -DITK_DIR_HINTS="../ITK_install" -DCMAKE_INSTALL_PREFIX=install
+  - cd ${TRAVIS_BUILD_DIR}
+  - cmake . -Bbin -DITK_DIR_HINTS="../ITK_install" -DCMAKE_INSTALL_PREFIX=install
   - cmake --build bin --config RELEASE --target itkTensorFlowTests
-  - cd tests
+  - cd bin/tests
   - ./itkTensorFlowTests
-  - cd ${TRAVIS_BUILD_DIR}/bin
-  - cmake --build bin --config RELEASE --target install
 
 before_deploy:
+  - cd ${TRAVIS_BUILD_DIR}
+  - cmake --build bin --config RELEASE --target install
   - cd ${TRAVIS_BUILD_DIR}/bin/install
   - zip -r ${exe_extended_name}.zip *
   - cd ${TRAVIS_BUILD_DIR}
