@@ -51,7 +51,6 @@ after_build:
   - dir %CONFIGURATION%
   - cd ..
   - dir install
-  - deployment
   - 7z a %ZIP_EXTENDED_NAME%.zip install\* -r # zip
   - mkdir deployment
   - copy %ZIP_EXTENDED_NAME%.zip deployment\%ZIP_EXTENDED_NAME%.zip
