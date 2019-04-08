@@ -31,10 +31,12 @@ script:
   - ./itkTensorFlowTests
   - cd ${TRAVIS_BUILD_DIR}/bin
   - make install
-
-before_deploy:
+#before_deploy:
   - export exe_extended_name=itkTensorFlow_${TRAVIS_BRANCH}_${TRAVIS_OS_NAME}
-  - cd deployment
+  - ls ${TRAVIS_BUILD_DIR}
+  - ls ${TRAVIS_BUILD_DIR}/bin
+  - ls ${TRAVIS_BUILD_DIR}/deployment
+  - cd ${TRAVIS_BUILD_DIR}/bin/deployment
   - zip -r ${exe_extended_name}.zip deployment
 
 deploy:
