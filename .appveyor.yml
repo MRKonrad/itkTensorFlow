@@ -49,14 +49,13 @@ after_build:
   - dir
   - cmake --build . --config %CONFIGURATION% --target INSTALL
   - dir %CONFIGURATION%
-  - dir %CONFIGURATION%\install
+  - dir install
   - deployment
-  - 7z a %ZIP_EXTENDED_NAME%.zip %CONFIGURATION%\install\* -r # zip
+  - 7z a %ZIP_EXTENDED_NAME%.zip install\* -r # zip
   - mkdir deployment
   - copy %ZIP_EXTENDED_NAME%.zip deployment\%ZIP_EXTENDED_NAME%.zip
   - dir
   - dir deployment
-  - mkdir deployment
 
 test_script:
   # TODO: should I add sth like this? https://github.com/mgerhardy/caveexpress/blob/master/appveyor.yml
