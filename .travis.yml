@@ -46,4 +46,4 @@ deploy:
   skip_cleanup: ON
   on:
     tags: ON
-    condition: $CXX == gcc # I guess I have to pick one compiler
+    condition: ${CXX} == "g++" # I guess I have to pick one compiler

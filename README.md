@@ -5,7 +5,7 @@ Heavily based on [Neargye/hello_tf_c_api](https://github.com/Neargye/hello_tf_c_
 | System   |      Badge      |
 |----------|:---------------:|
 | Travis OSX/Linux build | [![Build Status](https://travis-ci.org/MRKonrad/itkTensorFlow.svg?branch=master)](https://travis-ci.org/MRKonrad/itkTensorFlow)|
-| Appveyor Windows | [![Build status](https://ci.appveyor.com/api/projects/status/7kq7adc2ew4d54pn?svg=true)](https://ci.appveyor.com/project/MRKonrad/itktensorflow) | 
+| Appveyor Windows | [![Build status](https://ci.appveyor.com/api/projects/status/7kq7adc2ew4d54pn?svg=true&branch=master)](https://ci.appveyor.com/project/MRKonrad/itktensorflow) | 
 
 # How to use
 OSX/Linux
