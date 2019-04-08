@@ -8,6 +8,11 @@ compiler:
   - gcc
   - clang
 
+env:
+  global:
+    - exe_extended_name: itkTensorFlow_${TRAVIS_BRANCH}_${TRAVIS_OS_NAME}
+    - secure: ${GH_PERSONAL_ACCESS_TOKEN}
+
 install:
   # download ITK
   - cd ${TRAVIS_BUILD_DIR}
@@ -26,13 +31,13 @@ script:
   - mkdir bin
   - cd bin
   - cmake .. -DITK_DIR_HINTS="../ITK_install" -DCMAKE_INSTALL_PREFIX=install
-  - make -j8
+  - cmake --build bin --config RELEASE --target itkTensorFlowTests
   - cd tests
   - ./itkTensorFlowTests
   - cd ${TRAVIS_BUILD_DIR}/bin
-  - make install
-#before_deploy:
-  - export exe_extended_name=itkTensorFlow_${TRAVIS_BRANCH}_${TRAVIS_OS_NAME}
+  - cmake --build bin --config RELEASE --target install
+
+before_deploy:
   - cd ${TRAVIS_BUILD_DIR}/bin/install
   - zip -r ${exe_extended_name}.zip *
   - cd ${TRAVIS_BUILD_DIR}
