@@ -5,7 +5,7 @@ Heavily based on [Neargye/hello_tf_c_api](https://github.com/Neargye/hello_tf_c_
 | System   |      Badge      |
 |----------|:---------------:|
 | Travis OSX/Linux build | [![Build Status](https://travis-ci.org/MRKonrad/itkTensorFlow.svg?branch=master)](https://travis-ci.org/MRKonrad/itkTensorFlow)|
-
+| Appveyor Windows | [![Build status](https://ci.appveyor.com/api/projects/status/7kq7adc2ew4d54pn?svg=true)](https://ci.appveyor.com/project/MRKonrad/itktensorflow) | 
 
 # How to use
 OSX/Linux
@@ -13,10 +13,8 @@ OSX/Linux
 git clone https://github.com/MRKonrad/itkTensorFlow.git
 cd itkTensorflow
 git submodule update --init --recursive
-mkdir bin
-cd bin
-cmake .. -DITK_DIR_HINTS="../ITK_install"
-cmake --build .
+cmake . -Bbin -DITK_DIR_HINTS="../ITK_install"
+cmake --build bin
 ```
 
 Windows
@@ -36,10 +34,8 @@ http://mrkonrad.github.io/MRKonrad/files/cnnRotatedImage/image2_90.jpg
 http://mrkonrad.github.io/MRKonrad/files/cnnRotatedImage/image2_180.jpg  
 http://mrkonrad.github.io/MRKonrad/files/cnnRotatedImage/image2_270.jpg  
 
-
 # TODO:
 * remove dependency to hello_tf_c_api
-* check with valgrind
 
 # Thoughts
 
@@ -65,10 +61,10 @@ ImageType = itk::Image< PixelType, 2 >;
 **Con:** number of itkImageFilter have to be defined in a constructor. itkImageFilter constructor does not accept arguments. Hence the n has to be defined in the compile time  
 **Partial solution:** allow big number of inputs
 
-## Other
-* colormap in rgb: https://itk.org/Doxygen/html/classitk_1_1ScalarToRGBColormapImageFilter.html
-
-## Conventional commits
+## Git and conventional commits
 I am trying to follow the convetional commits guide:
 * https://www.conventionalcommits.org/en/v1.0.0-beta.2/
 * https://www.cheatography.com/albelop/cheat-sheets/conventional-commits/
+
+## Other
+* colormap in rgb: https://itk.org/Doxygen/html/classitk_1_1ScalarToRGBColormapImageFilter.html
