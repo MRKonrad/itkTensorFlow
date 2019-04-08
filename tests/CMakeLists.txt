@@ -28,4 +28,5 @@ include(${PROJECT_SOURCE_DIR}/cmake/downloadSampleJpg.cmake)
 
 if(WIN32)
   file(COPY testData DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+  file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/testData/temp)
 endif()

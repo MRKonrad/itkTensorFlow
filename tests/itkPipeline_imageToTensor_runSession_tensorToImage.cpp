@@ -25,7 +25,7 @@
 TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineRgb_test) {
 
     std::string inputFilename = "../../tests/testData/jpg/image2.jpg";
-    std::string outputFilename = "../../tests/testData/temp/itkPipeline_imageToTensor_runSession_tensorToImage_rgb.png";
+    std::string outputFilename = "../../tests/testData/temp/pipelineRgb.png";
     std::string graphFilename = "../../tests/testData/model_deeplab.pb";
 
     oxtf::GraphReader graphReader;
@@ -143,7 +143,7 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineRgb_test) {
 TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineDicom_test) {
 
     std::string inputFilename = "../../tests/testData/dicom/T1Map.dcm";
-    std::string outputFilename = "../../tests/testData/temp/itkPipeline_imageToTensor_runSession_tensorToImage_dicom.dcm";
+    std::string outputFilename = "../../tests/testData/temp/pipelineDicom.dcm";
     std::string graphFilename = "../../tests/testData/model_deeplab.pb";
 
     oxtf::GraphReader graphReader;
@@ -257,7 +257,7 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineDicom_test) {
 TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineDicom2_test) {
 
     std::string inputFilename = "../../tests/testData/dicom/Volunteer_T1Map.dcm";
-    std::string outputFilename = "../../tests/testData/temp/itkPipeline_imageToTensor_runSession_tensorToImage_dicom2";
+    std::string outputFilename = "../../tests/testData/temp/itkPipeline_imageToTensor_runSession_tensorToImage_dicom2.dcm";
     std::string graphFilename = "../../tests/testData/model_ocmr7.pb";
 
     oxtf::GraphReader graphReader;
