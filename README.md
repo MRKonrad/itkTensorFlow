@@ -35,6 +35,13 @@ http://mrkonrad.github.io/MRKonrad/files/cnnRotatedImage/image2_90.jpg
 http://mrkonrad.github.io/MRKonrad/files/cnnRotatedImage/image2_180.jpg  
 http://mrkonrad.github.io/MRKonrad/files/cnnRotatedImage/image2_270.jpg  
 
+# Troubleshooting
+* missing `msvcp140.dll` 
+Download https://www.microsoft.com/en-us/download/details.aspx?id=48145 as suggested in https://stackoverflow.com/questions/32998902/msvcp140-dll-missing
+* how to generate `.pb` (tensorflow) file from `.h5` (keras)   
+https://stackoverflow.com/questions/45466020/how-to-export-keras-h5-to-tensorflow-pb    
+https://github.com/amir-abdi/keras_to_tensorflow  
+
 # TODO:
 * remove dependency to hello_tf_c_api
 

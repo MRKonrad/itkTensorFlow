@@ -6,9 +6,6 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_INSTALL_RPATH "@executable_path")
-if(WIN32)
-    set(CMAKE_INSTALL_MFC_LIBRARIES ON)
-endif()
 
 find_package(ITK REQUIRED HINTS ${ITK_DIR_HINTS})
 include(${ITK_USE_FILE})
@@ -28,6 +25,8 @@ include(cmake/tensorflow.cmake)
 add_library(itkTensorFlowLib SHARED ${SRC_FILES})
 add_library(itkTensorFlowLibStatic STATIC  ${SRC_FILES})
 target_link_libraries (itkTensorFlowLib PUBLIC ${ITK_LIBRARIES} tensorflow)
+
+message(STATUS ${ITK_LIBRARIES})
 
 include(GenerateExportHeader)
 generate_export_header(itkTensorFlowLib)

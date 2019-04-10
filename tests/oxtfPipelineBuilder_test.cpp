@@ -5,6 +5,7 @@
 #include "gtest/gtest.h"
 #include "oxtfPipelineBuilder.h"
 #include "itkImage.h"
+#include "itkRGBPixel.h"
 
 TEST(PipelineBuilder, PipelineBuilder_noImagePaths) {
 
@@ -201,6 +202,23 @@ TEST(PipelineBuilder, PipelineBuilder_runPipeline2) {
 }
 
 //TEST(PipelineBuilder, PipelineBuilder_runPipeline3) {
+//
+//    typedef itk::Image<uint8_t , 3> ImageType;
+//
+//    std::string inputFilename = "../../tests/testData/dicom/Volunteer_T1Map.dcm";
+//    std::string outputDir = "../../tests/testData/temp/PipelineBuilder3";
+//    std::string graphFilename = "../../tests/testData/model_ocmr7.pb";
+//
+//    oxtf::PipelineBuilder pipelineBuilder;
+//    pipelineBuilder.setInputImageRgbPath(inputFilename);
+//    pipelineBuilder.setOutputDirPath(outputDir);
+//    pipelineBuilder.setGraphPath(graphFilename);
+//
+//    EXPECT_EQ(pipelineBuilder.runPipeline(), 1); // 3rd dim of image = 3 3rd dim of graph = 1, should not work
+//
+//}
+
+//TEST(PipelineBuilder, PipelineBuilder_runPipeline4) {
 //
 //    typedef itk::Image<float, 3> ImageType;
 //

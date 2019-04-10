@@ -4,14 +4,28 @@
 
 #include "oxtfGraphRunner.h"
 
+
 namespace oxtf {
 
     int
     GraphRunner::run(){
 
+        // check types
         if (TF_TensorType(_inputTensor) != _graphReader->getInputOperationType()){
-            std::cerr << "GraphRunner:run: this graph needs: " << TFDataTypeToString(_graphReader->getInputOperationType()) << " as input type" << std::endl;
+            std::cerr << "GraphRunner:run this graph needs: " << TFDataTypeToString(_graphReader->getInputOperationType()) << " as input type" << std::endl;
             return 1; // EXIT_FAILURE
+        }
+
+        // check sizes
+        for (int iDim = 0; iDim < TF_NumDims(_inputTensor); iDim++){
+            if ( _graphReader->getInputOperationSize()[iDim] == -1){
+                continue;
+            }
+            if (_graphReader->getInputOperationSize()[iDim] != TF_Dim(_inputTensor, iDim)){
+                std::cerr << "GraphRunner:run input tensor dim[" << iDim << "] = " << TF_Dim(_inputTensor, iDim) <<
+                          " is different than graph dim[" << iDim << "] = " << _graphReader->getInputOperationSize()[iDim] << std::endl;
+                return 1; // EXIT_FAILURE
+            }
         }
 
         auto start = std::chrono::high_resolution_clock::now();

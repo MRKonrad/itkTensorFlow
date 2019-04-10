@@ -15,6 +15,7 @@
 #include "itkExtractImageFilter.h"
 #include "itkFlipImageFilter.h"
 #include "itkThresholdImageFilter.h"
+#include "itkRGBPixel.h"
 
 #include "itkTensorFlowFilter.h"
 #include "oxtfImageToTensor.h"
@@ -92,6 +93,11 @@ namespace oxtf {
 
         typename ImageType::Pointer imageOut = runGraphOnImage<ImageType>(imageIn, graphReader);
 
+        if (imageOut.IsNull()){
+            delete graphReader;
+            return 1; // EXIT_FAILURE
+        }
+
         if (_flipAxes[0] || _flipAxes[1] || _flipAxes[2]){
             imageOut = flipImage<ImageType>(imageOut, _flipAxes);
         }
@@ -153,7 +159,7 @@ namespace oxtf {
     PipelineBuilder
     ::readInputImageRgb(const std::string &image_path){
 
-        typedef itk::RGBPixel<unsigned char> RgbPixelType;
+        typedef itk::RGBPixel<std::uint8_t> RgbPixelType;
         typedef itk::Image<RgbPixelType, 2> RgbImageType;
 
         typedef itk::ImageFileReader<RgbImageType> ReaderType;
@@ -302,7 +308,9 @@ namespace oxtf {
         graphRunner.setGraphReader(graphReader);
         graphRunner.setInputTensor(inputTensor);
 
-        graphRunner.run();
+        if(graphRunner.run() != 0) {
+            return nullptr; // EXIT_FAILURE
+        }
 
         TF_Tensor *outputTensor = graphRunner.getOutputTensor();
 
