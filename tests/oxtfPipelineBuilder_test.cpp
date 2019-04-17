@@ -183,6 +183,8 @@ TEST(PipelineBuilder, PipelineBuilder_runPipeline2) {
 
     std::vector<std::string> inputFilenames;
     inputFilenames.emplace_back( "../../tests/testData/dicom/T1Map.dcm");
+    inputFilenames.emplace_back( "../../tests/testData/dicom/T1Map.dcm");
+    inputFilenames.emplace_back( "../../tests/testData/dicom/T1Map.dcm");
     std::string outputDir = "../../tests/testData/temp/PipelineBuilder3";
     std::string graphFilename = "../../tests/testData/model_deeplab.pb";
 
