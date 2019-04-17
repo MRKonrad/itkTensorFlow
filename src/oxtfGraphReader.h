@@ -53,6 +53,8 @@ namespace oxtf {
         //destructor
         virtual ~GraphReader();
 
+        void disp();
+
     private:
 
         std::string _graphPath;

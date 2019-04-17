@@ -11,7 +11,7 @@ init:
   - ps: Update-AppveyorBuild -Version "$($env:APPVEYOR_REPO_BRANCH) - $($env:APPVEYOR_REPO_COMMIT)"
 
 environment:
-  ZIP_EXTENDED_NAME: itkTensorFlow_%APPVEYOR_REPO_TAG_NAME%_Windows_%PLATFORM%
+  ZIP_EXTENDED_NAME: itkTensorFlow_%APPVEYOR_REPO_TAG_NAME%_windows_%PLATFORM%
 
 install:
   - git submodule update --init --recursive

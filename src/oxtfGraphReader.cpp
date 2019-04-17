@@ -4,7 +4,8 @@
 
 #include "oxtfGraphReader.h"
 
-#include "tf_utils.hpp"
+#include "oxtfUtils.h"
+
 
 namespace oxtf {
 
@@ -143,6 +144,26 @@ namespace oxtf {
     GraphReader::~GraphReader() {
         tf_utils::DeleteGraph(_graph);
     }
+
+    void GraphReader::disp(){
+        std::cout << "GraphReader" << std::endl;
+        std::cout << "  graphPath: " << _graphPath << std::endl;
+        std::cout << "  inputOperationName: " << _inputOperationName
+                  << " inputOperationDims: " << _inputOperationDims
+                  << " inputOperationType: " << TFDataTypeToString(_inputOperationType)
+                  << std::endl;
+        std::cout << "  outputOperationName: " << _outputOperationName
+                  << " outputOperationDims: " << _outputOperationDims
+                  << " outputOperationType: " << TFDataTypeToString(_outputOperationType)
+                  << std::endl;
+
+        std::cout << "  operationWithBiggest2nd3rdSize: [ ";
+        for (int i = 0; i < _operationWithBiggest2nd3rdSize.size(); ++i){
+            std::cout << _operationWithBiggest2nd3rdSize[i] << " ";
+        }
+        std::cout << " ]"<< std::endl;
+    }
+
 
     int
     GraphReader::GetOpOutputInfo(TF_Graph* graph, TF_Operation* op, int nth_output, std::int64_t *num_dims, std::vector<std::int64_t> *dims, TF_DataType *type) {

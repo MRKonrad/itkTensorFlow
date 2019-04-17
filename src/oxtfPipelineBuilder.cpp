@@ -73,6 +73,8 @@ namespace oxtf {
         if (!graphReader)
             return 1; // EXIT_FAILURE
 
+        graphReader->disp();
+
         typename ImageType::Pointer imageIn = readInputImage<ImageType>();
 
         if (!imageIn)
