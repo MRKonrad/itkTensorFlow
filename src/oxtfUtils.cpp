@@ -194,7 +194,8 @@ int sessionRun(TF_Tensor* input_tensor, TF_Tensor*& output_tensor, std::string g
     );
 
     if (TF_GetCode(status) != TF_OK) {
-        std::cout << "Error " << TF_GetCode(status) << " running session";
+        std::cout << "Error running session: TF_Code: " << TF_GetCode(status)
+                  << " message: " << TF_Message(status) << std::endl;
         TF_DeleteStatus(status);
         return 5;
     }
