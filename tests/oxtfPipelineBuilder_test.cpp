@@ -213,14 +213,20 @@ TEST(PipelineBuilder, PipelineBuilder_runPipeline_moco) {
 
     std::vector<std::string> inputFilenames;
     inputFilenames.emplace_back( "../../tests/testData/dicom/T1Map.dcm");
+    inputFilenames.emplace_back( "../../tests/testData/dicom/T1Map.dcm");
+    inputFilenames.emplace_back( "../../tests/testData/dicom/T1Map.dcm");
+    inputFilenames.emplace_back( "../../tests/testData/dicom/T1Map.dcm");
+    inputFilenames.emplace_back( "../../tests/testData/dicom/T1Map.dcm");
+    inputFilenames.emplace_back( "../../tests/testData/dicom/T1Map.dcm");
+    inputFilenames.emplace_back( "../../tests/testData/dicom/T1Map.dcm");
     std::string outputDir = "../../tests/testData/temp/PipelineBuilder_moco";
-    std::string graphFilename = "../../tests/testData/MoCoAI2.pb"; // a private model
+    std::string graphFilename = "../../tests/testData/MoCoAI.pb"; // a private model
 
     oxtf::PipelineBuilder pipelineBuilder;
     pipelineBuilder.setInputImagesGrayscalePaths(inputFilenames);
     pipelineBuilder.setOutputDirPath(outputDir);
     pipelineBuilder.setGraphPath(graphFilename);
-    pipelineBuilder.setMultiplyOutputByFactor(255);
+    pipelineBuilder.setMultiplyOutputByFactor(1);
 
     std::vector<bool> flipAxes = std::vector<bool>(3, false);
     flipAxes[1] = true;
@@ -269,7 +275,7 @@ TEST(PipelineBuilder, PipelineBuilder_runPipeline4) {
     std::vector<std::string> inputFilenames;
     inputFilenames.emplace_back( "../../tests/testData/dicom/T1Map.dcm");
     std::string outputDir = "../../tests/testData/temp/PipelineBuilder4";
-    std::string graphFilename = "../../tests/testData/model_ocmr27.pb"; // a private model
+    std::string graphFilename = "../../tests/testData/model_ocmr7.pb"; // a private model
 
     oxtf::PipelineBuilder pipelineBuilder;
     pipelineBuilder.setInputImagesGrayscalePaths(inputFilenames);

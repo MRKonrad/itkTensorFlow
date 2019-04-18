@@ -20,7 +20,7 @@ TEST(playground, printGraphInfo) {
     if (!doPrint)
         std::cout.setstate(std::ios_base::failbit);
 
-    EXPECT_NO_THROW(printGraphInfo("../../tests/testData/model_ocmr7.pb"));
+    EXPECT_NO_THROW(printGraphInfo("../../tests/testData/MoCoAI.pb"));
 
     if (!doPrint)
         std::cout.setstate(std::ios_base::failbit);

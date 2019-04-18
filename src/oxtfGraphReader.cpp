@@ -37,30 +37,69 @@ namespace oxtf {
             const int num_outputs = TF_OperationNumOutputs(op);
             const int num_inputs = TF_OperationNumInputs(op);
 
-            // get input params
-            if (_inputOperationDims == 0){
-                if (num_outputs != 1){
-                    std::cerr << "GraphReader can only handle graphs with one input";
-                    return 1; //EXIT_FAILURE
+            int64_t tempOpDims;
+            std::vector<std::int64_t> tempOpSize;
+            TF_DataType tempOpType;
+
+
+            int result = GetOpOutputInfo(_graph, op, 0, &tempOpDims, &tempOpSize, &tempOpType);
+            if (result != 0)
+                continue;
+
+            // ----------------------------
+            // --- getting input params ---
+            // ----------------------------
+
+            if (    ( _inputOperationDims == 0 ) // skip if already set
+                 && ( tempOpDims == 4 ) ) { // consider only ops with 4 dims
+
+                if (   (tempOpSize[1] > 1 || tempOpSize[1] == -1) // consider only x == -1 or x > 1
+                    && (tempOpSize[2] > 1 || tempOpSize[2] == -1)) { // consider only y == -1 or y > 1
+
+                    if (num_outputs == 1) {
+                        _inputOperationName = name;
+                        _inputOperationDims = tempOpDims;
+                        _inputOperationSize = tempOpSize;
+                        _inputOperationType = tempOpType;
+
+                    }
                 }
-                _inputOperationName = name;
-                GetOpOutputInfo(_graph, op, 0, &_inputOperationDims, &_inputOperationSize, &_inputOperationType);
             }
 
-            // get output params
+            // -----------------------------
+            // --- getting output params ---
+            // -----------------------------
+
             // TODO: find more pretty solution, currently overwriting the all output params with each operation.
             // Can i get the number of the operations in the graph?
             _outputOperationName = name;
-            GetOpOutputInfo(_graph, op, 0, &_outputOperationDims, &_outputOperationSize, &_outputOperationType);
+            _outputOperationDims = tempOpDims;
+            _outputOperationSize = tempOpSize;
+            _outputOperationType = tempOpType;
 
             // biggest x and y
-            if (_outputOperationDims >= 3){
-                if (       _outputOperationSize[1] > _operationWithBiggest2nd3rdSize[1]
-                        && _outputOperationSize[2] > _operationWithBiggest2nd3rdSize[2] ){
-                    _operationWithBiggest2nd3rdSize = _outputOperationSize;
+            if (tempOpDims >= 3){
+                if (       tempOpSize[1] > _operationWithBiggest2nd3rdSize[1]
+                        && tempOpSize[2] > _operationWithBiggest2nd3rdSize[2] ){
+                    _operationWithBiggest2nd3rdSize = tempOpSize;
                 }
             }
         }
+
+        // if has not been set print to cerr
+        if (_inputOperationDims == 0){
+            std::cerr << "inputOperation has not been found" << std::endl;
+            return 1; // EXIT_FAILURE
+        }
+
+        // if has not been set print to cerr
+        if (_outputOperationDims == 0){
+            std::cerr << "outputOperation has not been found" << std::endl;
+            return 1; // EXIT_FAILURE
+        }
+
+        std::cout << "inputOperationName: " << _inputOperationName << std::endl;
+        std::cout << "outputOperationName: " << _outputOperationName << std::endl;
 
         return 0; //EXIT_SUCCESS
     }
@@ -196,6 +235,11 @@ namespace oxtf {
         if (TF_GetCode(status) != TF_OK) {
             std::cout << "Can't get tensor dimensionality" << std::endl;
             return 1; //EXIT_FAILURE
+        }
+
+        if (temp_num_dims < 0){
+            //std::cout << "Tensor dim < 0" << std::endl;
+            return 2; //EXIT_FAILURE
         }
 
         *num_dims = temp_num_dims;
