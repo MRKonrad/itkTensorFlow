@@ -203,43 +203,89 @@ TEST(PipelineBuilder, PipelineBuilder_runPipeline2) {
 
 }
 
-//TEST(PipelineBuilder, PipelineBuilder_runPipeline3) {
-//
-//    typedef itk::Image<uint8_t , 3> ImageType;
-//
-//    std::string inputFilename = "../../tests/testData/dicom/Volunteer_T1Map.dcm";
-//    std::string outputDir = "../../tests/testData/temp/PipelineBuilder3";
-//    std::string graphFilename = "../../tests/testData/model_ocmr7.pb";
-//
-//    oxtf::PipelineBuilder pipelineBuilder;
-//    pipelineBuilder.setInputImageRgbPath(inputFilename);
-//    pipelineBuilder.setOutputDirPath(outputDir);
-//    pipelineBuilder.setGraphPath(graphFilename);
-//
-//    EXPECT_EQ(pipelineBuilder.runPipeline(), 1); // 3rd dim of image = 3 3rd dim of graph = 1, should not work
-//
-//}
 
-//TEST(PipelineBuilder, PipelineBuilder_runPipeline4) {
-//
-//    typedef itk::Image<float, 3> ImageType;
-//
-//    std::vector<std::string> inputFilenames;
-//    inputFilenames.emplace_back( "../../tests/testData/dicom/T1Map.dcm");
-//    std::string outputDir = "../../tests/testData/temp/PipelineBuilder4";
-//    std::string graphFilename = "../../tests/testData/model_ocmr27_.pb";
-//
-//    oxtf::PipelineBuilder pipelineBuilder;
-//    pipelineBuilder.setInputImagesGrayscalePaths(inputFilenames);
-//    pipelineBuilder.setOutputDirPath(outputDir);
-//    pipelineBuilder.setGraphPath(graphFilename);
-//    pipelineBuilder.setMultiplyOutputByFactor(255);
-//
-//    std::vector<bool> flipAxes = std::vector<bool>(3, false);
-//    flipAxes[1] = true;
-//    pipelineBuilder.setFlipAxes(flipAxes);
-//    pipelineBuilder.setThreshold(2500);
-//
-//    EXPECT_EQ(pipelineBuilder.runPipeline(), 0);
-//
-//}
+/**
+ * testing a private model
+ */
+TEST(PipelineBuilder, PipelineBuilder_runPipeline_moco) {
+
+    typedef itk::Image<float, 3> ImageType;
+
+    std::vector<std::string> inputFilenames;
+    inputFilenames.emplace_back( "../../tests/testData/dicom/T1Map.dcm");
+    std::string outputDir = "../../tests/testData/temp/PipelineBuilder_moco";
+    std::string graphFilename = "../../tests/testData/MoCoAI2.pb"; // a private model
+
+    oxtf::PipelineBuilder pipelineBuilder;
+    pipelineBuilder.setInputImagesGrayscalePaths(inputFilenames);
+    pipelineBuilder.setOutputDirPath(outputDir);
+    pipelineBuilder.setGraphPath(graphFilename);
+    pipelineBuilder.setMultiplyOutputByFactor(255);
+
+    std::vector<bool> flipAxes = std::vector<bool>(3, false);
+    flipAxes[1] = true;
+    pipelineBuilder.setFlipAxes(flipAxes);
+    pipelineBuilder.setThreshold(255);
+
+    int result = pipelineBuilder.runPipeline();
+
+    if (result == 2) return; // a private model, so we do not want CI to raise warnings
+
+    EXPECT_EQ(result, 0); // test only if the model is available
+
+}
+
+/**
+ * testing a private model
+ */
+TEST(PipelineBuilder, PipelineBuilder_runPipeline_image_size_different_than_graph_size) {
+
+    typedef itk::Image<uint8_t , 3> ImageType;
+
+    std::string inputFilename = "../../tests/testData/dicom/Volunteer_T1Map.dcm";
+    std::string outputDir = "../../tests/testData/temp/PipelineBuilder3";
+    std::string graphFilename = "../../tests/testData/model_ocmr7.pb"; // a private model
+
+    oxtf::PipelineBuilder pipelineBuilder;
+    pipelineBuilder.setInputImageRgbPath(inputFilename);
+    pipelineBuilder.setOutputDirPath(outputDir);
+    pipelineBuilder.setGraphPath(graphFilename);
+
+    int result = pipelineBuilder.runPipeline();
+
+    if (result == 2) return; // a private model, so we do not want CI to raise warnings
+
+    EXPECT_EQ(result, 1); // 3rd dim of image = 3 3rd dim of graph = 1, should not work
+
+}
+
+/**
+ * testing a private model
+ */
+TEST(PipelineBuilder, PipelineBuilder_runPipeline4) {
+
+    typedef itk::Image<float, 3> ImageType;
+
+    std::vector<std::string> inputFilenames;
+    inputFilenames.emplace_back( "../../tests/testData/dicom/T1Map.dcm");
+    std::string outputDir = "../../tests/testData/temp/PipelineBuilder4";
+    std::string graphFilename = "../../tests/testData/model_ocmr27.pb"; // a private model
+
+    oxtf::PipelineBuilder pipelineBuilder;
+    pipelineBuilder.setInputImagesGrayscalePaths(inputFilenames);
+    pipelineBuilder.setOutputDirPath(outputDir);
+    pipelineBuilder.setGraphPath(graphFilename);
+    pipelineBuilder.setMultiplyOutputByFactor(255);
+
+    std::vector<bool> flipAxes = std::vector<bool>(3, false);
+    flipAxes[1] = true;
+    pipelineBuilder.setFlipAxes(flipAxes);
+    pipelineBuilder.setThreshold(2500);
+
+    int result = pipelineBuilder.runPipeline();
+
+    if (result == 2) return; // a private model, so we do not want CI to raise warnings
+
+    EXPECT_EQ(result, 0);
+
+}

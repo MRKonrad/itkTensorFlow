@@ -44,6 +44,7 @@ https://github.com/amir-abdi/keras_to_tensorflow
 
 # TODO:
 * remove dependency to hello_tf_c_api
+* add input and output node naming
 
 # Thoughts
 

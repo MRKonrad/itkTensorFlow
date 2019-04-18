@@ -71,7 +71,7 @@ namespace oxtf {
         typename ImageType::SizeType size;
         oxtf::GraphReader *graphReader = graphReaderMaker(_graphPath);
         if (!graphReader)
-            return 1; // EXIT_FAILURE
+            return 2; // EXIT_FAILURE
 
         graphReader->disp();
 

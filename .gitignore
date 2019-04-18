@@ -5,6 +5,7 @@ thirdParty/tensorflow
 tests/testData/log
 tests/testData/temp
 tests/testData/model*
+tests/testData/MoCo*
 tests/testData/jpg/
 tests/testData/dicom/Volunteer*
 

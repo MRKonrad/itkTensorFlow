@@ -149,13 +149,21 @@ namespace oxtf {
         std::cout << "GraphReader" << std::endl;
         std::cout << "  graphPath: " << _graphPath << std::endl;
         std::cout << "  inputOperationName: " << _inputOperationName
-                  << " inputOperationDims: " << _inputOperationDims
-                  << " inputOperationType: " << TFDataTypeToString(_inputOperationType)
-                  << std::endl;
+                  << " inputOperationType: " << TFDataTypeToString(_inputOperationType);
+        std::cout << " inputOperationSize: [ ";
+        for (int i = 0; i < _inputOperationSize.size(); ++i){
+            std::cout << _inputOperationSize[i] << " ";
+        }
+        std::cout << " ]" << std::endl;
+
         std::cout << "  outputOperationName: " << _outputOperationName
                   << " outputOperationDims: " << _outputOperationDims
-                  << " outputOperationType: " << TFDataTypeToString(_outputOperationType)
-                  << std::endl;
+                  << " outputOperationType: " << TFDataTypeToString(_outputOperationType);
+        std::cout << " outputOperationSize: [ ";
+        for (int i = 0; i < _outputOperationSize.size(); ++i){
+            std::cout << _outputOperationSize[i] << " ";
+        }
+        std::cout << " ]" << std::endl;
 
         std::cout << "  operationWithBiggest2nd3rdSize: [ ";
         for (int i = 0; i < _operationWithBiggest2nd3rdSize.size(); ++i){
