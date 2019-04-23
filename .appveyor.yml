@@ -46,10 +46,10 @@ before_build:
       )
   - cd
 
-# build:
-#   project: bin\itkTensorFlow.sln  # path to Visual Studio solution or project
-#   parallel: true           # enable MSBuild parallel builds
-#   verbosity: normal        # MSBuild verbosity level {quiet|minimal|normal|detailed}
+build:
+  project: bin\itkTensorFlow.sln  # path to Visual Studio solution or project
+  parallel: true           # enable MSBuild parallel builds
+  verbosity: normal        # MSBuild verbosity level {quiet|minimal|normal|detailed}
 
 after_build:
   # install the files
