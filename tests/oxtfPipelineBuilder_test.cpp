@@ -212,13 +212,13 @@ TEST(PipelineBuilder, PipelineBuilder_runPipeline_moco) {
     typedef itk::Image<float, 3> ImageType;
 
     std::vector<std::string> inputFilenames;
-    inputFilenames.emplace_back( "../../tests/testData/dicom/T1Map.dcm");
-    inputFilenames.emplace_back( "../../tests/testData/dicom/T1Map.dcm");
-    inputFilenames.emplace_back( "../../tests/testData/dicom/T1Map.dcm");
-    inputFilenames.emplace_back( "../../tests/testData/dicom/T1Map.dcm");
-    inputFilenames.emplace_back( "../../tests/testData/dicom/T1Map.dcm");
-    inputFilenames.emplace_back( "../../tests/testData/dicom/T1Map.dcm");
-    inputFilenames.emplace_back( "../../tests/testData/dicom/T1Map.dcm");
+    inputFilenames.emplace_back( "../../tests/testData/dicom/Volunteer_mag_0.tiff");
+    inputFilenames.emplace_back( "../../tests/testData/dicom/Volunteer_mag_1.tiff");
+    inputFilenames.emplace_back( "../../tests/testData/dicom/Volunteer_mag_2.tiff");
+    inputFilenames.emplace_back( "../../tests/testData/dicom/Volunteer_mag_3.tiff");
+    inputFilenames.emplace_back( "../../tests/testData/dicom/Volunteer_mag_4.tiff");
+    inputFilenames.emplace_back( "../../tests/testData/dicom/Volunteer_mag_5.tiff");
+    inputFilenames.emplace_back( "../../tests/testData/dicom/Volunteer_mag_6.tiff");
     std::string outputDir = "../../tests/testData/temp/PipelineBuilder_moco";
     std::string graphFilename = "../../tests/testData/MoCoAI.pb"; // a private model
 
@@ -226,12 +226,12 @@ TEST(PipelineBuilder, PipelineBuilder_runPipeline_moco) {
     pipelineBuilder.setInputImagesGrayscalePaths(inputFilenames);
     pipelineBuilder.setOutputDirPath(outputDir);
     pipelineBuilder.setGraphPath(graphFilename);
-    pipelineBuilder.setMultiplyOutputByFactor(1);
 
     std::vector<bool> flipAxes = std::vector<bool>(3, false);
-    flipAxes[1] = true;
+    //flipAxes[1] = true;
     pipelineBuilder.setFlipAxes(flipAxes);
-    pipelineBuilder.setThreshold(255);
+    //pipelineBuilder.setThreshold(1);
+    pipelineBuilder.setMultiplyOutputByFactor(50);
 
     int result = pipelineBuilder.runPipeline();
 

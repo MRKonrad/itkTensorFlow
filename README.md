@@ -9,6 +9,28 @@ Heavily based on [Neargye/hello_tf_c_api](https://github.com/Neargye/hello_tf_c_
 | [Downloads][downloads_link]               | [![GitHub Releases (by Release)][downloads_badge]][downloads_link] |
 
 # How to use
+[Download the library and the executable from here][downloads_link] 
+
+You can find examples of using executable here: https://github.com/MRKonrad/itkTensorFlow/tree/master/scripts
+
+If you want to use **one** rgb image:
+```console
+itkTensorFlowExe.exe ^
+                    -r "image2.dcm" ^
+                    -m "model.pb" ^
+                    -o "output"
+```
+If you want to use **one or more** grayscale images:
+```console
+itkTensorFlowExe.exe ^
+                    -g "image2.dcm" ^
+                    -g "image2.dcm" ^
+                    -g "image2.dcm" ^
+                    -m "model.pb" ^
+                    -o "output"
+```
+
+# How to compile
 OSX/Linux
 ```console
 git clone https://github.com/MRKonrad/itkTensorFlow.git
@@ -37,10 +59,20 @@ http://mrkonrad.github.io/MRKonrad/files/cnnRotatedImage/image2_270.jpg
 
 # Troubleshooting
 * missing `msvcp140.dll` 
-Download https://www.microsoft.com/en-us/download/details.aspx?id=48145 as suggested in https://stackoverflow.com/questions/32998902/msvcp140-dll-missing
+Download https://www.microsoft.com/en-us/download/details.aspx?id=48145 as suggested in https://stackoverflow.com/questions/32998902/msvcp140-dll-missing 
 * how to generate `.pb` (tensorflow) file from `.h5` (keras)   
 https://stackoverflow.com/questions/45466020/how-to-export-keras-h5-to-tensorflow-pb    
 https://github.com/amir-abdi/keras_to_tensorflow  
+```console
+python keras_to_tensorflow.py 
+       --input_model="path/to/keras/model.h5" 
+       --output_model="path/to/save/model.pb"
+```
+* How to see model in a `tensorboard`
+```console
+python ~/Code/tensorflow/tensorflow/python/tools/import_pb_to_tensorboard.py --model_dir tests/testData/model.pb --log_dir tests/testData/log
+tensorboard --logdir tests/testData/log
+```
 
 # TODO:
 * remove dependency to hello_tf_c_api
@@ -48,7 +80,8 @@ https://github.com/amir-abdi/keras_to_tensorflow
 
 # Thoughts
 
-## How to provide n 2d input images
+## Reason for using 3d itk input images
+These are the ways to  provide n 2d input images:
 * itkImage with third dimension as the n-th image  
 **Pro:** can be defined in the runtime  
 **Con:** breaches the logic behind itk image
@@ -63,12 +96,6 @@ ImageType = itk::Image< PixelType, 2 >;
 **Pro:** makes sense with itk logic  
 **Con:** number of itkImageFilter have to be defined in a constructor. itkImageFilter constructor does not accept arguments. Hence the n has to be defined in the compile time  
 **Partial solution:** allow big number of inputs
-
-## How to see a tensorboard from a model
-```console
-python ~/Code/tensorflow/tensorflow/python/tools/import_pb_to_tensorboard.py --model_dir tests/testData/model.pb --log_dir tests/testData/log
-tensorboard --logdir tests/testData/log
-```
 
 ## Git and conventional commits
 I am trying to follow the convetional commits guide:

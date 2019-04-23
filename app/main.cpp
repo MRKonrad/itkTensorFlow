@@ -13,6 +13,7 @@ void printInfo(){
            "\t -g inputGrayFilePaths, can be used multiple times\n"
            "\t -m inputGraphPath tensor flow model/graph (in .pb format)\n"
            "\t -o outputDirPath\n"
+           "\t -s scale (multiply output values by this value)\n"
            " Enjoy!\n"
            "author: Konrad Werys 2019 konrad.werys@cardiov.ox.ac.uk\n\n");
 }
@@ -25,6 +26,7 @@ int main(int argc, char** argv) {
     std::string inputGraphPath;
     std::string outputDirPath;
     std::vector<std::string> inputGrayFilePaths;
+    float scale = 1;
 
     // **************
     // *** PARSER ***
@@ -39,7 +41,7 @@ int main(int argc, char** argv) {
 
     // Retrieve the options:
     int c;
-    while ((c = getopt (argc, argv, "r:g:m:o:h")) != -1){
+    while ((c = getopt (argc, argv, "r:g:m:o:s:h")) != -1){
         switch (c) {
             case 'r':
                 inputRgbFilePath = optarg;
@@ -52,6 +54,9 @@ int main(int argc, char** argv) {
                 break;
             case 'o':
                 outputDirPath = optarg;
+                break;
+            case 's':
+                scale = std::stoi(optarg);
                 break;
             case 'h':
                 printInfo();
@@ -78,6 +83,7 @@ int main(int argc, char** argv) {
     pipelineBuilder.setInputImagesGrayscalePaths(inputGrayFilePaths);
     pipelineBuilder.setOutputDirPath(outputDirPath);
     pipelineBuilder.setGraphPath(inputGraphPath);
+    pipelineBuilder.setMultiplyOutputByFactor(scale);
     pipelineBuilder.disp();
 
     pipelineBuilder.runPipeline();
