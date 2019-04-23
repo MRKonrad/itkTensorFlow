@@ -17,7 +17,7 @@ install:
   - git submodule update --init --recursive
 
 platform:
-  - x86
+  - Win32
   - x64
 
 configuration:
@@ -38,7 +38,7 @@ before_build:
   - cd itkTensorFlow
   - cd
   - dir
-  - if [%PLATFORM%]==[x86] (
+  - if [%PLATFORM%]==[Win32] (
         cmake . -Bbin -DCMAKE_INSTALL_PREFIX=install -DITK_DIR_HINTS="../ITK_install" -G"Visual Studio 15 2017" -DCMAKE_BUILD_TYPE=%configuration%
       )
   - if [%PLATFORM%]==[x64] (
