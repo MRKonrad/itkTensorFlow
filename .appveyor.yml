@@ -39,12 +39,13 @@ before_build:
   - cd
   - dir
   - if [%PLATFORM%]==[x86] (
-        cmake . -Bbin -DCMAKE_INSTALL_PREFIX=install -DITK_DIR_HINTS="../ITK_install" -G"Visual Studio 15 2017"
+        cmake . -Bbin -DCMAKE_INSTALL_PREFIX=install -DITK_DIR_HINTS="../ITK_install" -G"Visual Studio 15 2017" -DCMAKE_BUILD_TYPE=%configuration%
       )
   - if [%PLATFORM%]==[x64] (
-        cmake . -Bbin -DCMAKE_INSTALL_PREFIX=install -DITK_DIR_HINTS="../ITK_install" -G"Visual Studio 15 2017 Win64"
+        cmake . -Bbin -DCMAKE_INSTALL_PREFIX=install -DITK_DIR_HINTS="../ITK_install" -G"Visual Studio 15 2017 Win64" -DCMAKE_BUILD_TYPE=%configuration%
       )
   - cd
+  - dir bin
 
 build:
   project: bin\itkTensorFlow.sln  # path to Visual Studio solution or project
