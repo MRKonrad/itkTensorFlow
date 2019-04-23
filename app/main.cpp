@@ -14,7 +14,8 @@ void printInfo(){
            "\t -m inputGraphPath tensor flow model/graph (in .pb format)\n"
            "\t -o outputDirPath\n"
            "\t -s scale (multiply output values by this value)\n"
-           " Enjoy!\n"
+           "\t -h help\n"
+           "Enjoy!\n"
            "author: Konrad Werys 2019 konrad.werys@cardiov.ox.ac.uk\n\n");
 }
 

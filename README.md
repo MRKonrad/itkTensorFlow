@@ -1,6 +1,7 @@
 # itkTensorFlow
 ITK pipeline using provided tensorflow .pd model.  
 Heavily based on [Neargye/hello_tf_c_api](https://github.com/Neargye/hello_tf_c_api)
+Feel free to contact me if you need new itkTensorFlow features, for example multiple inputs/outputs.
 
 | System   |      Badge      |
 |----------|:---------------:|
@@ -8,27 +9,51 @@ Heavily based on [Neargye/hello_tf_c_api](https://github.com/Neargye/hello_tf_c_
 | [Windows build - AppVeyor][appveyor_link] | [![AppVeyor][appveyor_badge]][appveyor_link]                       |
 | [Downloads][downloads_link]               | [![GitHub Releases (by Release)][downloads_badge]][downloads_link] |
 
-# How to use
-[Download the library and the executable from here][downloads_link] 
+# How to use the executable
+You can [download the library and the executable from here.][downloads_link] Options available for the executable execution:
+```console
+>> itkTensorFlowExe -h
+Use: itkTensorFlowExe
+	 -r inputRgbFilePath
+	 -g inputGrayFilePaths, can be used multiple times
+	 -m inputGraphPath tensor flow model/graph (in .pb format)
+	 -o outputDirPath
+	 -s scale (multiply output values by this value)
+	 -h help
+```
+
+## Example 1: one rgb image as input
+If you want to use **one** rgb image (Windows command line):
+```console
+itkTensorFlowExe.exe -r "image2.jpg" -m "path/to/model.pb" -o "output"
+```
+OSX/Linux command line:
+```console
+./itkTensorFlowExe -r "image2.jpg" -m "path/to/model.pb" -o "output" 
+```
+
+## Example 2: several grayscale images as input
+If you want to use **one or more** grayscale images (Windows command line):
+```console
+itkTensorFlowExe.exe ^
+                    -g "image0.dcm" ^
+                    -g "image1.dcm" ^
+                    -g "image2.dcm" ^
+                    -m "path/to/model.pb" ^
+                    -o "output"
+```
+
+OSX/Linux command line:
+```console
+./itkTensorFlowExe \
+                    -g "image0.dcm" \
+                    -g "image1.dcm" \
+                    -g "image2.dcm" \
+                    -m "path/to/model.pb"  \
+                    -o "output"
+```
 
 You can find examples of using executable here: https://github.com/MRKonrad/itkTensorFlow/tree/master/scripts
-
-If you want to use **one** rgb image:
-```console
-itkTensorFlowExe.exe ^
-                    -r "image2.dcm" ^
-                    -m "model.pb" ^
-                    -o "output"
-```
-If you want to use **one or more** grayscale images:
-```console
-itkTensorFlowExe.exe ^
-                    -g "image2.dcm" ^
-                    -g "image2.dcm" ^
-                    -g "image2.dcm" ^
-                    -m "model.pb" ^
-                    -o "output"
-```
 
 # How to compile
 OSX/Linux
@@ -76,7 +101,6 @@ tensorboard --logdir tests/testData/log
 
 # TODO:
 * remove dependency to hello_tf_c_api
-* add input and output node naming
 
 # Thoughts
 
@@ -96,6 +120,8 @@ ImageType = itk::Image< PixelType, 2 >;
 **Pro:** makes sense with itk logic  
 **Con:** number of itkImageFilter have to be defined in a constructor. itkImageFilter constructor does not accept arguments. Hence the n has to be defined in the compile time  
 **Partial solution:** allow big number of inputs
+
+In this project I went with the first option.
 
 ## Git and conventional commits
 I am trying to follow the convetional commits guide:
