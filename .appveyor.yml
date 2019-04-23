@@ -19,7 +19,6 @@ install:
 platform:
   - x86
   - x64
-#  - Any CPU # TODO: test it
 
 configuration:
   - Release
@@ -39,7 +38,10 @@ before_build:
   - cd itkTensorFlow
   - cd
   - dir
-  - cmake . -Bbin -DCMAKE_INSTALL_PREFIX=install -DITK_DIR_HINTS="../ITK_install" -G"Visual Studio 15 2017"
+  - if [%PLATFORM%]==[x86](
+      cmake . -Bbin -DCMAKE_INSTALL_PREFIX=install -DITK_DIR_HINTS="../ITK_install" -G"Visual Studio 15 2017")
+  - if [%PLATFORM%]==[x64](
+      cmake . -Bbin -DCMAKE_INSTALL_PREFIX=install -DITK_DIR_HINTS="../ITK_install" -G"Visual Studio 15 2017 Win64")
   - cd
 
 build:
@@ -51,6 +53,7 @@ after_build:
   # install the files
   - cd bin
   - dir
+  - cmake --build . --config %CONFIGURATION% --target BUILD_ALL
   - cmake --build . --config %CONFIGURATION% --target INSTALL
   - dir %CONFIGURATION%
   - cd ..
