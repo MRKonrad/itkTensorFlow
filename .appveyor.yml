@@ -38,10 +38,12 @@ before_build:
   - cd itkTensorFlow
   - cd
   - dir
-  - if [%PLATFORM%]==[x86](
-      cmake . -Bbin -DCMAKE_INSTALL_PREFIX=install -DITK_DIR_HINTS="../ITK_install" -G"Visual Studio 15 2017")
-  - if [%PLATFORM%]==[x64](
-      cmake . -Bbin -DCMAKE_INSTALL_PREFIX=install -DITK_DIR_HINTS="../ITK_install" -G"Visual Studio 15 2017 Win64")
+  - if [%PLATFORM%]==[x86] (
+        cmake . -Bbin -DCMAKE_INSTALL_PREFIX=install -DITK_DIR_HINTS="../ITK_install" -G"Visual Studio 15 2017"
+      )
+  - if [%PLATFORM%]==[x64] (
+        cmake . -Bbin -DCMAKE_INSTALL_PREFIX=install -DITK_DIR_HINTS="../ITK_install" -G"Visual Studio 15 2017 Win64"
+      )
   - cd
 
 # build:
