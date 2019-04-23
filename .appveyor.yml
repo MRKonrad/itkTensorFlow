@@ -40,15 +40,16 @@ before_build:
   - cmake . -Bbin -DCMAKE_GENERATOR_PLATFORM=%PLATFORM% -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DCMAKE_INSTALL_PREFIX=install -DITK_DIR_HINTS="../ITK_install"
   - cd
 
-build:
-  project: bin\itkTensorFlow.sln  # path to Visual Studio solution or project
-  parallel: true           # enable MSBuild parallel builds
-  verbosity: normal        # MSBuild verbosity level {quiet|minimal|normal|detailed}
+#build:
+#  project: bin\itkTensorFlow.sln  # path to Visual Studio solution or project
+#  parallel: true           # enable MSBuild parallel builds
+#  verbosity: normal        # MSBuild verbosity level {quiet|minimal|normal|detailed}
 
 after_build:
   # install the files
   - cd bin
   - dir
+  - cmake --build . --config %CONFIGURATION% --target BUILD_ALL
   - cmake --build . --config %CONFIGURATION% --target INSTALL
   - dir %CONFIGURATION%
   - cd ..
