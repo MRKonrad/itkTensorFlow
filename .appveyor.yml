@@ -41,6 +41,7 @@ before_build:
   - cmake . -Bbin -A%PLATFORM% -DCMAKE_INSTALL_PREFIX=install -DITK_DIR_HINTS="../ITK_install"
   - cd
   - dir bin
+  - set PATH=%PATH%;"F:\Program Files\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX64\x64"
   - if [%PLATFORM%]==[Win32] (
       cd thirdParty\tensorflow\lib &&
       lib /def:yourpath/tensorflow.def /OUT:yourpath/tensorflow.lib /MACHINE:X86 &&
