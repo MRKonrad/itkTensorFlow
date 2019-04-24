@@ -30,7 +30,7 @@ before_build:
   - cd
   - cd ..
   - cd
-  - curl -L -O https://www.dropbox.com/s/fu5we0o2j1a4uzt/ITK412_win_%PLATFORM%_install.zip
+  - curl -L -O https://github.com/MRKonrad/MRKonrad/raw/gh-pages/files/ITK_built/ITK412_win_%PLATFORM%_install.zip
   - dir
   - cd
   - 7z x -r ITK412_win_%PLATFORM%_install.zip
