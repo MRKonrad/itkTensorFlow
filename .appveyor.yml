@@ -41,13 +41,13 @@ before_build:
   - cmake . -Bbin -A%PLATFORM% -DCMAKE_INSTALL_PREFIX=install -DITK_DIR_HINTS="../ITK_install"
   - cd
   - dir bin
-  - where /r c:\ dumpbin*
-  - where /r c:\ lib*
-  - set PATH=%PATH%;"C:\Program Files\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX64\x64"
+  # - where /r c:\ dumpbin*
+  # - where /r c:\ lib*
+  - set PATH=%PATH%;"c:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\"
   - if [%PLATFORM%]==[Win32] (
       cd thirdParty\tensorflow\lib &&
       lib /def:yourpath/tensorflow.def /OUT:yourpath/tensorflow.lib /MACHINE:X86 &&
-      cd ..\..\.. )
+      cd %APPVEYOR_BUILD_FOLDER% )
 
 build:
   project: bin\itkTensorFlow.sln  # path to Visual Studio solution or project
@@ -56,7 +56,7 @@ build:
 
 after_build:
   # install the files
-  - cd bin
+  - cd %APPVEYOR_BUILD_FOLDER%\bin
   - dir
   # - cmake --build . --config %CONFIGURATION% --target ALL_BUILD
   - cmake --build . --config %CONFIGURATION% --target INSTALL
@@ -77,7 +77,7 @@ test_script:
   - dir
   - cd bin\tests\%CONFIGURATION%
   - itkTensorFlowTests.exe
-  - cd ..\..\..
+  - cd %APPVEYOR_BUILD_FOLDER%
 
 artifacts:
   - path: deployment\*.*
