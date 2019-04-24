@@ -30,20 +30,15 @@ before_build:
   - cd
   - cd ..
   - cd
-  - curl -L -O https://www.dropbox.com/s/fu5we0o2j1a4uzt/ITK412_win_x64_install.zip
+  - curl -L -O https://www.dropbox.com/s/fu5we0o2j1a4uzt/ITK412_win_%PLATFORM%_install.zip
   - dir
   - cd
-  - 7z x -r ITK412_win_x64_install.zip
+  - 7z x -r ITK412_win_%PLATFORM%_install.zip
   - dir
   - cd itkTensorFlow
   - cd
   - dir
-  - if [%PLATFORM%]==[Win32] (
-        cmake . -Bbin -DCMAKE_INSTALL_PREFIX=install -DITK_DIR_HINTS="../ITK_install" -G"Visual Studio 15 2017" -DCMAKE_BUILD_TYPE=%configuration%
-      )
-  - if [%PLATFORM%]==[x64] (
-        cmake . -Bbin -DCMAKE_INSTALL_PREFIX=install -DITK_DIR_HINTS="../ITK_install" -G"Visual Studio 15 2017 Win64" -DCMAKE_BUILD_TYPE=%configuration%
-      )
+  - cmake . -Bbin -A%PLATFORM% -DCMAKE_INSTALL_PREFIX=install -DITK_DIR_HINTS="../ITK_install"
   - cd
   - dir bin
 
@@ -56,7 +51,7 @@ after_build:
   # install the files
   - cd bin
   - dir
-  - cmake --build . --config %CONFIGURATION% --target BUILD_ALL
+  # - cmake --build . --config %CONFIGURATION% --target ALL_BUILD
   - cmake --build . --config %CONFIGURATION% --target INSTALL
   - dir %CONFIGURATION%
   - cd ..
