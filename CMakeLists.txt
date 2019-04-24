@@ -24,7 +24,9 @@ include(cmake/tensorflow.cmake)
 
 add_library(itkTensorFlowLib SHARED ${SRC_FILES})
 add_library(itkTensorFlowLibStatic STATIC  ${SRC_FILES})
-target_link_libraries (itkTensorFlowLib PUBLIC ${ITK_LIBRARIES} tensorflow)
+
+target_link_libraries (itkTensorFlowLib PUBLIC ${ITK_LIBRARIES})
+target_link_libraries (itkTensorFlowLib PUBLIC tensorflow)
 
 message(STATUS ${ITK_LIBRARIES})
 
