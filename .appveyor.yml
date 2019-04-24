@@ -46,7 +46,7 @@ before_build:
   - set PATH=%PATH%;"c:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\"
   - if [%PLATFORM%]==[Win32] (
       cd thirdParty\tensorflow\lib &&
-      lib /def:/tensorflow.def /OUT:tensorflow.lib /MACHINE:X86 &&
+      lib /def:tensorflow.def /OUT:tensorflow.lib /MACHINE:X86 &&
       cd %APPVEYOR_BUILD_FOLDER% )
 
 build:
