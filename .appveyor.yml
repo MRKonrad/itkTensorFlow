@@ -42,8 +42,8 @@ before_build:
   - cd
   - dir bin
   - if [%PLATFORM%]==[Win32] (
-      cd thirdpart/tensorflow/bin
-      lib /def:yourpath/tensorflow.def /OUT:yourpath/tensorflow.lib /MACHINE:X86
+      cd thirdpart/tensorflow/bin &&
+      lib /def:yourpath/tensorflow.def /OUT:yourpath/tensorflow.lib /MACHINE:X86 &&
       cd ../../..
   )
 
