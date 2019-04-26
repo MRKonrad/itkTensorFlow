@@ -101,6 +101,10 @@ tensorboard --logdir tests/testData/log
 
 # TODO:
 * remove dependency to hello_tf_c_api
+* make it work with 32bit windows. I have unsuccessfully tried to:
+  * compile tensorflow myself: https://github.com/MRKonrad/tensorflowBuild 
+  * use playertwo compiled tensorflow 1.6: https://github.com/MRKonrad/build-tensorflow
+  * possibly I could start with playertwo solution from scratch and see where it goes
 
 # Thoughts
 
