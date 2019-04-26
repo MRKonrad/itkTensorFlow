@@ -35,19 +35,21 @@ if (
 endif()
 
 # different dll file in WIN32
-if(${CMAKE_GENERATOR_PLATFORM} STREQUAL "Win32") # only windows 32 bit
-    set(DownloadUrl32 "https://github.com/playertwo/build-tensorflow/releases/download/TensorFlow-1.6.0/libtensorflow-cpu-windows-x86-1.6.0.zip ")
-    set(DownloadPath32 ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib/libtensorflow.zip)
-    file( DOWNLOAD ${DownloadUrl32} ${DownloadPath32} STATUS status LOG log)
-    list(GET status 0 status_code)
-    list(GET status 1 status_string)
-    if(NOT status_code EQUAL 0)
-        message(FATAL_ERROR "error downloading tensorflow lib 32bit: ${status_string}" "${log}")
+if(${CMAKE_GENERATOR_PLATFORM})
+    if(${CMAKE_GENERATOR_PLATFORM} STREQUAL "Win32") # only windows 32 bit
+        set(DownloadUrl32 "https://github.com/playertwo/build-tensorflow/releases/download/TensorFlow-1.6.0/libtensorflow-cpu-windows-x86-1.6.0.zip ")
+        set(DownloadPath32 ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib/libtensorflow.zip)
+        file( DOWNLOAD ${DownloadUrl32} ${DownloadPath32} STATUS status LOG log)
+        list(GET status 0 status_code)
+        list(GET status 1 status_string)
+        if(NOT status_code EQUAL 0)
+            message(FATAL_ERROR "error downloading tensorflow lib 32bit: ${status_string}" "${log}")
+        endif()
+        execute_process(
+                COMMAND cmake -E tar xvzf ${DownloadPath32}
+              WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib)
+        file(REMOVE ${DownloadPath32})
     endif()
-    execute_process(
-            COMMAND cmake -E tar xvzf ${DownloadPath32}
-          WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib)
-    file(REMOVE ${DownloadPath32})
 endif()
 
 include_directories(${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/include/tensorflow/c)
