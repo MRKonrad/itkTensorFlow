@@ -11,7 +11,8 @@ init:
   - ps: Update-AppveyorBuild -Version "$($env:APPVEYOR_REPO_BRANCH) - $($env:APPVEYOR_REPO_COMMIT)"
 
 environment:
-  ZIP_EXTENDED_NAME: itkTensorFlow_%APPVEYOR_REPO_TAG_NAME%_windows_%PLATFORM%
+  EXE_EXTENDED_NAME: itkTensorFlowExe_%APPVEYOR_REPO_TAG_NAME%_windows_%PLATFORM%
+  LIB_EXTENDED_NAME: itkTensorFlowLib_%APPVEYOR_REPO_TAG_NAME%_windows_%PLATFORM%
 
 install:
   - git submodule update --init --recursive
@@ -24,30 +25,15 @@ configuration:
   - Release
 
 before_build:
-  - echo %PLATFORM%
+  - echo %platform%
   - echo %configuration%
-  - dir
-  - cd
-  - cd ..
-  - cd
-  - curl -L -O http://mrkonrad.github.io/MRKonrad/files/ITK_built/ITK412_win_%PLATFORM%_install.zip
-  - dir
-  - cd
-  - 7z x -r ITK412_win_%PLATFORM%_install.zip
-  - dir
-  - cd itkTensorFlow
-  - cd
-  - dir
-  - cmake . -Bbin -A%PLATFORM% -DCMAKE_INSTALL_PREFIX=install -DITK_DIR_HINTS="../ITK_install"
-  - cd
-  - dir bin
-  # - where /r c:\ dumpbin*
-  # - where /r c:\ lib*
-  - set PATH=%PATH%;"c:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\"
-  - if [%PLATFORM%]==[Win32] (
-      cd thirdParty\tensorflow\lib &&
-      lib /def:tensorflow.def /OUT:tensorflow.lib /MACHINE:X86 &&
-      cd %APPVEYOR_BUILD_FOLDER% )
+  - cd %APPVEYOR_BUILD_FOLDER%\..
+  - mkdir ITK_install
+  - cd ITK_install
+  - curl -L https://github.com/MRKonrad/build-itk/releases/download/itk_v4.13.2/itk_v4.13.2_windows_%PLATFORM%_%toolset%.zip -o itk_install.zip
+  - 7z x -r itk_install.zip
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - cmake . -Bbin -A%PLATFORM% -T%toolset% -DCMAKE_INSTALL_PREFIX=install -DITK_DIR_HINTS="../ITK_install"
 
 build:
   project: bin\itkTensorFlow.sln  # path to Visual Studio solution or project
@@ -61,23 +47,28 @@ after_build:
   # - cmake --build . --config %CONFIGURATION% --target ALL_BUILD
   - cmake --build . --config %CONFIGURATION% --target INSTALL
   - dir %CONFIGURATION%
-  - cd ..
-  - dir install
-  - cd install
-  - 7z a %ZIP_EXTENDED_NAME%.zip * -r # zip
-  - cd ..
+  - dir %APPVEYOR_BUILD_FOLDER%\install
+  - dir %APPVEYOR_BUILD_FOLDER%\install\bin
+  - dir %APPVEYOR_BUILD_FOLDER%\install\lib
+  - dir %APPVEYOR_BUILD_FOLDER%\install\include
+
+  - cd %APPVEYOR_BUILD_FOLDER%\install\bin
+  - 7z a %EXE_EXTENDED_NAME%.zip * -r # zip
+  - cd %APPVEYOR_BUILD_FOLDER%\install
+  - 7z a %LIB_EXTENDED_NAME%.zip lib include -r # zip
+
+  - cd %APPVEYOR_BUILD_FOLDER%
   - mkdir deployment
-  - copy install\%ZIP_EXTENDED_NAME%.zip deployment\%ZIP_EXTENDED_NAME%.zip
+
+  - copy %APPVEYOR_BUILD_FOLDER%\install\bin\%EXE_EXTENDED_NAME%.zip %APPVEYOR_BUILD_FOLDER%\deployment\%EXE_EXTENDED_NAME%.zip
+  - copy %APPVEYOR_BUILD_FOLDER%\install\%LIB_EXTENDED_NAME%.zip %APPVEYOR_BUILD_FOLDER%\deployment\%LIB_EXTENDED_NAME%.zip
   - dir
   - dir deployment
 
 test_script:
   # TODO: should I add sth like this? https://github.com/mgerhardy/caveexpress/blob/master/appveyor.yml
-  - cd
-  - dir
-  - cd bin\tests\%CONFIGURATION%
+  - cd %APPVEYOR_BUILD_FOLDER%\bin\tests\%CONFIGURATION%
   - itkTensorFlowTests.exe
-  - cd %APPVEYOR_BUILD_FOLDER%
 
 artifacts:
   - path: deployment\*.*
