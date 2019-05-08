@@ -48,21 +48,21 @@ after_build:
   # - cmake --build . --config %CONFIGURATION% --target ALL_BUILD
   - cmake --build . --config %CONFIGURATION% --target INSTALL
   - dir %CONFIGURATION%
-  - dir %APPVEYOR_BUILD_FOLDER%\install
-  - dir %APPVEYOR_BUILD_FOLDER%\install\bin
-  - dir %APPVEYOR_BUILD_FOLDER%\install\lib
-  - dir %APPVEYOR_BUILD_FOLDER%\install\include
+  - dir %APPVEYOR_BUILD_FOLDER%\bin\install
+  - dir %APPVEYOR_BUILD_FOLDER%\bin\install\bin
+  - dir %APPVEYOR_BUILD_FOLDER%\bin\install\lib
+  - dir %APPVEYOR_BUILD_FOLDER%\bin\install\include
 
-  - cd %APPVEYOR_BUILD_FOLDER%\install\bin
+  - cd %APPVEYOR_BUILD_FOLDER%\bin\install\bin
   - 7z a %EXE_EXTENDED_NAME%.zip * -r # zip
-  - cd %APPVEYOR_BUILD_FOLDER%\install
+  - cd %APPVEYOR_BUILD_FOLDER%\bin\install
   - 7z a %LIB_EXTENDED_NAME%.zip lib include -r # zip
 
   - cd %APPVEYOR_BUILD_FOLDER%
   - mkdir deployment
 
-  - copy %APPVEYOR_BUILD_FOLDER%\install\bin\%EXE_EXTENDED_NAME%.zip %APPVEYOR_BUILD_FOLDER%\deployment\%EXE_EXTENDED_NAME%.zip
-  - copy %APPVEYOR_BUILD_FOLDER%\install\%LIB_EXTENDED_NAME%.zip %APPVEYOR_BUILD_FOLDER%\deployment\%LIB_EXTENDED_NAME%.zip
+  - copy %APPVEYOR_BUILD_FOLDER%\bin\install\bin\%EXE_EXTENDED_NAME%.zip %APPVEYOR_BUILD_FOLDER%\deployment\%EXE_EXTENDED_NAME%.zip
+  - copy %APPVEYOR_BUILD_FOLDER%\bin\install\%LIB_EXTENDED_NAME%.zip %APPVEYOR_BUILD_FOLDER%\deployment\%LIB_EXTENDED_NAME%.zip
   - dir
   - dir deployment
 
