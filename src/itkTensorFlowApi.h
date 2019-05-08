@@ -6,8 +6,6 @@
 #define ITKTENSORFLOW_ITKTENSORFLOWAPI_H
 
 #include "itktensorflowlib_export.h"
-#include "itkTensorFlowFilter.h"
-#include "oxtfPipelineBuilder.h"
 
 
 ITKTENSORFLOWLIB_EXPORT int printTensorFlowVersion();
