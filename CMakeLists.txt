@@ -22,7 +22,7 @@ file(GLOB_RECURSE SRC_FILES
 
 file(GLOB_RECURSE INCLUDE_FILES
         src/*.h
-        /Users/kwerys/Code/itkTensorFlow/thirdParty/tensorflow/include/tensorflow/c/c_api.h)
+        thirdParty/tensorflow/include/tensorflow/c/c_api.h)
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_SOURCE_DIR}/thirdParty/hello_tf_c_api/src)
