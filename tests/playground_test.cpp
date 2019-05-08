@@ -5,7 +5,7 @@
 #include "gtest/gtest.h"
 
 #include "oxtfUtils.h"
-
+#include "tf_utils.hpp"
 
 TEST(playground, printTensorFlowVersion_test) {
 

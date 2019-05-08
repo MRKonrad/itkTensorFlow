@@ -12,7 +12,7 @@
 namespace itk
 {
 
-    template< typename TImageIn, typename TImageOut>
+    template< typename TImageIn, typename TImageOut=TImageIn>
     class TensorFlowImageFilter : public ImageToImageFilter< TImageIn, TImageOut >
     {
     public:

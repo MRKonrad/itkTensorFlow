@@ -3,6 +3,7 @@
 //
 
 #include "oxtfUtils.h"
+#include "tf_utils.hpp"
 
 const char* TFDataTypeToString(TF_DataType data_type) {
     switch (data_type) {

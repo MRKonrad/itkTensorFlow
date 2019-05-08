@@ -5,7 +5,6 @@
 #ifndef ITKTENSORFLOW_TFMODELREADER_H
 #define ITKTENSORFLOW_TFMODELREADER_H
 
-
 #include <iostream>
 #include <vector>
 #include <string>

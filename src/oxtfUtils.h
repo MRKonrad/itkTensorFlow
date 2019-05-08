@@ -5,7 +5,7 @@
 #ifndef ITKTENSORFLOW_ITKTFUTILS_H
 #define ITKTENSORFLOW_ITKTFUTILS_H
 
-#include "tf_utils.hpp"
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -44,7 +44,7 @@ void PrintOp(TF_Graph* graph);
  * based on https://github.com/Neargye/hello_tf_c_api
  * @return
  */
-ITKTENSORFLOWLIB_EXPORT int printTensorFlowVersion();
+int printTensorFlowVersion();
 
 /**
  * based on https://github.com/Neargye/hello_tf_c_api

@@ -5,7 +5,7 @@
 #include "oxtfGraphReader.h"
 
 #include "oxtfUtils.h"
-
+#include "tf_utils.hpp"
 
 namespace oxtf {
 

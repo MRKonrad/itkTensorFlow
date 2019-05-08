@@ -12,19 +12,21 @@ message(STATUS "CMAKE_GENERATOR_PLATFORM: " ${CMAKE_GENERATOR_PLATFORM})
 find_package(ITK REQUIRED HINTS ${ITK_DIR_HINTS})
 include(${ITK_USE_FILE})
 
+include(cmake/tensorflow.cmake)
+
 file(GLOB_RECURSE SRC_FILES
         src/*.c*
         src/*.h*
         src/*.t*
         thirdParty/hello_tf_c_api/src/tf_utils.cpp)
 
-file(GLOB_RECURSE INCLUDE_FILES src/*.h)
+file(GLOB_RECURSE INCLUDE_FILES
+        src/*.h
+        /Users/kwerys/Code/itkTensorFlow/thirdParty/tensorflow/include/tensorflow/c/c_api.h)
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_SOURCE_DIR}/thirdParty/hello_tf_c_api/src)
 include_directories(${PROJECT_BINARY_DIR}) # to make itktensorflowlib_export.h visible
-
-include(cmake/tensorflow.cmake)
 
 add_library(itkTensorFlowLib SHARED ${SRC_FILES})
 add_library(itkTensorFlowLibStatic STATIC ${SRC_FILES})

@@ -5,6 +5,7 @@
 #include "gtest/gtest.h"
 
 #include "oxtfGraphRunner.h"
+#include "tf_utils.hpp"
 
 TEST(GraphRunner, GraphRunner_test) {
 
