@@ -15,15 +15,18 @@ namespace oxtf {
 }
 
 namespace itk {
-    template class ITKTENSORFLOWLIB_EXPORT Image<short, 3>;
-    template class ITKTENSORFLOWLIB_EXPORT Image<int, 3>;
-    template class ITKTENSORFLOWLIB_EXPORT Image<float, 3>;
-    template class ITKTENSORFLOWLIB_EXPORT Image<double, 3>;
+    template< typename TImageIn, int dim>
+    class Image <TImageIn, dim>;
 
-    template class ITKTENSORFLOWLIB_EXPORT TensorFlowImageFilter<typename Image<short, 3>, typename Image<short, 3> >;
-    template class ITKTENSORFLOWLIB_EXPORT TensorFlowImageFilter<typename Image<int, 3>, typename Image<int, 3> >;
-    template class ITKTENSORFLOWLIB_EXPORT TensorFlowImageFilter<typename Image<float, 3>, typename Image<float, 3> >;
-    template class ITKTENSORFLOWLIB_EXPORT TensorFlowImageFilter<typename Image<double, 3>, typename Image<double, 3> >;
+    typedef Image< short, 3 > ImageTypeShort;
+    typedef Image< int, 3 > ImageTypeInt;
+    typedef Image< float, 3 > ImageTypeFloat;
+    typedef Image< double, 3 > ImageTypeDouble;
+
+    template class ITKTENSORFLOWLIB_EXPORT TensorFlowImageFilter< ImageTypeShort, ImageTypeShort >;
+    template class ITKTENSORFLOWLIB_EXPORT TensorFlowImageFilter< ImageTypeInt, ImageTypeInt >;
+    template class ITKTENSORFLOWLIB_EXPORT TensorFlowImageFilter< ImageTypeFloat, ImageTypeFloat >;
+    template class ITKTENSORFLOWLIB_EXPORT TensorFlowImageFilter< ImageTypeDouble, ImageTypeDouble >;
 }
 
 #endif //ITKTENSORFLOW_ITKTENSORFLOWAPI_H
