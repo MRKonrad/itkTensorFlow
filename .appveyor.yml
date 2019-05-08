@@ -11,6 +11,7 @@ init:
   - ps: Update-AppveyorBuild -Version "$($env:APPVEYOR_REPO_BRANCH) - $($env:APPVEYOR_REPO_COMMIT)"
 
 environment:
+  toolset: v140
   EXE_EXTENDED_NAME: itkTensorFlowExe_%APPVEYOR_REPO_TAG_NAME%_windows_%PLATFORM%
   LIB_EXTENDED_NAME: itkTensorFlowLib_%APPVEYOR_REPO_TAG_NAME%_windows_%PLATFORM%
 
