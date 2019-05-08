@@ -8,7 +8,6 @@
 #include "itktensorflowlib_export.h"
 #include "itkTensorFlowFilter.h"
 #include "oxtfPipelineBuilder.h"
-#include "oxtfUtils.h"
 
 
 ITKTENSORFLOWLIB_EXPORT int printTensorFlowVersion();
