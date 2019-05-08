@@ -51,7 +51,6 @@ install(FILES ${INCLUDE_FILES} DESTINATION include)
 MESSAGE(${CMAKE_SHARED_LIBRARY_SUFFIX})
 
 if(WIN32)
-    install (FILES ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}/lib/itkTensorFlowLib.dll DESTINATION bin)
     install (FILES ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib/tensorflow.dll DESTINATION bin)
     install (FILES ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib/tensorflow.dll DESTINATION lib)
 #    install (FILES ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib/tensorflow.lib DESTINATION lib)
