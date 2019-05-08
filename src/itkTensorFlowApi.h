@@ -15,8 +15,7 @@ namespace oxtf {
 }
 
 namespace itk {
-    template< typename TImageIn, int dim>
-    class Image <TImageIn, dim>;
+    template< typename TImageIn, int dim> class Image;
 
     typedef Image< short, 3 > ImageTypeShort;
     typedef Image< int, 3 > ImageTypeInt;
