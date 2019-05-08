@@ -100,14 +100,14 @@ namespace oxtf {
             return 1; // EXIT_FAILURE
         }
 
-        if (_flipAxes[0] || _flipAxes[1] || _flipAxes[2]){
-            imageOut = flipImage<ImageType>(imageOut, _flipAxes);
-        }
-
-        if (_paddingOrNor) {
-            imageOut = cropImage<ImageType>(imageOut, size[0], size[1]);
-        }
-
+//        if (_flipAxes[0] || _flipAxes[1] || _flipAxes[2]){
+//            imageOut = flipImage<ImageType>(imageOut, _flipAxes);
+//        }
+//
+//        if (_paddingOrNor) {
+//            imageOut = cropImage<ImageType>(imageOut, size[0], size[1]);
+//        }
+//
         imageOut = multiplyImage<ImageType>(imageOut, _multiplyOutputByFactor);
 
         writeImages<ImageType>(imageOut, _outputDirPath);
@@ -385,20 +385,24 @@ namespace oxtf {
         RegionType3d::SizeType size = region3d.GetSize();
         RegionType3d::IndexType index = region3d.GetIndex();
 
+        itk::FileTools::CreateDirectory(output_dir);
         unsigned long nImages = image->GetLargestPossibleRegion().GetSize()[2];
+
         for (unsigned int i = 0; i < nImages; i++) {
+
             size[2] = 0;
             index[2] = i;
             region3d.SetSize(size);
             region3d.SetIndex(index);
             extractor->SetExtractionRegion(region3d);
-
-            itk::FileTools::CreateDirectory(output_dir);
+            typename TImageOut::Pointer extractedImage = extractor->GetOutput();
+            extractor->Update();
+            extractedImage->DisconnectPipeline();
 
             typedef itk::ImageFileWriter<TImageOut> WriterType;
             WriterType::Pointer writer = WriterType::New();
             writer->SetFileName(output_dir + fileSeparator() + "image_" + std::to_string(i) + ".png");
-            writer->SetInput(extractor->GetOutput());
+            writer->SetInput(extractedImage);
             writer->Update();
         }
 

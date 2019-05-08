@@ -257,7 +257,7 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineDicom_test) {
 TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineDicom2_test) {
 
     std::string inputFilename = "../../tests/testData/dicom/Volunteer_T1Map.dcm";
-    std::string outputFilename = "../../tests/testData/temp/itkPipeline_imageToTensor_runSession_tensorToImage_dicom2.dcm";
+    std::string outPutDir = "../../tests/testData/temp/itkPipeline_imageToTensor_runSession_tensorToImage/";
     std::string graphFilename = "../../tests/testData/model_ocmr7.pb";
 
     oxtf::GraphReader graphReader;
@@ -388,14 +388,11 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineDicom2_test) {
         rescaleIntensity2->SetInput(extractor->GetOutput());
         rescaleIntensity2->Update();
 
-        auto pos = outputFilename.rfind(fileSeparator());
-        if (pos != std::string::npos) {
-            itk::FileTools::CreateDirectory(outputFilename.substr(0, pos));
-        }
+        itk::FileTools::CreateDirectory(outPutDir);
 
         typedef itk::ImageFileWriter<ImageTypeOut> WriterType;
         WriterType::Pointer writer = WriterType::New();
-        writer->SetFileName(outputFilename + "_" + std::to_string(i) + ".png");
+        writer->SetFileName(outPutDir + "image_" + std::to_string(i) + ".png");
         writer->SetInput(rescaleIntensity2->GetOutput());
         writer->Update();
     }

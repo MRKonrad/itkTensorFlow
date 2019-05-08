@@ -212,13 +212,20 @@ TEST(PipelineBuilder, PipelineBuilder_runPipeline_moco) {
     typedef itk::Image<float, 3> ImageType;
 
     std::vector<std::string> inputFilenames;
-    inputFilenames.emplace_back( "../../tests/testData/dicom/Volunteer_mag_0.tiff");
-    inputFilenames.emplace_back( "../../tests/testData/dicom/Volunteer_mag_1.tiff");
-    inputFilenames.emplace_back( "../../tests/testData/dicom/Volunteer_mag_2.tiff");
-    inputFilenames.emplace_back( "../../tests/testData/dicom/Volunteer_mag_3.tiff");
-    inputFilenames.emplace_back( "../../tests/testData/dicom/Volunteer_mag_4.tiff");
-    inputFilenames.emplace_back( "../../tests/testData/dicom/Volunteer_mag_5.tiff");
-    inputFilenames.emplace_back( "../../tests/testData/dicom/Volunteer_mag_6.tiff");
+//    inputFilenames.emplace_back( "../../tests/testData/dicom/Volunteer_mag_0.tiff");
+//    inputFilenames.emplace_back( "../../tests/testData/dicom/Volunteer_mag_1.tiff");
+//    inputFilenames.emplace_back( "../../tests/testData/dicom/Volunteer_mag_2.tiff");
+//    inputFilenames.emplace_back( "../../tests/testData/dicom/Volunteer_mag_3.tiff");
+//    inputFilenames.emplace_back( "../../tests/testData/dicom/Volunteer_mag_4.tiff");
+//    inputFilenames.emplace_back( "../../tests/testData/dicom/Volunteer_mag_5.tiff");
+//    inputFilenames.emplace_back( "../../tests/testData/dicom/Volunteer_mag_6.tiff");
+    inputFilenames.emplace_back( "../../tests/testData/dicom/Phantom_mag_0.dcm");
+    inputFilenames.emplace_back( "../../tests/testData/dicom/Phantom_mag_1.dcm");
+    inputFilenames.emplace_back( "../../tests/testData/dicom/Phantom_mag_2.dcm");
+    inputFilenames.emplace_back( "../../tests/testData/dicom/Phantom_mag_3.dcm");
+    inputFilenames.emplace_back( "../../tests/testData/dicom/Phantom_mag_4.dcm");
+    inputFilenames.emplace_back( "../../tests/testData/dicom/Phantom_mag_5.dcm");
+    inputFilenames.emplace_back( "../../tests/testData/dicom/Phantom_mag_6.dcm");
     std::string outputDir = "../../tests/testData/temp/PipelineBuilder_moco";
     std::string graphFilename = "../../tests/testData/MoCoAI.pb"; // a private model
 
@@ -249,7 +256,7 @@ TEST(PipelineBuilder, PipelineBuilder_runPipeline_image_size_different_than_grap
     typedef itk::Image<uint8_t , 3> ImageType;
 
     std::string inputFilename = "../../tests/testData/dicom/Volunteer_T1Map.dcm";
-    std::string outputDir = "../../tests/testData/temp/PipelineBuilder3";
+    std::string outputDir = "../../tests/testData/temp/PipelineBuilder5";
     std::string graphFilename = "../../tests/testData/model_ocmr7.pb"; // a private model
 
     oxtf::PipelineBuilder pipelineBuilder;
