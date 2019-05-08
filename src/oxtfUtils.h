@@ -13,6 +13,7 @@
 #include <complex>
 #include <c_api.h> // TensorFlow C API header
 #include "itktensorflowlib_export.h"
+#include "itkTensorFlowApi.h"
 
 /**
  * based on https://github.com/Neargye/hello_tf_c_api
