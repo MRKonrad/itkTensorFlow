@@ -11,7 +11,7 @@
 #include "oxtfUtils.h"
 
 
-ITKTENSORFLOWLIB_EXPORT int printTensorFlowVersion();
+//ITKTENSORFLOWLIB_EXPORT int printTensorFlowVersion();
 
 namespace oxtf {
     class ITKTENSORFLOWLIB_EXPORT PipelineBuilder;
