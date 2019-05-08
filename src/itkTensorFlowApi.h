@@ -14,9 +14,16 @@ namespace oxtf {
     class ITKTENSORFLOWLIB_EXPORT PipelineBuilder;
 }
 
-template class ITKTENSORFLOWLIB_EXPORT itk::TensorFlowImageFilter < itk::Image<short, 3>, itk::Image<short, 3> >;
-template class ITKTENSORFLOWLIB_EXPORT itk::TensorFlowImageFilter < itk::Image<int, 3>, itk::Image<int, 3> >;
-template class ITKTENSORFLOWLIB_EXPORT itk::TensorFlowImageFilter < itk::Image<float, 3>, itk::Image<float, 3> >;
-template class ITKTENSORFLOWLIB_EXPORT itk::TensorFlowImageFilter < itk::Image<double, 3>, itk::Image<double, 3> >;
+namespace itk {
+    template class ITKTENSORFLOWLIB_EXPORT Image<short, 3>;
+    template class ITKTENSORFLOWLIB_EXPORT Image<int, 3>;
+    template class ITKTENSORFLOWLIB_EXPORT Image<float, 3>;
+    template class ITKTENSORFLOWLIB_EXPORT Image<double, 3>;
+
+    template class ITKTENSORFLOWLIB_EXPORT TensorFlowImageFilter<Image<short, 3>, Image<short, 3> >;
+    template class ITKTENSORFLOWLIB_EXPORT TensorFlowImageFilter<Image<int, 3>, Image<int, 3> >;
+    template class ITKTENSORFLOWLIB_EXPORT TensorFlowImageFilter<Image<float, 3>, Image<float, 3> >;
+    template class ITKTENSORFLOWLIB_EXPORT TensorFlowImageFilter<Image<double, 3>, Image<double, 3> >;
+}
 
 #endif //ITKTENSORFLOW_ITKTENSORFLOWAPI_H
