@@ -11,9 +11,7 @@
 
 //ITKTENSORFLOWLIB_EXPORT int printTensorFlowVersion();
 
-namespace oxtf {
-    class ITKTENSORFLOWLIB_EXPORT PipelineBuilder;
-}
+class ITKTENSORFLOWLIB_EXPORT oxtf::PipelineBuilder;
 
 template class ITKTENSORFLOWLIB_EXPORT itk::TensorFlowImageFilter < typename itk::Image<short, 3> >;
 template class ITKTENSORFLOWLIB_EXPORT itk::TensorFlowImageFilter < typename itk::Image<int, 3> >;
