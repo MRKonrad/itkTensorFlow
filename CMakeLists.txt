@@ -7,6 +7,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_INSTALL_RPATH "@executable_path")
 
+#delete!!!
+set(CMAKE_INSTALL_PREFIX install)
+#delete!!!
+
 message(STATUS "CMAKE_GENERATOR_PLATFORM: " ${CMAKE_GENERATOR_PLATFORM})
 
 find_package(ITK REQUIRED HINTS ${ITK_DIR_HINTS})
@@ -41,8 +45,6 @@ generate_export_header(itkTensorFlowLib)
 add_executable(itkTensorFlowExe app/main.cpp app/getopt.cpp app/getopt.h)
 target_link_libraries (itkTensorFlowExe PUBLIC itkTensorFlowLib )
 
-set(CMAKE_INSTALL_PREFIX install)
-
 install(TARGETS itkTensorFlowExe itkTensorFlowLib itkTensorFlowLibStatic
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
@@ -50,6 +52,8 @@ install(TARGETS itkTensorFlowExe itkTensorFlowLib itkTensorFlowLibStatic
 install(FILES ${INCLUDE_FILES} DESTINATION include)
 
 if(WIN32)
+    install (FILES ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}/bin/itkTensorFlowLib.dll DESTINATION lib)
+    install (FILES ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}/lib_static/itkTensorFlowLib.lib DESTINATION lib)
     install (FILES ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib/tensorflow.dll DESTINATION bin)
     install (FILES ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib/tensorflow.dll DESTINATION lib)
     install (FILES ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib/tensorflow.lib DESTINATION lib)
