@@ -59,4 +59,4 @@ deploy:
   draft: true
   on:
     tags: ON
-    condition: ${compiler} == "clang" # I guess I have to pick one compiler
+    condition: ${CXX} == "clang++" # I guess I have to pick one compiler
