@@ -52,6 +52,8 @@ install(TARGETS itkTensorFlowExe itkTensorFlowLib itkTensorFlowLibStatic
 install(FILES ${INCLUDE_FILES} DESTINATION include)
 
 if(WIN32)
+    install (FILES ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}/bin/itkTensorFlowLib.dll DESTINATION lib)
+    install (FILES ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}/lib_static/itkTensorFlowLib.lib DESTINATION lib)
     install (FILES ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib/tensorflow.dll DESTINATION bin)
     install (FILES ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib/tensorflow.dll DESTINATION lib)
     install (FILES ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib/tensorflow.lib DESTINATION lib)
