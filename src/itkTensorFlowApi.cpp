@@ -4,6 +4,7 @@
 
 #include "itkTensorFlowApi.h"
 #include "itkTensorFlowFilter.h"
+#include "oxtfPipelineBuilder.h"
 
 #ifndef ITKTENSORFLOWLIB_EXPORT
 #define ITKTENSORFLOWLIB_EXPORT
