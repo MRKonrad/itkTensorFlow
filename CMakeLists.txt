@@ -55,6 +55,7 @@ install(TARGETS itkTensorFlowExe itkTensorFlowLib
 install(FILES ${INCLUDE_FILES} DESTINATION include)
 
 if(WIN32)
+    install (FILES ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}/bin/itkTensorFlowLib.dll DESTINATION ${CMAKE_BINARY_DIR}/tests/Release)
     install (FILES ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}/bin/itkTensorFlowLib.dll DESTINATION lib)
     install (FILES ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}/lib/itkTensorFlowLib.lib DESTINATION lib)
     install (FILES ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib/tensorflow.dll DESTINATION bin)
