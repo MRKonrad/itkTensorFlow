@@ -22,7 +22,8 @@ file(GLOB_RECURSE SRC_FILES
 
 file(GLOB_RECURSE INCLUDE_FILES
         src/*.h
-        thirdParty/tensorflow/include/tensorflow/c/c_api.h)
+        thirdParty/tensorflow/include/tensorflow/c/c_api.h
+        cmake/itktensorflowlib_export.h)
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_SOURCE_DIR}/thirdParty/hello_tf_c_api/src)
@@ -33,8 +34,6 @@ add_library(itkTensorFlowLibStatic STATIC ${SRC_FILES})
 
 target_link_libraries (itkTensorFlowLib PUBLIC ${ITK_LIBRARIES})
 target_link_libraries (itkTensorFlowLib PUBLIC tensorflow)
-
-message(STATUS ${ITK_LIBRARIES})
 
 include(GenerateExportHeader)
 generate_export_header(itkTensorFlowLib)
@@ -49,8 +48,6 @@ install(TARGETS itkTensorFlowExe itkTensorFlowLib itkTensorFlowLibStatic
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib_static)
 install(FILES ${INCLUDE_FILES} DESTINATION include)
-
-MESSAGE(${CMAKE_SHARED_LIBRARY_SUFFIX})
 
 if(WIN32)
     install (FILES ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib/tensorflow.dll DESTINATION bin)

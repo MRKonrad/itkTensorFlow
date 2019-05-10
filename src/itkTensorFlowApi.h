@@ -10,17 +10,19 @@
 //#include "oxtfPipelineBuilder.h"
 //#include "oxtfUtils.h"
 
-#ifndef ITKTENSORFLOW_API
-#define ITKTENSORFLOW_API
-#endif
-
 //ITKTENSORFLOWLIB_EXPORT int printTensorFlowVersion();
 //
 //ITKTENSORFLOWLIB_EXPORT class oxtf::PipelineBuilder;
+
+#ifndef ITKTENSORFLOWLIB_EXPORT
+#define ITKTENSORFLOWLIB_EXPORT
+#endif
 
 template class ITKTENSORFLOWLIB_EXPORT itk::TensorFlowImageFilter < typename itk::Image<short, 3> >;
 template class ITKTENSORFLOWLIB_EXPORT itk::TensorFlowImageFilter < typename itk::Image<int, 3> >;
 template class ITKTENSORFLOWLIB_EXPORT itk::TensorFlowImageFilter < typename itk::Image<float, 3> >;
 template class ITKTENSORFLOWLIB_EXPORT itk::TensorFlowImageFilter < typename itk::Image<double, 3> >;
+
+#undef ITKTENSORFLOWLIB_EXPORT
 
 #endif //ITKTENSORFLOW_ITKTENSORFLOWAPI_H
