@@ -56,6 +56,7 @@ deploy:
   file_glob: ON # to use wildcards
   file: deployment/*
   skip_cleanup: ON
+  draft: true
   on:
     tags: ON
-    condition: ${CXX} == "g++" # I guess I have to pick one compiler
+    condition: ${compiler} == "clang" # I guess I have to pick one compiler

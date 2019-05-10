@@ -10,6 +10,9 @@
 //#include "oxtfPipelineBuilder.h"
 //#include "oxtfUtils.h"
 
+#ifndef ITKTENSORFLOW_API
+#define ITKTENSORFLOW_API
+#endif
 
 //ITKTENSORFLOWLIB_EXPORT int printTensorFlowVersion();
 //
