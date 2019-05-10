@@ -34,9 +34,10 @@ include_directories(${CMAKE_SOURCE_DIR}/thirdParty/hello_tf_c_api/src)
 include_directories(${PROJECT_BINARY_DIR}) # to make itktensorflowlib_export.h visible
 
 add_library(itkTensorFlowLib SHARED ${SRC_FILES})
-add_library(itkTensorFlowLibStatic STATIC ${SRC_FILES})
+#add_library(itkTensorFlowLibStatic STATIC ${SRC_FILES})
 
 target_link_libraries (itkTensorFlowLib PUBLIC ${ITK_LIBRARIES})
+target_link_libraries (itkTensorFlowLib PUBLIC tensorflow)
 target_link_libraries (itkTensorFlowLib PUBLIC tensorflow)
 
 include(GenerateExportHeader)
@@ -45,15 +46,15 @@ generate_export_header(itkTensorFlowLib)
 add_executable(itkTensorFlowExe app/main.cpp app/getopt.cpp app/getopt.h)
 target_link_libraries (itkTensorFlowExe PUBLIC itkTensorFlowLib )
 
-install(TARGETS itkTensorFlowExe itkTensorFlowLib itkTensorFlowLibStatic
+install(TARGETS itkTensorFlowExe itkTensorFlowLib
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib_static)
+        ARCHIVE DESTINATION lib)
 install(FILES ${INCLUDE_FILES} DESTINATION include)
 
 if(WIN32)
     install (FILES ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}/bin/itkTensorFlowLib.dll DESTINATION lib)
-    install (FILES ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}/lib_static/itkTensorFlowLib.lib DESTINATION lib)
+    install (FILES ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}/lib/itkTensorFlowLib.lib DESTINATION lib)
     install (FILES ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib/tensorflow.dll DESTINATION bin)
     install (FILES ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib/tensorflow.dll DESTINATION lib)
     install (FILES ${CMAKE_SOURCE_DIR}/thirdParty/tensorflow/lib/tensorflow.lib DESTINATION lib)

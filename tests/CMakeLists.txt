@@ -12,14 +12,8 @@ file(GLOB_RECURSE TESTS_FILES ${PROJECT_SOURCE_DIR}/tests/*.c* ${PROJECT_SOURCE_
 add_executable(itkTensorFlowTests ${TESTS_FILES})
 target_link_libraries(itkTensorFlowTests PUBLIC gtest)
 target_link_libraries(itkTensorFlowTests PUBLIC tensorflow)
-if(WIN32)
-  target_link_libraries(itkTensorFlowTests PUBLIC itkTensorFlowLibStatic)
-  target_link_libraries(itkTensorFlowTests PUBLIC ${ITK_LIBRARIES})
-else()
-  target_link_libraries(itkTensorFlowTests PUBLIC itkTensorFlowLib)
-endif()
-
-#set_target_properties(itkTensorFlowTests PROPERTIES COMPILE_FLAGS -DitkTensorFlow_EXPORTS) # to see hxx content
+target_link_libraries(itkTensorFlowTests PUBLIC ${ITK_LIBRARIES})
+target_link_libraries(itkTensorFlowTests PUBLIC itkTensorFlowLib)
 
 add_test(NAME ctest_tests COMMAND itkTensorFlowTests)
 

@@ -19,26 +19,26 @@
  * @param data_type
  * @return
  */
-const char* TFDataTypeToString(TF_DataType data_type);
+ITKTENSORFLOWLIB_EXPORT const char* TFDataTypeToString(TF_DataType data_type);
 
 /**
  * based on https://github.com/Neargye/hello_tf_c_api
  * @param op
  */
-void PrintOpInputs(TF_Graph*, TF_Operation* op);
+ITKTENSORFLOWLIB_EXPORT void PrintOpInputs(TF_Graph*, TF_Operation* op);
 
 /**
  * based on https://github.com/Neargye/hello_tf_c_api
  * @param graph
  * @param op
  */
-void PrintOpOutputs(TF_Graph* graph, TF_Operation* op);
+ITKTENSORFLOWLIB_EXPORT void PrintOpOutputs(TF_Graph* graph, TF_Operation* op);
 
 /**
  * based on https://github.com/Neargye/hello_tf_c_api
  * @param graph
  */
-void PrintOp(TF_Graph* graph);
+ITKTENSORFLOWLIB_EXPORT void PrintOp(TF_Graph* graph);
 
 /**
  * based on https://github.com/Neargye/hello_tf_c_api
@@ -51,7 +51,7 @@ ITKTENSORFLOWLIB_EXPORT int printTensorFlowVersion();
  * @param graphPath
  * @return
  */
-int printGraphInfo(std::string graphPath);
+ITKTENSORFLOWLIB_EXPORT int printGraphInfo(std::string graphPath);
 
 /**
  * based on https://github.com/Neargye/hello_tf_c_api
@@ -62,7 +62,7 @@ int printGraphInfo(std::string graphPath);
  * @param outputNodeName
  * @return
  */
-int sessionRun(TF_Tensor* input_tensor, TF_Tensor*& output_tensor, std::string graphPath, std::string inputNodeName, std::string outputNodeName);
+ITKTENSORFLOWLIB_EXPORT int sessionRun(TF_Tensor* input_tensor, TF_Tensor*& output_tensor, std::string graphPath, std::string inputNodeName, std::string outputNodeName);
 
 inline char fileSeparator() {
 #ifdef _WIN32
