@@ -268,31 +268,31 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineDicom2_test) {
 
     typedef float PixelTypeIn;
     typedef unsigned char PixelTypeOut;
-    typedef itk::Image<PixelTypeIn, 2> tfImageTypeIn;
-    typedef itk::Image<PixelTypeIn, 3> tfImageTypeOut;
+    typedef itk::Image<PixelTypeIn, 3> tfImageType;
     typedef itk::Image<PixelTypeIn, 2> ImageTypeOutFloat;
     typedef itk::Image<PixelTypeOut, 2> ImageTypeOut;
 
-
-    typedef itk::ImageFileReader<tfImageTypeIn> ReaderType;
+    typedef itk::ImageFileReader<tfImageType> ReaderType;
     ReaderType::Pointer reader = ReaderType::New();
     reader->SetFileName(inputFilename);
     reader->Update();
 
-    typedef itk::ImageRegion< 2 > RegionType;
+    typedef itk::ImageRegion< 3 > RegionType;
     RegionType region = reader->GetOutput()->GetLargestPossibleRegion();
 
-    tfImageTypeIn::SizeType lowerExtendRegion;
+    tfImageType::SizeType lowerExtendRegion;
     lowerExtendRegion[0] = 0;
     lowerExtendRegion[1] = 0;
+    lowerExtendRegion[2] = 0;
 
-    tfImageTypeIn::SizeType upperExtendRegion;
+    tfImageType::SizeType upperExtendRegion;
     upperExtendRegion[0] = 384 - region.GetSize()[0];
     upperExtendRegion[1] = 384 - region.GetSize()[1];
+    upperExtendRegion[2] = 0;
 
     PixelTypeIn zeroPixel(0);
 
-    typedef itk::ConstantPadImageFilter< tfImageTypeIn, tfImageTypeIn > ConstantPadType;
+    typedef itk::ConstantPadImageFilter< tfImageType, tfImageType > ConstantPadType;
     ConstantPadType::Pointer constantPad = ConstantPadType::New();
     constantPad->SetPadLowerBound(lowerExtendRegion);
     constantPad->SetPadUpperBound(upperExtendRegion);
@@ -304,17 +304,18 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineDicom2_test) {
     //*** special sauce start ***
     //***************************
 
-    itk::FixedArray<bool, 2> flipAxes;
+    itk::FixedArray<bool, 3> flipAxes;
     flipAxes[0] = false;
     flipAxes[1] = true;
+    flipAxes[2] = false;
 
-    typedef itk::FlipImageFilter <tfImageTypeIn> FlipImageFilterType;
+    typedef itk::FlipImageFilter <tfImageType> FlipImageFilterType;
     FlipImageFilterType::Pointer flipFilter = FlipImageFilterType::New ();
     flipFilter->SetInput(constantPad->GetOutput());
     flipFilter->SetFlipAxes(flipAxes);
     flipFilter->Update();
 
-    typedef itk::ThresholdImageFilter <tfImageTypeIn> ThresholdImageFilterType;
+    typedef itk::ThresholdImageFilter <tfImageType> ThresholdImageFilterType;
     ThresholdImageFilterType::Pointer thresholdFilter = ThresholdImageFilterType::New();
     thresholdFilter->SetInput(flipFilter->GetOutput());
     thresholdFilter->ThresholdAbove(2500);
@@ -330,7 +331,7 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineDicom2_test) {
     //*******************************************
 
     TF_Tensor *inputTensor;
-    oxtf::ImageToTensor<tfImageTypeIn>::convert(thresholdFilter->GetOutput(), &inputTensor);
+    oxtf::ImageToTensor<tfImageType>::convert(thresholdFilter->GetOutput(), &inputTensor);
 
     oxtf::GraphRunner graphRunner;
     graphRunner.setGraphReader(&graphReader);
@@ -340,8 +341,8 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineDicom2_test) {
 
     TF_Tensor *outputTensor = graphRunner.getOutputTensor();
 
-    tfImageTypeOut::Pointer image = tfImageTypeOut::New();
-    oxtf::TensorToImage<tfImageTypeOut>::convert(outputTensor, image);
+    tfImageType::Pointer image = tfImageType::New();
+    oxtf::TensorToImage<tfImageType>::convert(outputTensor, image);
 
     //*******************************************
     //*** What we actually want to test stop  ***
@@ -356,7 +357,7 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineDicom2_test) {
     flipAxes2[1] = flipAxes[1];
     flipAxes2[2] = false;
 
-    typedef itk::FlipImageFilter <tfImageTypeOut> FlipImageFilterType2;
+    typedef itk::FlipImageFilter <tfImageType> FlipImageFilterType2;
     FlipImageFilterType2::Pointer flipFilter2 = FlipImageFilterType2::New ();
     flipFilter2->SetInput(image);
     flipFilter2->SetFlipAxes(flipAxes2);
@@ -365,7 +366,7 @@ TEST(itkPipeline_imageToTensor_runSession_tensorToImage, pipelineDicom2_test) {
     //*** special sauce stop  ***
     //***************************
 
-    typedef itk::ExtractImageFilter<tfImageTypeOut, ImageTypeOutFloat> ExtractImageFilterType;
+    typedef itk::ExtractImageFilter<tfImageType, ImageTypeOutFloat> ExtractImageFilterType;
     ExtractImageFilterType::Pointer extractor = ExtractImageFilterType::New();
     extractor->SetInput(flipFilter2->GetOutput());
     extractor->SetDirectionCollapseToIdentity();

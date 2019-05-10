@@ -10,6 +10,8 @@
 #include "tf_utils.hpp"
 #include "oxtfUtils.h"
 
+//TODO: move funcionality to hxx
+
 namespace oxtf {
 
     template< typename ImageType>

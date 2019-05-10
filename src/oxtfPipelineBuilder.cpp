@@ -100,14 +100,14 @@ namespace oxtf {
             return 1; // EXIT_FAILURE
         }
 
-//        if (_flipAxes[0] || _flipAxes[1] || _flipAxes[2]){
-//            imageOut = flipImage<ImageType>(imageOut, _flipAxes);
-//        }
-//
-//        if (_paddingOrNor) {
-//            imageOut = cropImage<ImageType>(imageOut, size[0], size[1]);
-//        }
-//
+        if (_flipAxes[0] || _flipAxes[1] || _flipAxes[2]){
+            imageOut = flipImage<ImageType>(imageOut, _flipAxes);
+        }
+
+        if (_paddingOrNor) {
+            imageOut = cropImage<ImageType>(imageOut, size[0], size[1]);
+        }
+
         imageOut = multiplyImage<ImageType>(imageOut, _multiplyOutputByFactor);
 
         writeImages<ImageType>(imageOut, _outputDirPath);
