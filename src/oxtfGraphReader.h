@@ -9,10 +9,11 @@
 #include <vector>
 #include <string>
 #include <c_api.h> // TensorFlow C API header
+#include "itktensorflowlib_export.h"
 
 namespace oxtf {
 
-    class GraphReader {
+    class ITKTENSORFLOWLIB_EXPORT GraphReader {
 
     public:
 

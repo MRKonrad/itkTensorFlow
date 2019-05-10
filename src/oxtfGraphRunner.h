@@ -8,10 +8,11 @@
 #include "oxtfGraphReader.h"
 #include "oxtfUtils.h"
 #include <chrono>
+#include "itktensorflowlib_export.h"
 
 namespace oxtf {
 
-    class GraphRunner {
+    class ITKTENSORFLOWLIB_EXPORT GraphRunner {
 
     public:
 
