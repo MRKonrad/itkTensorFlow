@@ -7,8 +7,6 @@
 
 #include "itktensorflowlib_export.h"
 #include "itkTensorFlowFilter.h"
-//#include "oxtfPipelineBuilder.h"
-#include "oxtfUtils.h"
 
 #ifndef ITKTENSORFLOWLIB_EXPORT
 #define ITKTENSORFLOWLIB_EXPORT
@@ -16,7 +14,7 @@
 
 ITKTENSORFLOWLIB_EXPORT int printTensorFlowVersion();
 
-ITKTENSORFLOWLIB_EXPORT class oxtf::PipelineBuilder;
+class ITKTENSORFLOWLIB_EXPORT oxtf::PipelineBuilder;
 
 template class ITKTENSORFLOWLIB_EXPORT itk::TensorFlowImageFilter < typename itk::Image<short, 3> >;
 template class ITKTENSORFLOWLIB_EXPORT itk::TensorFlowImageFilter < typename itk::Image<int, 3> >;

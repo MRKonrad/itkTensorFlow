@@ -7,6 +7,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_INSTALL_RPATH "@executable_path")
 
+#delete!!!
+set(CMAKE_INSTALL_PREFIX install)
+#delete!!!
+
 message(STATUS "CMAKE_GENERATOR_PLATFORM: " ${CMAKE_GENERATOR_PLATFORM})
 
 find_package(ITK REQUIRED HINTS ${ITK_DIR_HINTS})
@@ -40,8 +44,6 @@ generate_export_header(itkTensorFlowLib)
 
 add_executable(itkTensorFlowExe app/main.cpp app/getopt.cpp app/getopt.h)
 target_link_libraries (itkTensorFlowExe PUBLIC itkTensorFlowLib )
-
-set(CMAKE_INSTALL_PREFIX install)
 
 install(TARGETS itkTensorFlowExe itkTensorFlowLib itkTensorFlowLibStatic
         RUNTIME DESTINATION bin
