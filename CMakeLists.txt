@@ -7,6 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_INSTALL_RPATH "@executable_path")
 
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
 #delete!!!
 set(CMAKE_INSTALL_PREFIX install)
 #delete!!!
