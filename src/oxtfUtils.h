@@ -44,7 +44,7 @@ void PrintOp(TF_Graph* graph);
  * based on https://github.com/Neargye/hello_tf_c_api
  * @return
  */
-int printTensorFlowVersion();
+ITKTENSORFLOWLIB_EXPORT int printTensorFlowVersion();
 
 /**
  * based on https://github.com/Neargye/hello_tf_c_api

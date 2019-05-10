@@ -77,8 +77,8 @@ namespace oxtf {
 
  } //namespace oxtf
 
-#ifdef ITKTENSORFLOWLIB_EXPORT
+#ifndef ITKTENSORFLOWLIB_COMPILED
 #include "oxtfImageToTensor.hxx"
-#endif // ITKTENSORFLOWLIB_EXPORT
+#endif // ITKTENSORFLOWLIB_COMPILED
 
 #endif //ITKTENSORFLOW_ITKIMAGETOTENSOR_H
