@@ -11,7 +11,7 @@
 
 namespace oxtf {
 
-    class PipelineBuilder {
+    class ITKTENSORFLOWLIB_EXPORT PipelineBuilder {
 
     public:
 

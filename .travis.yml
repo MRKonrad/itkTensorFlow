@@ -59,3 +59,9 @@ deploy:
   on:
     tags: ON
     condition: ${CXX} == "clang++" # I guess I have to pick one compiler
+
+notifications:
+  slack:
+    rooms:
+      - secure: xelZIHZuWerzZ9LsGuSQIlNDRmAW2oKjK3tjDGXfJvYmZDTaFua2+OLyYnXelPVpZNKBsG8tuzrAThhvpgY8TbsxLD2wOQ4ZoL7Zf3VqJqkA3HmlUKrZmvDbkoAkd48x81WmeQpusk0Gx4E6mnVi9tcg54HDhWKP4mfQm6/SZQooxl2uiNMjmqu/GwnEtnOl5SD+5+KonyJWbcLwDBOGQFeNwBoc7yGv2FC32Jl51BD9i9AJvEG/hClm3qmUHQrs+wcp4XesrNhaRv2pHmZzsXlMKWgWOd6ngf98ebJiWvtgX2ch1H5B66JviCe2OgBIPLpbBkaR0T7X73wxfgRKH6rPkCXRInOd1K9zWKJprBTlwVyx6ARUWWuOdltIxDbK5aIbn4FD1AKMdEqYve4tChcfwlWTKKAL9Ny1CNl5Udw/69YJWyl+XuJHXAtyE/ba7nrmCKCLrZWG6kKX28+dWrHTMXR4XO9eLOkfz9kLwGiJMkKUm7ClibGANYCxJuNfJL0zwQU/+kUMQ83XdlRXc2TvUo6Fn962Epi61cSbGpbfr5yIgUpkxhvIPIfvTjPg+/qbbNHeqo9nd46jjJP+XQXKK5ZFmrils7y4VGhmGdlPs/axkdDf49Nu/bV9qMCFPA5Q2K5UzdJ5JFw/IWZ0sgM6RtVs0x7np5uYpz6HcBQ=
+    on_success: always
