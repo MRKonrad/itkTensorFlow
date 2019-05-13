@@ -63,7 +63,6 @@ after_build:
 
   - copy %APPVEYOR_BUILD_FOLDER%\bin\install\bin\%EXE_EXTENDED_NAME%.zip %APPVEYOR_BUILD_FOLDER%\deployment\%EXE_EXTENDED_NAME%.zip
   - copy %APPVEYOR_BUILD_FOLDER%\bin\install\%LIB_EXTENDED_NAME%.zip %APPVEYOR_BUILD_FOLDER%\deployment\%LIB_EXTENDED_NAME%.zip
-  - dir
   - dir deployment
 
 test_script:

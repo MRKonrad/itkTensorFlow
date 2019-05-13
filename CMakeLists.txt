@@ -9,9 +9,9 @@ set(CMAKE_INSTALL_RPATH "@executable_path")
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
-#delete!!!
+# delete!!!
 set(CMAKE_INSTALL_PREFIX install)
-#delete!!!
+# delete!!!
 
 message(STATUS "CMAKE_GENERATOR_PLATFORM: " ${CMAKE_GENERATOR_PLATFORM})
 
