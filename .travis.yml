@@ -18,6 +18,17 @@ env:
     - secure: ${GH_PERSONAL_ACCESS_TOKEN}
 
 install:
+  # update cmake, necesary for precise
+  - sudo apt remove --purge --auto-remove cmake
+  - mkdir ~/temp
+  - cd ~/temp
+  - wget https://cmake.org/files/v3.14/cmake-3.14.3.tar.gz
+  - tar -xzvf cmake-3.14.3.tar.gz
+  - cd cmake-3.14.3/
+  - ./bootstrap
+  - make -j4
+  - sudo make install
+  - cmake --version
   # download ITK
   - cd ${TRAVIS_BUILD_DIR}/..
   - curl -L -O http://mrkonrad.github.io/MRKonrad/files/ITK_built/ITK413_${TRAVIS_OS_NAME}_install.zip
