@@ -30,7 +30,7 @@ script:
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
       cd ${TRAVIS_BUILD_DIR}/bin;
       ls;
-      objdump -T libitkTensorFlow.so;
+      objdump -T libitkTensorFlowLib.so;
     fi
 
 before_deploy:
