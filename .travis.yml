@@ -28,7 +28,7 @@ script:
   - cd bin/tests
   - ./itkTensorFlowTests
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-      cd ${TRAVIS_BUILD_DIR}/bin/install/lib;
+      cd ${TRAVIS_BUILD_DIR}/bin;
       objdump -T libitkTensorFlow;
     fi
 
