@@ -6,8 +6,6 @@
 #define ITKTENSORFLOW_TFPROCESSING_HXX
 
 #include "oxtfGraphReader.h"
-#include "oxtfUtils.h"
-#include <chrono>
 #include "itktensorflowlib_export.h"
 
 namespace oxtf {
