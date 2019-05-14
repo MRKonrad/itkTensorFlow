@@ -27,6 +27,10 @@ script:
   - cmake --build bin --config RELEASE --target itkTensorFlowTests
   - cd bin/tests
   - ./itkTensorFlowTests
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+      cd ${TRAVIS_BUILD_DIR}/bin/install/lib;
+      objdump -T libitkTensorFlow;
+    fi
 
 before_deploy:
   - cd ${TRAVIS_BUILD_DIR}
@@ -49,11 +53,6 @@ before_deploy:
   - ls ${TRAVIS_BUILD_DIR}
   - ls ${TRAVIS_BUILD_DIR}/deployment
 
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-      cd ${TRAVIS_BUILD_DIR}/bin/install/lib;
-      objdump -T libitkTensorFlow
-    fi
-
 deploy:
   provider: releases # GitHub
   api_key:
@@ -68,5 +67,5 @@ deploy:
 notifications:
   slack:
     rooms:
-      - secure: Bw8AaTA6bKabgubrEmlkIvoyZ86GMWspUvkLumUuOJfGX3DEo8DYxmi/XdE3CTYsgDSOPH1CAhX/YHqmi7FRNYQsHv2++RPGJ3xbhY0A6KZ1j/69BZ3GC97P6yjVZbv7x0NXWFfxEJCkTA21fVssdLIDwpL7wdGaDSnf2219khP9jNbvrFlxZKxhAI9qiLBcQebJ1tHNW9MDmvMHxmL4m2wKEzebbRGZdEUOEivCsw8k4S+CxH4ThseEANuN8uhM46CNs7wFz03NLDrnoh/qyZYoT4bC4nGSZwRhN8CLEAXNf2zEuqZFkqnVLbmJeUPs/730YElKy3FXEnPzk/1/kn28vCHzshnwOqVYCeyq4MGKJOGjOyMASQWmetu+oJ6rrVoaRuoAKka9flEbyrarMd6fGjhb9a+i7LBw5aT0RigORdVHDQizXJaH/o+v5LtMjKjUC6pQE+Y8oLEvON78cr0d9yhr0hHULwJpQ3NW1B4qVgzFPW2j1dSF5U3VGlimOjT37F5Hc3flWQ7ZP6g60kgvZFEb/qimjE2NDwAneGXZ9MsGRj7Zf1OjpTUPdBA3iYXHvFIK0iNbIRaj6b7zGJ4ua5rIOCPGodE1x3MsYOCdYLqf5g26I169CNFoCd7PGZG9LM8Qto4/SVZsM2ekZhzFrQSq7HUKxp/eb8Dl2x0=
+      - secure: R8PUXsLnyFyeXma3vlEG8igF6jy41sd4z3JY/MvllJGySHkPfBWoNbNMg5a9oLexHysnJdC5OnnXJi8F1Cq904qmHx4gf+cHFGvlVMBKWb4pFNhrn7N+15TzC/t+xobFljzGzRdYlycAYYwh2FMtMCqmfvKL/0ujSCuUA4I6cdUTG7m5fzeGVWRM+mG8D1Zp+dn6svKlm3dI1jFMQY7GHYh5GUrTahdfsocDEfSy8/mydz2hEtKeeBRzs7n96/ho2PEHeJB5o+eLUpODEk179SkAd+FI96xLLdx74CHNcdiBXB5sVQNg8xusg0PDrlF2nldvqvwja9k/88f2W3Tr6fReRJ+LfeCXz8fxtGduYnh3k3VPzHDLYJblMkEvRs8hbIk3FTH5E0k5ScGAaOz/HbOxg3GTBHwNjmQoGVKMCi3IqEMoEWomdTzlXmKvGfiSpVu61kgit9yP/B1KFhV2OobHFWaBq7wjs0NTc8P0fi3ZHubxr1eqMUlWGzR28gsdUM0w1AVFLqtVWqZJGFnrPyJ3Fa13UJFUn/PpgImYtz4/KteGNJVUuhVm1h581IrSi3uVpQ1DTSwd4Bbph6JRecobaKetc/so++8yvHDi+yw3Bs8of3D2GyH9A4j1SPMBFuQaJXechKDZZeZkAzXxOTo8slS6J4Euyc6sO3Dyd1Y=
     on_success: always
