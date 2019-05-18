@@ -5,9 +5,15 @@ project(itkTensorFlow)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
+# macos needs it
 set(CMAKE_INSTALL_RPATH "@executable_path")
 
+# windows needs it to have all the symbols visible from a dll
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
+# linux needs it to see the shared library in the current directory
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='$ORIGIN'")
 
 # delete!!!
 set(CMAKE_INSTALL_PREFIX install)
