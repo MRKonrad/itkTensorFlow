@@ -21,9 +21,9 @@ ENDIF()
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 # linux needs it to see the shared library in the current directory
-if (UNIX)
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='$ORIGIN',-dynamic-linker,ld-linux.so.2")
-    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='$ORIGIN',-dynamic-linker,ld-linux.so.2")
+if (UNIX AND NOT APPLE)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='$ORIGIN',-dynamic-linker,ld-linux-x86-64.so.2")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='$ORIGIN',-dynamic-linker,ld-linux-x86-64.so.2")
 endif(UNIX)
 
 # delete!!!
