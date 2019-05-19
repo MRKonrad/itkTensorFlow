@@ -10,6 +10,7 @@
 #include <string>
 #include <c_api.h> // TensorFlow C API header
 #include "itktensorflowlib_export.h"
+#include "interp.h"
 
 namespace oxtf {
 

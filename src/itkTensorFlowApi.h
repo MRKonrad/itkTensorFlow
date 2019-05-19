@@ -9,7 +9,7 @@
 #include "itkTensorFlowFilter.h"
 #include "oxtfImageToTensor.h"
 #include "oxtfTensorToItkImage.h"
-
+#include "interp.h"
 //namespace oxtf {
 //    class ITKTENSORFLOWLIB_EXPORT GraphReader;
 //    class ITKTENSORFLOWLIB_EXPORT GraphRunner;

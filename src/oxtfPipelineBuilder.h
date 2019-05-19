@@ -8,6 +8,7 @@
 #include "itktensorflowlib_export.h"
 #include "oxtfGraphReader.h"
 #include <string>
+#include "interp.h"
 
 namespace oxtf {
 
@@ -128,7 +129,7 @@ namespace oxtf {
 
         PipelineBuilder();
 
-		// no virtual destructor, as otherwise I have windows errors about vf table, for example 
+		// no virtual destructor, as otherwise I have windows errors about vf table, for example
 		// >itkTensorFlowLibStatic.lib(oxtfPipelineBuilder.obj) : error LNK2019: unresolved external symbol "__declspec(dllimport) const oxtf::PipelineBuilder::`vftable'" (__imp_??_7PipelineBuilder@oxtf@@6B@) referenced in function "public: __cdecl oxtf::PipelineBuilder::PipelineBuilder(void)" (??0PipelineBuilder@oxtf@@QEAA@XZ)
 		~PipelineBuilder();
 

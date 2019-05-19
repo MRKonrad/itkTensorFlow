@@ -8,6 +8,7 @@
 #include "itkImageToImageFilter.h"
 #include "oxtfGraphReader.h"
 #include "itktensorflowlib_export.h"
+#include "interp.h"
 
 namespace itk
 {

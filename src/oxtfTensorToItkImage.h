@@ -9,6 +9,7 @@
 #include <c_api.h>
 #include "tf_utils.hpp"
 #include "oxtfUtils.h"
+#include "interp.h"
 
 //TODO: move funcionality to hxx
 

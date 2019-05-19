@@ -7,6 +7,7 @@
 
 #include "oxtfGraphReader.h"
 #include "itktensorflowlib_export.h"
+#include "interp.h"
 
 namespace oxtf {
 

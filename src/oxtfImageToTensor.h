@@ -8,6 +8,7 @@
 #include "itkImage.h"
 #include <c_api.h>
 #include "tf_utils.hpp"
+#include "interp.h"
 
 namespace oxtf {
 
