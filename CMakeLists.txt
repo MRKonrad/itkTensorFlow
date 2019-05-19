@@ -6,8 +6,16 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# macos needs it
-set(CMAKE_INSTALL_RPATH "@executable_path")
+IF(APPLE)
+    # macos needs it
+    set(CMAKE_INSTALL_RPATH "@executable_path")
+
+    set(CMAKE_THREAD_LIBS_INIT "-lpthread")
+    set(CMAKE_HAVE_THREADS_LIBRARY 1)
+    set(CMAKE_USE_WIN32_THREADS_INIT 0)
+    set(CMAKE_USE_PTHREADS_INIT 1)
+    set(THREADS_PREFER_PTHREAD_FLAG ON)
+ENDIF()
 
 # windows needs it to have all the symbols visible from a dll
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
@@ -15,6 +23,7 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 # linux needs it to see the shared library in the current directory
 if (UNIX)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='$ORIGIN',-dynamic-linker,ld-linux.so.2")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='$ORIGIN',-dynamic-linker,ld-linux.so.2")
 endif(UNIX)
 
 # delete!!!
