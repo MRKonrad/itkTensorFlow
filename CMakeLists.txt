@@ -13,7 +13,9 @@ set(CMAKE_INSTALL_RPATH "@executable_path")
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 # linux needs it to see the shared library in the current directory
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='$ORIGIN'")
+if (UNIX)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='$ORIGIN',-dynamic-linker,ld-linux.so.2")
+endif(UNIX)
 
 # delete!!!
 set(CMAKE_INSTALL_PREFIX install)
